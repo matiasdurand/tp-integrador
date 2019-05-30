@@ -12,6 +12,7 @@ public class ArbolBinarioBusquedaTest {
 	
 	@Before
 	public void preTest() {
+		
 		abb = new ArbolBinarioBusqueda<Integer>(10);
 		
 		abb.agregar(5);
