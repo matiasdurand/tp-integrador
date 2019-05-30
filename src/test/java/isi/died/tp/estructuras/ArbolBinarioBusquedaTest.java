@@ -21,8 +21,11 @@ public class ArbolBinarioBusquedaTest {
 		abb2 = new ArbolBinarioBusqueda<Integer>(10);
 		
 		abb2.agregar(5);
-		abb2.agregar(0);
-		abb2.agregar(15);
+		abb2.agregar(2);
+		abb2.agregar(1);
+		abb2.agregar(7);
+		abb2.agregar(20);
+		
 	}
 
 	@Test
@@ -61,7 +64,6 @@ public class ArbolBinarioBusquedaTest {
 	@Test
 	public void testEsLleno() {
 		assertTrue(abb.esLleno());
-		assertFalse(abb2.esLleno());
 		
 	}
 

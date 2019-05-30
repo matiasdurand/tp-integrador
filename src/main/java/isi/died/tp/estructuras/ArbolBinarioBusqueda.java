@@ -114,8 +114,11 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		// TODO 1.d
 		if((izquierdo.profundidad() == 0) && derecho.esVacio()) return true;
 		else {
-			if(izquierdo.esVacio() && !derecho.esVacio()) return false;
-			else return (izquierdo.esCompleto() && derecho.esCompleto());
+			if(izquierdo.profundidad()>derecho.profundidad()+1 || derecho.profundidad()>izquierdo.profundidad()+1) return false;
+			else {
+				if(derecho.profundidad()==profundidad()-1) return (izquierdo.esLleno() && derecho.esCompleto());
+				else return (izquierdo.esCompleto() && derecho.esCompleto());
+			}
 		}
 	}
 
