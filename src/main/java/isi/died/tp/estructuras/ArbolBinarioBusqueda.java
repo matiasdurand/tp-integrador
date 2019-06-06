@@ -3,6 +3,8 @@ package isi.died.tp.estructuras;
 import java.util.ArrayList;
 import java.util.List;
 
+import isi.died.tp.dominio.Insumo;
+
 public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 
 	protected Arbol<E> izquierdo;
@@ -34,6 +36,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		lista.addAll(this.derecho.preOrden());
 		return lista;
 	}
+	
 	@Override
 	public List<E> inOrden() {
 		List<E> lista = new ArrayList<E>();
@@ -42,6 +45,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		lista.addAll(this.derecho.preOrden());
 		return lista;
 	}
+	
 	@Override
 	public List<E> posOrden() {
 		List<E> lista = new ArrayList<E>();
@@ -49,8 +53,8 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		lista.addAll(this.derecho.preOrden());
 		lista.add(this.valor);
 		return lista;
-
 	}
+	
 	@Override
 	public boolean esVacio() {
 		return false;
@@ -70,14 +74,14 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	public Arbol<E> derecho() {
 		return this.derecho;
 	}
-
-
+	
 	@Override
 	public void agregar(E a) {
 		if(this.valor.compareTo(a)<1) {
 			if (this.derecho.esVacio()) this.derecho = new ArbolBinarioBusqueda<E>(a);
 			else this.derecho.agregar(a);
-		}else {
+		}
+		else {
 			if (this.izquierdo.esVacio()) this.izquierdo= new ArbolBinarioBusqueda<E>(a);
 			else this.izquierdo.agregar(a);
 		}
@@ -91,7 +95,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public boolean contiene(E unValor) {
 		// TODO 1.a
-		return this.valor.equals(unValor) || this.izquierdo().contiene(unValor) || this.derecho().contiene(unValor);
+		return (this.valor.equals(unValor) || this.izquierdo().contiene(unValor) || this.derecho().contiene(unValor));
 	}
 
 	@Override
@@ -106,7 +110,6 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		// TODO 1.c
 		if(nivel==0) return 1;
 		else return izquierdo.cuentaNodosDeNivel(nivel-1) + derecho.cuentaNodosDeNivel(nivel-1);
-		
 	}
 
 	@Override
@@ -125,10 +128,23 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public boolean esLleno() {
 		// TODO 1.e
-		
 		int profundidad = profundidad();
-		
 		if(cuentaNodosDeNivel(profundidad) == Math.pow(2, profundidad)) return true;
 		else return false;
+	}
+	
+	@Override
+	//Recorrido inorden, no necesariamente completo, del arbol (depende del rango). Agrego a la lista los stocks que caen dentro del rango.
+	public ArrayList<Insumo> rango(Double inicio, Double fin){
+		
+		ArrayList<Insumo> lista = new ArrayList<Insumo>();
+
+		if(((Insumo)valor).getStock()>inicio) lista.addAll(izquierdo.rango(inicio, fin));
+		
+		if(((Insumo)valor).getStock()>=inicio && ((Insumo)valor).getStock()<=fin) lista.add((Insumo)valor);
+
+		if(((Insumo)valor).getStock()<fin) lista.addAll(derecho.rango(inicio, fin));
+		
+		return lista;
 	}
 }

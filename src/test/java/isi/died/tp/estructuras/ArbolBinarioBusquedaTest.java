@@ -10,6 +10,7 @@ public class ArbolBinarioBusquedaTest {
 	private ArbolBinarioBusqueda<Integer> abb;
 	private ArbolBinarioBusqueda<Integer> abb2;
 	
+	
 	@Before
 	public void preTest() {
 		
@@ -25,7 +26,7 @@ public class ArbolBinarioBusquedaTest {
 		abb2.agregar(1);
 		abb2.agregar(7);
 		abb2.agregar(20);
-		
+
 	}
 
 	@Test
@@ -66,5 +67,4 @@ public class ArbolBinarioBusquedaTest {
 		assertTrue(abb.esLleno());
 		
 	}
-
 }
