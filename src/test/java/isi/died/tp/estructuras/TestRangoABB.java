@@ -18,10 +18,10 @@ public class TestRangoABB {
 	@Before
 	public void preTest() {
 		
-		abbInsumos = new ArbolBinarioBusqueda<Insumo>(new Insumo("Descripcion1", UnidadDeMedida.Kilogramo, 50.00, 10.00, 5.00, false));
-		abbInsumos.agregar(new Insumo("Descripcion2", UnidadDeMedida.Pieza, 100.00, 5.00, 10.00, false));
-		abbInsumos.agregar(new Liquido("Descripcion3", 250.00, 15.00, false, 997.00));
-
+		abbInsumos = new ArbolBinarioBusqueda<Insumo>(new Insumo("Descripcion1", UnidadDeMedida.Kilogramo, 50.00, 10, 5.00, false));
+		abbInsumos.agregar(new Insumo("Descripcion2", UnidadDeMedida.Pieza, 100.00, 5, 10.00, false));
+		abbInsumos.agregar(new Liquido("Descripcion3", 250.00, 15, false, 997.00));
+		
 	}
 	
 	@Test

@@ -6,26 +6,21 @@ public class Insumo implements Comparable<Insumo> {
 	protected String descripcion;
 	protected UnidadDeMedida unidadDeMedida;
 	protected Double costo;
-	protected Double stock;
+	protected Integer stock;
 	protected Double peso;
 	protected Boolean esRefrigerado;
-	private static int CANT_INSUMOS=0;
+	private static Integer CANT_INSUMOS=0;
 	
-	/*public Insumo(String descripcion, UnidadDeMedida unidadDeMedida, Double costoEnUDM, Double stock, Double pesoEnKg, Boolean esRefrigerado) {
-		this.id = CANT_INSUMOS++;
+	public Insumo(String descripcion, UnidadDeMedida unidadDeMedida, Double costo, Integer stock, Double peso, Boolean esRefrigerado) {
+		id = CANT_INSUMOS++;
 		this.descripcion = descripcion;
 		this.unidadDeMedida = unidadDeMedida;
-		this.costoEnUDM = costoEnUDM;
+		this.costo = costo;
 		this.stock = stock;
-		this.pesoEnKg = pesoEnKg;
+		this.peso = peso;
 		this.esRefrigerado = esRefrigerado;
-	}*/
-	
-	@Override
-	public int compareTo(Insumo insumo) {
-		return stock.compareTo(insumo.getStock());
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -58,11 +53,11 @@ public class Insumo implements Comparable<Insumo> {
 		this.costo = costo;
 	}
 
-	public Double getStock() {
+	public Integer getStock() {
 		return stock;
 	}
 
-	public void setStock(Double stock) {
+	public void setStock(Integer stock) {
 		this.stock = stock;
 	}
 
@@ -80,6 +75,11 @@ public class Insumo implements Comparable<Insumo> {
 
 	public void setEsRefrigerado(Boolean esRefrigerado) {
 		this.esRefrigerado = esRefrigerado;
+	}
+	
+	@Override
+	public int compareTo(Insumo insumo) {
+		return stock.compareTo(insumo.getStock());
 	}
 	
 }

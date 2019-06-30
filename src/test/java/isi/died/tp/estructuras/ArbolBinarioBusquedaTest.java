@@ -10,7 +10,6 @@ public class ArbolBinarioBusquedaTest {
 	private ArbolBinarioBusqueda<Integer> abb;
 	private ArbolBinarioBusqueda<Integer> abb2;
 	
-	
 	@Before
 	public void preTest() {
 		
@@ -26,7 +25,7 @@ public class ArbolBinarioBusquedaTest {
 		abb2.agregar(1);
 		abb2.agregar(7);
 		abb2.agregar(20);
-
+		
 	}
 
 	@Test
@@ -34,22 +33,7 @@ public class ArbolBinarioBusquedaTest {
 		assertTrue(abb.contiene(10));
 		assertFalse(abb.contiene(11));
 	}
-
-	@Test
-	public void testEqualsArbolOfE() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAgregar() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testProfundidad() {
-		assertEquals(1, abb.profundidad());
-	}
-
+	
 	@Test
 	public void testCuentaNodosDeNivel() {
 		assertEquals(1, abb.cuentaNodosDeNivel(0));
@@ -58,13 +42,13 @@ public class ArbolBinarioBusquedaTest {
 
 	@Test
 	public void testEsCompleto() {
-		assertTrue(abb2.esCompleto());
+		assertFalse(abb2.esCompleto());
 		assertTrue(abb.esCompleto());
 	}
 
 	@Test
 	public void testEsLleno() {
 		assertTrue(abb.esLleno());
-		
 	}
+	
 }

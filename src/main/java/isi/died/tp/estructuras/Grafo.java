@@ -18,8 +18,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import isi.died.tp.dominio.Insumo;
+import isi.died.tp.dominio.Planta;
+
 
 public class Grafo<T> {
+	
 	private List<Arista<T>> aristas;
 	private List<Vertice<T>> vertices;
 
@@ -64,7 +68,7 @@ public class Grafo<T> {
 	}
 	
 
-	private List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
+	protected List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
 		List<Vertice<T>> salida = new ArrayList<Vertice<T>>();
 		for(Arista<T> enlace : this.aristas){
 			if( enlace.getInicio().equals(unNodo)){
@@ -375,6 +379,9 @@ public class Grafo<T> {
 		}
 		return false;
 	}
-    
-    
+
+	public Planta buscarPlanta(Planta inicial, Insumo i, Integer saltos) {
+		return null;
+	}
+  
 }

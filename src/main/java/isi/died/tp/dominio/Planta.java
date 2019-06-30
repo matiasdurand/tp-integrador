@@ -7,12 +7,13 @@ public class Planta {
 
 		private Integer id;
 		private String nombre;
-		private List<Stock> listaStocks;
+		private List<Stock> listaStock;
+		private static Integer CANT_PLANTAS=0;
 		
-		public Double costoTotal() {
-			
-			 return listaStocks.stream().mapToDouble((s)->s.getCantidad()*s.getInsumo().getCosto()).sum();
-
+		public Planta(String nombre, List<Stock> listaStock) {
+			id = CANT_PLANTAS++;
+			this.nombre = nombre;
+			this.listaStock = listaStock;
 		}
 		
 		public Integer getId() {
@@ -31,22 +32,23 @@ public class Planta {
 			this.nombre = nombre;
 		}
 
-		public List<Stock> getListaStocks() {
-			return listaStocks;
+		public List<Stock> getListaStock() {
+			return listaStock;
 		}
 
-		public void setListaStocks(List<Stock> listaStocks) {
-			this.listaStocks = listaStocks;
+		public void setListaStock(List<Stock> listaStock) {
+			this.listaStock = listaStock;
+		}
+		
+		public Double costoTotal() {
+			 return listaStock.stream().mapToDouble((s) -> s.getCantidad()*s.getInsumo().getCosto()).sum();
 		}
 
 		public List<Insumo> stockEntre(Integer s1, Integer s2){
-			
-			return listaStocks.stream().filter((s)->s.getCantidad()>=s1 && s.getCantidad()<=s2).map((s)->s.getInsumo()).collect(Collectors.toList());
-
+			return listaStock.stream().filter((s) -> s.getCantidad()>=s1 && s.getCantidad()<=s2).map((s) -> s.getInsumo()).collect(Collectors.toList());
 		}
 		
 		public Boolean necesitaInsumo(Insumo i) {
-			
-			return listaStocks.stream().anyMatch((s) -> s.getInsumo()==i && s.getCantidad()<s.getPuntoPedido());
+			return listaStock.stream().anyMatch((s) -> s.getInsumo()==i && s.getCantidad()<=s.getPuntoPedido());
 		}
 }
