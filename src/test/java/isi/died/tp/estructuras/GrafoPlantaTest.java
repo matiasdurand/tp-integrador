@@ -8,11 +8,12 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import isi.died.tp.dominio.GrafoPlantas;
 import isi.died.tp.dominio.Insumo;
+import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
 import isi.died.tp.dominio.Planta;
 import isi.died.tp.dominio.Stock;
-import isi.died.tp.dominio.UnidadDeMedida;
 
 public class GrafoPlantaTest {
 
@@ -64,7 +65,7 @@ public class GrafoPlantaTest {
 		planta03 = new Planta("Planta03", listaStockPlanta03);
 		planta04 = new Planta("Planta04", listaStockPlanta04);
 		
-		grafoDePlantas = new GrafoPlanta();
+		grafoDePlantas = new GrafoPlantas();
 		grafoDePlantas.addNodo(plantaAcopio);
 		grafoDePlantas.addNodo(planta02);
 		grafoDePlantas.addNodo(planta03);

@@ -1,12 +1,9 @@
 package isi.died.tp.estructuras;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +12,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import isi.died.tp.dominio.Insumo;
@@ -172,14 +168,6 @@ public class Grafo<T> {
 		return resultado;
  	}
         
-    private boolean esAdyacente(Vertice<T> v1,Vertice<T> v2){
-    	List<Vertice<T>> ady = this.getAdyacentes(v1);
-        for(Vertice<T> unAdy : ady){
-        	if(unAdy.equals(v2)) return true;
-        }
-        return false;
-    }
-    
     private void buscarCaminosAux(Vertice<T> v1,Vertice<T> v2, List<Vertice<T>> marcados, List<List<Vertice<T>>> todos) {
     	List<Vertice<T>> adyacentes = this.getAdyacentes(v1);
     	// Vector copiaMarcados;
@@ -204,9 +192,8 @@ public class Grafo<T> {
     }
     
     public List<List<Vertice<T>>> caminos(T v1,T v2){
-    	return this.caminos(new Vertice(v1), new Vertice(v2));
+    	return this.caminos(new Vertice<T>(v1), new Vertice<T>(v2));
     }
-
     
     public List<List<Vertice<T>>> caminos(Vertice<T> v1,Vertice<T> v2){
     	List<List<Vertice<T>>>salida = new ArrayList<List<Vertice<T>>>();

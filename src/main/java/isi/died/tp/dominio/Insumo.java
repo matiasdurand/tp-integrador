@@ -2,6 +2,8 @@ package isi.died.tp.dominio;
 
 public class Insumo implements Comparable<Insumo> {
 	
+	public enum UnidadDeMedida { Gramo, Kilogramo, Metro, MetroCuadrado, MetroCubico, Litro, Pieza };
+	
 	protected Integer id;
 	protected String descripcion;
 	protected UnidadDeMedida unidadDeMedida;

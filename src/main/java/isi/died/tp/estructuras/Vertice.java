@@ -17,9 +17,7 @@ public class Vertice<T> {
 	public T getValor(){
 		return this.valor;
 	}
-	
-	
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -36,8 +34,9 @@ public class Vertice<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Vertice other = (Vertice) obj;
-		if (valor == null) {
+		@SuppressWarnings("unchecked")
+		Vertice<T> other = (Vertice<T>) obj;
+		if (valor==null) {
 			if (other.valor != null)
 				return false;
 		} else if (!valor.equals(other.valor))

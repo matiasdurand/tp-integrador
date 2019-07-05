@@ -1,13 +1,16 @@
-package isi.died.tp.estructuras; 
+package isi.died.tp.dominio;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
 import isi.died.tp.dominio.Insumo; 
-import isi.died.tp.dominio.Planta; 
+import isi.died.tp.dominio.Planta;
+import isi.died.tp.estructuras.Arista;
+import isi.died.tp.estructuras.Grafo;
+import isi.died.tp.estructuras.Vertice; 
  
-public class GrafoPlanta extends Grafo<Planta> { 
+public class GrafoPlantas extends Grafo<Planta> { 
  
 	public void imprimirDistanciaAdyacentes(Planta inicial) {
 	  

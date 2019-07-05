@@ -9,6 +9,14 @@ public class Liquido extends Insumo {
 		this.densidad = densidad;
 	}
 	
+	public Double getDensidad() {
+		return densidad;
+	}
+
+	public void setDensidad(Double densidad) {
+		this.densidad = densidad;
+	}
+
 	public Double calcularPeso(Double litros) {
 		return (litros*0.001*densidad);
 	}
