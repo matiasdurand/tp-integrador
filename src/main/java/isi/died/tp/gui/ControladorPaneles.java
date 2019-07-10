@@ -3,23 +3,26 @@ package isi.died.tp.gui;
 import java.awt.Color;
 import java.awt.Font;
 
-public class GestorPaneles {
+public class ControladorPaneles {
 	
-	private static GestorPaneles _INSTANCIA = null;
+	private static ControladorPaneles _INSTANCIA = null;
+	
 	private PanelPlanta panelPlanta = null;
 	private PanelInsumo panelInsumo = null;
 	private PanelCamion panelCamion = null;
 	private PanelGrafo panelGrafo = null;
 	
+	private PanelRegistrarInsumo panelRegistrarInsumo = null;
+	
 	//public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
 	//public static final Color COLOR_TITULO = new Color(5,85,244);
 	
-	private GestorPaneles() {
+	private ControladorPaneles() {
 		
 	}
 	
-	public static GestorPaneles getInstance() {
-		if(_INSTANCIA == null) _INSTANCIA = new GestorPaneles();
+	public static ControladorPaneles getInstance() {
+		if(_INSTANCIA == null) _INSTANCIA = new ControladorPaneles();
 		return _INSTANCIA;
 	}
 
@@ -41,5 +44,15 @@ public class GestorPaneles {
 	public PanelGrafo getPanelGrafo() {
 		if(panelGrafo == null) panelGrafo = new PanelGrafo();
 		return panelGrafo;
-	}	  
+	}	
+	
+	public PanelRegistrarInsumo getPanelRegistrarInsumo() {
+		if(panelRegistrarInsumo == null) panelRegistrarInsumo = new PanelRegistrarInsumo();
+		return panelRegistrarInsumo;
+	}
+	
+	public PanelEditarInsumo getPanelEditarInsumo(Integer idInsumo) {
+		return new PanelEditarInsumo(idInsumo);
+	}
+	
 }

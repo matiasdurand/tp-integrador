@@ -4,18 +4,21 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
+import isi.died.tp.controladores.ControladorGrafo;
+
 public class PanelGrafo extends JPanel {
 	
-	private PanelGrafoControlador controlador;
+	private ControladorGrafo controlador;
 	
 	//agregrar como atributos todos los componentes de la interfaz
 	
 	
 	public PanelGrafo() {
 		super();
-		controlador = new PanelGrafoControlador(this);
-		this.armar();
-		this.configurarEventos();
+		controlador = ControladorGrafo.getInstance();
+		controlador.setpGrafo(this);
+		armar();
+		configurarEventos();
 		
 	}
 	

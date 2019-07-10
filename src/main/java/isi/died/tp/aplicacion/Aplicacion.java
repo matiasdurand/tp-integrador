@@ -8,10 +8,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
-import isi.died.tp.gui.GestorPaneles;
+import isi.died.tp.gui.ControladorPaneles;
 
 public class Aplicacion {
 
+	public static JFrame f;
+	
 	public static void main( String[] args )
     {
     	SwingUtilities.invokeLater(new Runnable(){ public void run(){ mostrarVentanaPrincipal(); } } );
@@ -19,7 +21,7 @@ public class Aplicacion {
 	
 	private static void mostrarVentanaPrincipal() {
 		
-		JFrame f = new JFrame("Aplicacion DIED 2019");
+		f = new JFrame("Aplicacion");
 		
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(1000, 750);
@@ -40,28 +42,28 @@ public class Aplicacion {
         menuItem1 = new JMenuItem("Plantas");
         menuItem1.addActionListener(e -> { 
       	  f.getContentPane().removeAll();
-      	  f.getContentPane().add(GestorPaneles.getInstance().getPanelPlanta());
+      	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelPlanta());
       	  f.pack(); } );
         menu1.add(menuItem1);
         
         menuItem2 = new JMenuItem("Insumos");
         menuItem2.addActionListener(e -> { 
       	  f.getContentPane().removeAll();
-      	  f.getContentPane().add(GestorPaneles.getInstance().getPanelInsumo());
+      	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
       	  f.pack(); } );
         menu1.add(menuItem2);
         
         menuItem3 = new JMenuItem("Camiones");
         menuItem3.addActionListener(e -> { 
       	  f.getContentPane().removeAll();
-      	  f.getContentPane().add(GestorPaneles.getInstance().getPanelCamion());
+      	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelCamion());
       	  f.pack(); } );
         menu1.add(menuItem3);  
 
         menuItem4 = new JMenuItem("Grafo");
         menuItem4.addActionListener(e -> { 
       	  f.getContentPane().removeAll();
-      	  f.getContentPane().add(GestorPaneles.getInstance().getPanelGrafo());
+      	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelGrafo());
       	  f.pack(); } );
         menu2.add(menuItem4);
         

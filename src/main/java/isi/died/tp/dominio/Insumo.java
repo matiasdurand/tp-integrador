@@ -5,6 +5,7 @@ public class Insumo implements Comparable<Insumo> {
 	public enum UnidadDeMedida { Gramo, Kilogramo, Metro, MetroCuadrado, MetroCubico, Litro, Pieza };
 	
 	protected Integer id;
+	protected String nombre;
 	protected String descripcion;
 	protected UnidadDeMedida unidadDeMedida;
 	protected Double costo;
@@ -13,8 +14,10 @@ public class Insumo implements Comparable<Insumo> {
 	protected Boolean esRefrigerado;
 	private static Integer CANT_INSUMOS=0;
 	
-	public Insumo(String descripcion, UnidadDeMedida unidadDeMedida, Double costo, Integer stock, Double peso, Boolean esRefrigerado) {
+	
+	public Insumo(String nombre, String descripcion, UnidadDeMedida unidadDeMedida, Double costo, Integer stock, Double peso, Boolean esRefrigerado) {
 		id = CANT_INSUMOS++;
+		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.unidadDeMedida = unidadDeMedida;
 		this.costo = costo;
@@ -22,7 +25,7 @@ public class Insumo implements Comparable<Insumo> {
 		this.peso = peso;
 		this.esRefrigerado = esRefrigerado;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}

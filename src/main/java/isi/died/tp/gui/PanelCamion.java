@@ -4,18 +4,21 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 
+import isi.died.tp.controladores.ControladorCamiones;
+
 public class PanelCamion extends JPanel {
 
-	private PanelCamionControlador controlador;
+	private ControladorCamiones controlador;
 	
 	//agregrar como atributos todos los componentes de la interfaz
 	
 	
 	public PanelCamion() {
 		super();
-		controlador = new PanelCamionControlador(this);
-		this.armar();
-		this.configurarEventos();
+		controlador = ControladorCamiones.getInstance();
+		controlador.setpCamion(this);
+		armar();
+		configurarEventos();
 		
 	}
 	
