@@ -8,10 +8,12 @@ public class Planta {
 		private Integer id;
 		private String nombre;
 		private List<Stock> listaStock;
-		private static Integer CANT_PLANTAS=0;
+		
+		public Planta() {
+			
+		}
 		
 		public Planta(String nombre, List<Stock> listaStock) {
-			id = CANT_PLANTAS++;
 			this.nombre = nombre;
 			this.listaStock = listaStock;
 		}

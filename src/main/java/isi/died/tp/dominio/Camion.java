@@ -11,6 +11,9 @@ public class Camion {
 	private Double costoPorKm;
 	private Boolean aptoParaLiquidos;
 	
+	public Camion() {
+		
+	}
 	
 	public Integer getId() {
 		return id;

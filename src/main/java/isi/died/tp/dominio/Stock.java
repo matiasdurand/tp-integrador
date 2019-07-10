@@ -6,10 +6,12 @@ public class Stock {
 	private Integer cantidad;
 	private Integer puntoPedido;
 	private Insumo insumo;
-	private static Integer CANT_STOCKS=0;
+	
+	public Stock() {
+		
+	}
 	
 	public Stock(Integer cantidad, Integer puntoPedido, Insumo insumo) {
-		id = CANT_STOCKS++;
 		this.cantidad = cantidad;
 		this.puntoPedido = puntoPedido;
 		this.insumo = insumo;

@@ -8,7 +8,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
-import isi.died.tp.gui.ControladorPaneles;
+import isi.died.tp.controladores.ControladorPaneles;
 
 public class Aplicacion {
 

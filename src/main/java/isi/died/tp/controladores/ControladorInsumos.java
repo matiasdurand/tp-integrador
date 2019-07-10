@@ -2,14 +2,16 @@ package isi.died.tp.controladores;
 
 import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import isi.died.tp.dao.InsumoDao;
+import isi.died.tp.dao.InsumoDaoH2;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
@@ -23,9 +25,11 @@ public class ControladorInsumos {
 	private PanelInsumo pInsumo;
 	private PanelRegistrarInsumo pRInsumo;
 	private PanelEditarInsumo pEInsumo;
+	private InsumoDao dao;
 	
 	private ControladorInsumos() {
 		//EL CONTROLADOR NO PUEDE SER INSTANCIADO FUERA DE ESTE AMBITO
+		dao = new InsumoDaoH2();
 	}
 	
 	public static ControladorInsumos getInstance() {
@@ -62,12 +66,11 @@ public class ControladorInsumos {
 			Insumo i;
 			if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
 			else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
-			
-			//this.logica.guardar(p);
-			//List<Proyecto> listaInsumos = logica.buscar(); ver como obtener lista de insumos sin base de datos;
+			dao.crear(i);
+			List<Insumo> listaInsumos = dao.buscarTodos();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					//pInsumo.actualizarDatosTabla(listaInsumos);
+					pInsumo.actualizarTablaInsumos(listaInsumos);
 					JOptionPane.showMessageDialog((Component)pInsumo, "Insumo Registrado");
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
@@ -79,46 +82,85 @@ public class ControladorInsumos {
 	}
 	
 	public void actualizarInsumo(Integer id, String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
-		/*Runnable r = () -> {
+		Runnable r = () -> {
 			Insumo i;
 			if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
 			else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
-
-			this.logica.guardar(p);
-			List<Proyecto> lista = logica.buscar();
+			i.setId(id);
+			dao.actualizar(i);
+			List<Insumo> listaInsumos = dao.buscarTodos();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					panel.actualizarDatosTabla(lista);
-					JOptionPane.showMessageDialog((Component) panel, "Proyecto "+ nombre +" Actualizado");
+					pInsumo.actualizarTablaInsumos(listaInsumos);
+					JOptionPane.showMessageDialog((Component)pInsumo, "Insumo Actualizado");
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
 		};
-		
 		Thread hilo = new Thread(r);
-		
-		hilo.start();	*/
-	}
-	
-	public List<Insumo> filtrar(String nombre, String costoMinimo, String costoMaximo, String stockMinimo, String stockMaximo) {
-		
-		Double costoMin, costoMax, stockMin, stockMax;
-		List<Insumo> filtrado = new ArrayList<Insumo>();
-		//OBTENER LISTA DE INSUMOS Y FILTRAR SEGUN PARAMETROS.
-		
-		return filtrado;
+		hilo.start();
 	}
 	
 	public void eliminarInsumo(Integer id) {
-		//ELIMINAR EL INSUMO CON ID IGUAL A id;
+		Runnable r = () -> {
+			dao.borrar(id);
+			List<Insumo> listaInsumos = dao.buscarTodos();
+			try {
+				SwingUtilities.invokeAndWait(() -> {
+					pInsumo.actualizarTablaInsumos(listaInsumos);
+					JOptionPane.showMessageDialog((Component)pInsumo, "Proyecto borrado");
+				});
+			} catch (InvocationTargetException | InterruptedException e) {
+				e.printStackTrace();
+			}
+		};
+		Thread hilo = new Thread(r);
+		hilo.start();	
 	}
-
-	public List<Insumo> ordenarPor(String criterio) {
-		
-		//ordenar la lista con el criterio (nombre, costo, stock)
-		
-		return null;
+	
+	public List<Insumo> filtrar(String nombre, String costoMinimo, String costoMaximo, String stockMinimo, String stockMaximo) {
+		Double costoMin, costoMax;
+		Integer stockMin, stockMax;
+		List<Insumo> filtrado = dao.buscarTodos();
+		if(!costoMinimo.isEmpty() && !filtrado.isEmpty()) {
+			costoMin = Double.parseDouble(costoMinimo);
+			filtrado = filtrado.stream().filter( i -> i.getCosto()>=costoMin).collect(Collectors.toList());
+		}
+		if(!costoMaximo.isEmpty() && !filtrado.isEmpty()) {
+			costoMax = Double.parseDouble(costoMaximo);
+			filtrado = filtrado.stream().filter( i -> i.getCosto()<=costoMax).collect(Collectors.toList());
+		}
+		if(!stockMinimo.isEmpty() && !filtrado.isEmpty()) {
+			stockMin = Integer.parseInt(stockMinimo);
+			filtrado = filtrado.stream().filter( i -> i.getStock()>=stockMin).collect(Collectors.toList());
+		}
+		if(!stockMaximo.isEmpty() && !filtrado.isEmpty()) {
+			stockMax = Integer.parseInt(stockMaximo);
+			filtrado = filtrado.stream().filter( i -> i.getStock()<=stockMax).collect(Collectors.toList());
+		}
+		return filtrado;
+	}
+	
+	public List<Insumo> ordenarPor(String criterio, Boolean descendente) {
+		List<Insumo> listaInsumos = dao.buscarTodos();
+		if(criterio.equals("Nombre")) {
+			if(descendente) listaInsumos.sort( (i1,i2) -> i1.getNombre().compareTo(i2.getNombre()));
+			else listaInsumos.sort( (i1,i2) -> i2.getNombre().compareTo(i1.getNombre()));
+		}
+		else {
+			if(criterio.equals("Stock total")) {
+				if(descendente) listaInsumos.sort( (i1,i2) -> i1.getStock().compareTo(i2.getStock()));
+				else listaInsumos.sort( (i1,i2) -> i2.getStock().compareTo(i1.getStock()));
+			}
+			else {
+				if(criterio.equals("Costo")) {
+					if(descendente) listaInsumos.sort( (i1,i2) -> i1.getCosto().compareTo(i2.getCosto()));
+					else listaInsumos.sort( (i1,i2) -> i2.getCosto().compareTo(i1.getCosto()));
+				}
+			}
+		}
+		return listaInsumos;
 	}
 	
 	public void cargarComboUDM(JComboBox<UnidadDeMedida> combo){
@@ -134,14 +176,14 @@ public class ControladorInsumos {
 					e.printStackTrace();
 				}
 			};
-			
 			Thread hilo = new Thread(r);
-			
 			hilo.start();	
 		}
 	
 	public Boolean esLiquido(Integer idInsumo) {
-		//DEVOLVER TRUE SI EL INSUMO CON idInsumo ES LIQUIDO.
+		Insumo i = dao.buscar(idInsumo);
+		if(i.getClass().getSimpleName().equals("Liquido")) return true;
+		else return false;
 	}
 
 }

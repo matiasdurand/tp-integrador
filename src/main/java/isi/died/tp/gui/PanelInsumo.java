@@ -18,6 +18,7 @@ import javax.swing.ListSelectionModel;
 
 import isi.died.tp.aplicacion.Aplicacion;
 import isi.died.tp.controladores.ControladorInsumos;
+import isi.died.tp.controladores.ControladorPaneles;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.gui.util.GenericTableColumn;
 import isi.died.tp.gui.util.GenericTableModel;
@@ -100,15 +101,15 @@ public class PanelInsumo extends JPanel {
 	    		btnEditar.setEnabled(true);
     		}
         });
-		/*CONFIGURAR EVENTOS DE COMBOBOX Y RADIOBUTTONS PARA ORDENAR TABLA.
-		    cmboxOrdenarPor.addActionListener( e -> {
-			if(rbtnDescendente.isSelected())
-			actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem()));
+		cmboxOrdenarPor.addActionListener( e -> {
+			actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected()));
 		});
-		
 		rbtnDescendente.addActionListener( e -> {
-			actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem()));
-		});*/
+			actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), true));
+		});
+		rbtnAscendente.addActionListener( e -> {
+			actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), false));
+		});
 		
 	}
 	
@@ -127,7 +128,7 @@ public class PanelInsumo extends JPanel {
     	return gtm;
     }
 	
-	private void actualizarTablaInsumos(List<Insumo> lista) {
+	public void actualizarTablaInsumos(List<Insumo> lista) {
 		this.gtm.setDatos(lista);
     	this.gtm.fireTableDataChanged();
 	}

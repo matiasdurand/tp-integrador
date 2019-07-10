@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import isi.died.tp.aplicacion.Aplicacion;
 import isi.died.tp.controladores.ControladorInsumos;
+import isi.died.tp.controladores.ControladorPaneles;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 
 public class PanelRegistrarInsumo extends JPanel {

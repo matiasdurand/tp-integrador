@@ -1,7 +1,14 @@
-package isi.died.tp.gui;
+package isi.died.tp.controladores;
 
 import java.awt.Color;
 import java.awt.Font;
+
+import isi.died.tp.gui.PanelCamion;
+import isi.died.tp.gui.PanelEditarInsumo;
+import isi.died.tp.gui.PanelGrafo;
+import isi.died.tp.gui.PanelInsumo;
+import isi.died.tp.gui.PanelPlanta;
+import isi.died.tp.gui.PanelRegistrarInsumo;
 
 public class ControladorPaneles {
 	

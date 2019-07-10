@@ -12,11 +12,12 @@ public class Insumo implements Comparable<Insumo> {
 	protected Integer stock;
 	protected Double peso;
 	protected Boolean esRefrigerado;
-	private static Integer CANT_INSUMOS=0;
 	
+	public Insumo() {
+		
+	}
 	
 	public Insumo(String nombre, String descripcion, UnidadDeMedida unidadDeMedida, Double costo, Integer stock, Double peso, Boolean esRefrigerado) {
-		id = CANT_INSUMOS++;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.unidadDeMedida = unidadDeMedida;
@@ -34,6 +35,14 @@ public class Insumo implements Comparable<Insumo> {
 		this.id = id;
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
 	public String getDescripcion() {
 		return descripcion;
 	}
