@@ -119,6 +119,12 @@ public class ControladorInsumos {
 		hilo.start();	
 	}
 	
+	public Boolean validarDatos(Boolean esLiquido, String nombre, String descripcion, String costo, String stock, String peso, String densidad) {
+		if(esLiquido && !nombre.isEmpty() && !descripcion.isEmpty() && !costo.isEmpty() && !stock.isEmpty() && !densidad.isEmpty()) return true;
+		if(!esLiquido && !nombre.isEmpty() && !descripcion.isEmpty() && !costo.isEmpty() && !stock.isEmpty() && !peso.isEmpty()) return true;
+		return false;
+	}
+	
 	public List<Insumo> filtrar(String nombre, String costoMinimo, String costoMaximo, String stockMinimo, String stockMaximo) {
 		Double costoMin, costoMax;
 		Integer stockMin, stockMax;
@@ -162,6 +168,23 @@ public class ControladorInsumos {
 		}
 		return listaInsumos;
 	}
+	
+	public void cargarComboOrdenarPor(JComboBox<String> combo){
+		Runnable r = () -> {
+				String[] criterios = {"Nombre", "Stock total", "Costo"};
+				try {
+					SwingUtilities.invokeAndWait(() -> {
+						for(String criterio: criterios){
+							combo.addItem(criterio);
+						}
+					});
+				} catch (InvocationTargetException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			};
+			Thread hilo = new Thread(r);
+			hilo.start();	
+		}
 	
 	public void cargarComboUDM(JComboBox<UnidadDeMedida> combo){
 		Runnable r = () -> {

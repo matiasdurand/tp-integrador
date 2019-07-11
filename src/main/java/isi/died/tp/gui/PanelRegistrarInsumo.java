@@ -72,9 +72,10 @@ public class PanelRegistrarInsumo extends JPanel {
 			densidad.setEnabled(false);
 		});
 		btnGuardar.addActionListener( e -> {
-			//VALIDAR DATOS INGRESADOS.
-			if(rbtnLiquido.isSelected()) controlador.crearInsumo(nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), -1.00, rbtnRefrigerado.isSelected(), Double.parseDouble(densidad.getText()));
-			else controlador.crearInsumo(nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), Double.parseDouble(peso.getText()), rbtnRefrigerado.isSelected(), -1.00);
+			if(controlador.validarDatos(rbtnLiquido.isSelected(), nombre.getText(), descripcion.getText(), costo.getText(), stock.getText(), peso.getText(), densidad.getText())) {
+				if(rbtnLiquido.isSelected()) controlador.crearInsumo(nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), -1.00, rbtnRefrigerado.isSelected(), Double.parseDouble(densidad.getText()));
+				else controlador.crearInsumo(nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), Double.parseDouble(peso.getText()), rbtnRefrigerado.isSelected(), -1.00);
+			}
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
 			Aplicacion.f.pack();
