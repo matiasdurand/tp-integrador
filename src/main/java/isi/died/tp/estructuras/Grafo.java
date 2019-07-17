@@ -20,53 +20,48 @@ import isi.died.tp.dominio.Planta;
 
 public class Grafo<T> {
 	
-	private List<Arista<T>> aristas;
-	private List<Vertice<T>> vertices;
+	protected List<Arista<T>> aristas;
+	protected List<Vertice<T>> vertices;
 
 	public Grafo(){
-		this.aristas = new ArrayList<Arista<T>>();
-		this.vertices = new ArrayList<Vertice<T>>();
+		aristas = new ArrayList<Arista<T>>();
+		vertices = new ArrayList<Vertice<T>>();
 	}
 
 	public void addNodo(T nodo){
-		this.addNodo(new Vertice<T>(nodo));
+		addNodo(new Vertice<T>(nodo));
 	}
 
 	private void addNodo(Vertice<T> nodo){
-		this.vertices.add(nodo);
+		vertices.add(nodo);
 	}
 	
-	public void conectar(T n1,T n2){
-		this.conectar(getNodo(n1), getNodo(n2), 1.0);
+	public void conectar(T n1,T n2, Double d, Double t, Double p){
+		conectar(getNodo(n1), getNodo(n2), d, t, p);
 	}
 
-	public void conectar(T n1,T n2,Number valor){
-		this.conectar(getNodo(n1), getNodo(n2), valor);
-	}
-
-	private void conectar(Vertice<T> nodo1,Vertice<T> nodo2,Number valor){
-		this.aristas.add(new Arista<T>(nodo1,nodo2,valor));
+	private void conectar(Vertice<T> nodo1, Vertice<T> nodo2, Double d, Double t, Double p){
+		aristas.add(new Arista<T>(nodo1, nodo2, d, t, p));
 	}
 	
 	public Vertice<T> getNodo(T valor){
-		return this.vertices.get(this.vertices.indexOf(new Vertice<T>(valor)));
+		return vertices.get(vertices.indexOf(new Vertice<T>(valor)));
 	}
 
 	public List<T> getAdyacentes(T valor){ 
-		Vertice<T> unNodo = this.getNodo(valor);
+		Vertice<T> unNodo = getNodo(valor);
 		List<T> salida = new ArrayList<T>();
-		for(Arista<T> enlace : this.aristas){
-			if( enlace.getInicio().equals(unNodo)){
+		for(Arista<T> enlace : aristas){
+			if(enlace.getInicio().equals(unNodo)){
 				salida.add(enlace.getFin().getValor());
 			}
 		}
 		return salida;
 	}
 	
-
 	protected List<Vertice<T>> getAdyacentes(Vertice<T> unNodo){ 
 		List<Vertice<T>> salida = new ArrayList<Vertice<T>>();
-		for(Arista<T> enlace : this.aristas){
+		for(Arista<T> enlace : aristas){
 			if( enlace.getInicio().equals(unNodo)){
 				salida.add(enlace.getFin());
 			}
@@ -74,21 +69,21 @@ public class Grafo<T> {
 		return salida;
 	}
 	
-	public void imprimirAristas(){
+	/*public void imprimirAristas(){
 		System.out.println(this.aristas.toString());
-	}
+	}*/
 
 	public Integer gradoEntrada(Vertice<T> vertice){
-		Integer res =0;
-		for(Arista<T> arista : this.aristas){
+		Integer res=0;
+		for(Arista<T> arista: aristas){
 			if(arista.getFin().equals(vertice)) ++res;
 		}
 		return res;
 	}
 
 	public Integer gradoSalida(Vertice<T> vertice){
-		Integer res =0;
-		for(Arista<T> arista : this.aristas){
+		Integer res=0;
+		for(Arista<T> arista: aristas){
 			if(arista.getInicio().equals(vertice)) ++res;
 		}
 		return res;
@@ -217,7 +212,7 @@ public class Grafo<T> {
 
     	// inicializo todas las distancias a INFINITO
     	Map<Vertice<T>, Integer> distancias = new HashMap<Vertice<T>, Integer>();
-    	for(Vertice<T> unVertice : this.vertices) {
+    	for(Vertice<T> unVertice : vertices) {
     		distancias.put(unVertice, Integer.MAX_VALUE);
     	}
     	distancias.put(origen, 0);
@@ -238,12 +233,12 @@ public class Grafo<T> {
         	for(Vertice<T> unAdy : adyacentes) {
         		if(!visitados.contains(unAdy)) {
         			Arista<T> enlace = this.buscarArista(nodo.getValue(), unAdy);
-        			if(enlace !=null) {
-        				nuevaDistancia = enlace.getValor().intValue();
+        			if(enlace!=null) {
+        				nuevaDistancia = enlace.getDistancia().intValue();
         			}
         			int distanciaHastaAdy = distancias.get(nodo.getValue()).intValue();
         			int distanciaAnterior = distancias.get(unAdy).intValue();
-        			if(distanciaHastaAdy  + nuevaDistancia < distanciaAnterior ) {
+        			if(distanciaHastaAdy  + nuevaDistancia < distanciaAnterior) {
         				distancias.put(unAdy, distanciaHastaAdy  + nuevaDistancia);
         				aVisitar.put(distanciaHastaAdy  + nuevaDistancia,unAdy);
         			}        			
@@ -268,7 +263,7 @@ public class Grafo<T> {
     	return null;
     }
     
-    public void floydWarshall() {
+    /*public void floydWarshall() {
     	int cantVertices= this.vertices.size();
     	int[][] matrizDistancias = new int[cantVertices][cantVertices];
     	
@@ -307,7 +302,7 @@ public class Grafo<T> {
             imprimirMatriz(matrizDistancias);
         } 
     	
-    }
+    }*/
     
     public void imprimirMatriz(int[][] m) {
     	for(int i=0; i<m.length;i++) {
@@ -368,6 +363,14 @@ public class Grafo<T> {
 	}
 
 	public Planta buscarPlanta(Planta inicial, Insumo i, Integer saltos) {
+		return null;
+	}
+
+	public HashMap<List<Vertice<Planta>>, Double> caminosPosibles(Vertice<Planta> v1, Vertice<Planta> v2) {
+		return null;
+	}
+
+	public List<Arista<Planta>> getAristas() {
 		return null;
 	}
   

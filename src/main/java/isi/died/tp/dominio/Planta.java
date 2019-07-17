@@ -13,6 +13,10 @@ public class Planta {
 			
 		}
 		
+		public Planta(String nombre) {
+			this.nombre = nombre;
+		}
+		
 		public Planta(String nombre, List<Stock> listaStock) {
 			this.nombre = nombre;
 			this.listaStock = listaStock;
@@ -52,5 +56,11 @@ public class Planta {
 		
 		public Boolean necesitaInsumo(Insumo i) {
 			return listaStock.stream().anyMatch((s) -> s.getInsumo()==i && s.getCantidad()<=s.getPuntoPedido());
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			Planta p = (Planta)obj;
+			return id.equals(p.getId()) && nombre.equals(p.getNombre());
 		}
 }

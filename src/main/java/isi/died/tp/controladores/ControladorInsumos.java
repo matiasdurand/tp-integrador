@@ -209,4 +209,8 @@ public class ControladorInsumos {
 		else return false;
 	}
 
+	public List<Insumo> buscarTodos() {
+		return dao.buscarTodos();
+	}
+
 }

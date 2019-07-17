@@ -37,7 +37,7 @@ public class GrafoPlantaTest {
 	@Before
 	public void cargarDatos() {
 		
-		insumo1 = new Insumo("Descripcion1", UnidadDeMedida.Pieza, 500.00, 10, 5.00, false);
+		insumo1 = new Insumo("Insumo1", "Descripcion1", UnidadDeMedida.Pieza, 500.00, 10, 5.00, false);
 		insumo2 = new Insumo("Descripcion3", UnidadDeMedida.Kilogramo, 100.00, 15, 1.00, false);
 		insumo3 = new Insumo("Descripcion6", UnidadDeMedida.Metro, 5.00, 1000, 0.10, false);
 		insumo4 = new Liquido("Descripcion10", 1000.00, 10, true, 13600.00);

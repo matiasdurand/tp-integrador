@@ -96,4 +96,9 @@ public class Insumo implements Comparable<Insumo> {
 		return stock.compareTo(insumo.getStock());
 	}
 	
+	@Override
+	public String toString() {
+		return nombre;
+	}
+	
 }
