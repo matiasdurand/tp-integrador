@@ -291,6 +291,8 @@ public class PanelRegistrarInsumo extends JPanel {
 				cmboxUDM.setSelectedItem(UnidadDeMedida.Gramo);
 				cmboxUDM.setEnabled(true);
 				peso.setEnabled(true);
+				peso.setText("");
+				densidad.setText("");
 				densidad.setEnabled(false);
 			}
 		});

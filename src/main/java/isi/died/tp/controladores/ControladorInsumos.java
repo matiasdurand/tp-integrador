@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 
 import isi.died.tp.dao.InsumoDao;
 import isi.died.tp.dao.InsumoDaoH2;
+import isi.died.tp.dao.LiquidoDao;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
@@ -26,6 +27,7 @@ public class ControladorInsumos {
 	private PanelRegistrarInsumo pRInsumo;
 	private PanelEditarInsumo pEInsumo;
 	private InsumoDao dao;
+	private LiquidoDao daoLiquido;
 	
 	private ControladorInsumos() {
 		//EL CONTROLADOR NO PUEDE SER INSTANCIADO FUERA DE ESTE AMBITO
@@ -207,6 +209,14 @@ public class ControladorInsumos {
 		Insumo i = dao.buscar(idInsumo);
 		if(i.getClass().getSimpleName().equals("Liquido")) return true;
 		else return false;
+	}
+	
+	public Insumo buscarInsumo(Integer id){
+		return dao.buscar(id);
+	}
+	
+	public Liquido buscarLiquido(Integer id) {
+		return daoLiquido.buscar(id);
 	}
 
 	public List<Insumo> buscarTodos() {
