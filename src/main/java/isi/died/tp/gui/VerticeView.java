@@ -25,7 +25,7 @@ public class VerticeView {
     }
 
     public VerticeView(Integer coordenadaX, Integer coordenadaY,Color color) {
-        this.colorBase = color;
+        this.color = color;
         this.coordenadaX = coordenadaX;
         this.coordenadaY = coordenadaY;
         this.nodo= new Ellipse2D.Double(coordenadaX,coordenadaY,RADIO,RADIO);

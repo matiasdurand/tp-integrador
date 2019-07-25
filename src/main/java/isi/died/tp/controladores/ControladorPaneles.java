@@ -1,11 +1,8 @@
 package isi.died.tp.controladores;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import isi.died.tp.gui.PanelCamion;
 import isi.died.tp.gui.PanelEditarInsumo;
-import isi.died.tp.gui.PanelGrafo;
+import isi.died.tp.gui.PanelGrafoView;
 import isi.died.tp.gui.PanelInsumo;
 import isi.died.tp.gui.PanelPlanta;
 import isi.died.tp.gui.PanelRegistrarInsumo;
@@ -17,12 +14,9 @@ public class ControladorPaneles {
 	private PanelPlanta panelPlanta = null;
 	private PanelInsumo panelInsumo = null;
 	private PanelCamion panelCamion = null;
-	private PanelGrafo panelGrafo = null;
+	private PanelGrafoView panelGrafoView = null;
 	
 	private PanelRegistrarInsumo panelRegistrarInsumo = null;
-	
-	//public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
-	//public static final Color COLOR_TITULO = new Color(5,85,244);
 	
 	private ControladorPaneles() {
 		
@@ -48,9 +42,9 @@ public class ControladorPaneles {
 		return panelCamion;
 	}	  
 	
-	public PanelGrafo getPanelGrafo() {
-		if(panelGrafo == null) panelGrafo = new PanelGrafo();
-		return panelGrafo;
+	public PanelGrafoView getPanelGrafoView() {
+		if(panelGrafoView == null) panelGrafoView = new PanelGrafoView();
+		return panelGrafoView;
 	}	
 	
 	public PanelRegistrarInsumo getPanelRegistrarInsumo() {

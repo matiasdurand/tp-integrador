@@ -223,6 +223,7 @@ public class PanelRegistrarInsumo extends JPanel {
     	c.anchor = GridBagConstraints.CENTER;
     	c.fill=GridBagConstraints.BOTH;
     	c.weightx=0.5;
+    	densidad.setEnabled(false);
     	this.add(densidad,c);
     	
     	//Tercer fila
@@ -309,12 +310,17 @@ public class PanelRegistrarInsumo extends JPanel {
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
 			Aplicacion.f.pack();
+			Aplicacion.f.revalidate();
+			Aplicacion.f.repaint();
 		});
 		
 		btnCancelar.addActionListener( e -> {
+			
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
 			Aplicacion.f.pack();
+			Aplicacion.f.revalidate();
+			Aplicacion.f.repaint();
 		});
 	}
 }

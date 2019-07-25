@@ -283,14 +283,18 @@ public class PanelInsumo extends JPanel {
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelRegistrarInsumo());
 			Aplicacion.f.pack();
+			Aplicacion.f.revalidate();
+			Aplicacion.f.repaint();
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
     	});
 		
 		btnEditar.addActionListener( e -> {
 			Aplicacion.f.getContentPane().removeAll();
-			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
+			Aplicacion.f.setContentPane(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
 			Aplicacion.f.pack();
+			Aplicacion.f.revalidate();
+			Aplicacion.f.repaint();
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
 		});

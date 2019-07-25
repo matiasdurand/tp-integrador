@@ -6,47 +6,54 @@ import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 
-import isi.died.tp.controladores.ControladorGrafo;
+import isi.died.tp.controladores.ControladorGrafoView;
 import isi.died.tp.dominio.Insumo;
-import isi.died.tp.dominio.Planta;
+import isi.died.tp.gui.util.GenericTableModel;
 
-public class PanelGrafo extends JPanel {
+public class PanelGrafoView extends JPanel {
 	
 	private JComboBox<Insumo> cmboxInsumo;
 	private JTextArea textArea;
+	//GenericTableModel<Insumo> gtm;
+	//private JTable tablaResultados;
 	private JRadioButton rbtnDistancia;
 	private JRadioButton rbtnTiempo;
-	private JButton btnNecesitanInsumo;
-	private JButton btnMejorCamino;
+	private JButton btnMostrarInfo;
+	private JButton btnMostrarCaminos;
     private List<VerticeView> vertices;
     private List<AristaView> aristas;
-	private ControladorGrafo controlador;
+	private ControladorGrafoView controlador;
 	private VerticeView verticeSeleccionado;
 	private List<AristaView> aristasAMover;
+	private int contador = 0;
+	private Integer idNodoInicio = -1;
+	private Integer idNodoFin = -1;
 	
-	public PanelGrafo() {
+	public PanelGrafoView() {
 		super();
-		controlador = ControladorGrafo.getInstance();
+		controlador = ControladorGrafoView.getInstance();
 		controlador.setpGrafo(this);
 		vertices = new ArrayList<>();
         aristas = new ArrayList<>();
         aristasAMover = new ArrayList<>();
-		controlador.inicializarGrafo();
+		controlador.inicializarGrafoView();
 		armar();
 		configurarEventos();
 	}
@@ -55,39 +62,36 @@ public class PanelGrafo extends JPanel {
 		//CONFIGURAR APARIENCIA DEL PANEL.
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();  
+		
 		cmboxInsumo = new JComboBox<Insumo>();
 		controlador.cargarComboInsumos(cmboxInsumo);
 		c.gridx=0;
-		c.gridy=3;
+		c.gridy=2;
 		add(cmboxInsumo,c);
 		
-		btnNecesitanInsumo = new JButton("NECESITAN INSUMO");
-		c.gridx=1;
+		btnMostrarInfo = new JButton("MOSTRAR INFORMACION");
+		c.gridx=0;
 		c.gridy=3;
-		add(btnNecesitanInsumo,c);
+		add(btnMostrarInfo,c);
+		
+		textArea = new JTextArea();
+		c.gridx=1;
+		c.gridy=4;
+		add(textArea,c);
+
+		btnMostrarCaminos = new JButton("MOSTRAR CAMINOS");
+		c.gridx=0;
+		c.gridy=5;
+		btnMostrarCaminos.setEnabled(false);
+		add(btnMostrarCaminos,c);
 		
 	}
 	
 	private void configurarEventos() {
 		addMouseListener(new MouseAdapter() {
-            /*public void mouseClicked(MouseEvent event) {
-                if (event.getClickCount()==2 && !event.isConsumed()) {
-                    event.consume();
-                    VerticeView v = clicEnUnNodo(event.getPoint());
-                    if(v!=null) {
-                    	verticeSeleccionado = v; 
-                    	verticeSeleccionado.setColor(Color.CYAN);
-                    	//actualizarVertice(verticeSeleccionado, event.getPoint());
-                    }
-                    System.out.println("DOBLE CLICK");
-                }
-            }*/
 			public void mousePressed(MouseEvent event) {
-				System.out.println("click en "+event.getPoint());
-				VerticeView v = clicEnUnNodo(event.getPoint());
-				if(v!=null) {
-					verticeSeleccionado = v;
-					verticeSeleccionado.setColor(Color.YELLOW);
+				verticeSeleccionado = clicEnUnNodo(event.getPoint());
+				if(verticeSeleccionado!=null) {
 					for(AristaView a: aristas) if(a.getOrigen().equals(verticeSeleccionado)||a.getDestino().equals(verticeSeleccionado)) aristasAMover.add(a);
 				}   
 			}
@@ -95,7 +99,55 @@ public class PanelGrafo extends JPanel {
                	verticeSeleccionado = null;
                	aristasAMover.clear();
 			}
+			public void mouseClicked(MouseEvent event) {
+				verticeSeleccionado = clicEnUnNodo(event.getPoint());
+				if(verticeSeleccionado!=null) {
+					
+					if(contador==0) {
+						verticeSeleccionado.setColor(Color.GREEN);
+						idNodoInicio = verticeSeleccionado.getId();
+						contador++;
+						repaint();
+					}
+					else {
+						if(contador==1) {
+							if(verticeSeleccionado.getId()==idNodoInicio) {
+								verticeSeleccionado.setColor(Color.YELLOW);
+								idNodoInicio = -1;
+								contador = 0;
+								repaint();
+							}
+							else {
+								verticeSeleccionado.setColor(Color.GREEN);
+								idNodoFin = verticeSeleccionado.getId();
+								contador++;
+								repaint();
+							}
+						}
+						else {
+							if(verticeSeleccionado.getId()==idNodoInicio) {
+								verticeSeleccionado.setColor(Color.YELLOW);
+								idNodoInicio = idNodoFin;
+								idNodoFin = -1;
+								contador--;
+								repaint();
+							}
+							else {
+								if(verticeSeleccionado.getId()==idNodoFin) {
+									verticeSeleccionado.setColor(Color.YELLOW);
+									idNodoFin = -1;
+									contador--;
+									repaint();
+								}
+							}
+						}
+					}
+				}
+				if(contador==2) btnMostrarCaminos.setEnabled(true);
+				else btnMostrarCaminos.setEnabled(false);
+			}
         });
+		
         addMouseMotionListener(new MouseAdapter() {
             public void mouseDragged(MouseEvent event) {
                 if(verticeSeleccionado!=null) {
@@ -105,15 +157,18 @@ public class PanelGrafo extends JPanel {
                 }
             }
         });
-        btnNecesitanInsumo.addActionListener( e -> {
-        	pintarVerticesColorOriginal();
-        	pintarVertices(controlador.verticesAPintar((Insumo)cmboxInsumo.getSelectedItem()));
-        	repaint();
+        btnMostrarInfo.addActionListener( e -> {
+        		textArea.setText("");
+        		pintarVertices(Color.YELLOW);
+        		pintarVertices(controlador.verticesAPintar((Insumo)cmboxInsumo.getSelectedItem()), Color.RED);
+        		repaint();
+        		//controlador.buscarMejorCamino((Insumo)cmboxInsumo.getSelectedItem(), rbtnDistancia.isSelected());
         });
-        /*btnMejorCamino.addActionListener( e -> {
-        	controlador.obtenerMejorCamino((Insumo)cmboxInsumo.getSelectedItem(), rbtnDistancia.isSelected());
-        });*/
         
+        /*btnMostrarCaminos.addActionListener( e -> {
+        	textArea.setText("");
+        	controlador.buscarCaminos(1, 6);
+        });*/
 	}
 	
 	public void agregar(AristaView arista){
@@ -166,11 +221,18 @@ public class PanelGrafo extends JPanel {
     	a.update();
     }
     
-    private void pintarVertices(List<Integer> idVerticesView) {
-    	for(VerticeView v: vertices) if(idVerticesView.contains(v.getId())) v.setColor(Color.RED);
+    private void pintarVertices(List<Integer> idVertices, Color color) {
+    	for(VerticeView v: vertices) if(idVertices.contains(v.getId())) v.setColor(color);
     }
     
-	private void pintarVerticesColorOriginal() {
-		for(VerticeView v: vertices) v.setColor(Color.YELLOW);
+	private void pintarVertices(Color color) {
+		for(VerticeView v: vertices) v.setColor(color);
 	}
+
+	public void mostrarInfo(String camino) {
+		if(textArea.getText().isEmpty()) textArea.setText(camino);
+		else textArea.append(camino);
+	}
+
+
 }

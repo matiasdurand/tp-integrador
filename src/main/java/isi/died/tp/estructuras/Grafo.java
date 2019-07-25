@@ -361,17 +361,5 @@ public class Grafo<T> {
 		}
 		return false;
 	}
-
-	public Planta buscarPlanta(Planta inicial, Insumo i, Integer saltos) {
-		return null;
-	}
-
-	public HashMap<List<Vertice<Planta>>, Double> caminosPosibles(Vertice<Planta> v1, Vertice<Planta> v2) {
-		return null;
-	}
-
-	public List<Arista<Planta>> getAristas() {
-		return null;
-	}
   
 }

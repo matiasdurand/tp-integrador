@@ -13,13 +13,13 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
 import isi.died.tp.controladores.ControladorPaneles;
-import isi.died.tp.dominio.GrafoPlantas;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Liquido;
 import isi.died.tp.dominio.Planta;
 import isi.died.tp.dominio.Stock;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.estructuras.Grafo;
+import isi.died.tp.estructuras.GrafoPlantas;
 import isi.died.tp.estructuras.Vertice;
 
 public class Aplicacion {
@@ -80,28 +80,36 @@ public class Aplicacion {
         menuItem1.addActionListener(e -> { 
       	  f.getContentPane().removeAll();
       	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelPlanta());
-      	  f.pack(); } );
+      	  f.pack();
+      	  f.revalidate();
+      	  f.repaint();} );
         menu1.add(menuItem1);
         
         menuItem2 = new JMenuItem("Insumos");
         menuItem2.addActionListener(e -> { 
       	  f.getContentPane().removeAll();
       	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
-      	  f.pack(); } );
+      	  f.pack();
+      	  f.revalidate();
+    	  f.repaint();} );
         menu1.add(menuItem2);
         
         menuItem3 = new JMenuItem("Camiones");
         menuItem3.addActionListener(e -> { 
       	  f.getContentPane().removeAll();
       	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelCamion());
-      	  f.pack(); } );
+      	  f.pack();
+      	  f.revalidate();
+    	  f.repaint();} );
         menu1.add(menuItem3);  
 
         menuItem4 = new JMenuItem("Grafo");
         menuItem4.addActionListener(e -> { 
       	  f.getContentPane().removeAll();
-      	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelGrafo());
-      	  f.pack(); } );
+      	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelGrafoView());
+      	  f.pack();
+      	  f.revalidate();
+    	  f.repaint();} );
         menu2.add(menuItem4);
        
         f.pack();
