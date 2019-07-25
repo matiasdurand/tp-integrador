@@ -11,6 +11,8 @@ public class Insumo implements Comparable<Insumo> {
 	protected Double costo;
 	protected Integer stock;
 	protected Double peso;
+	protected Boolean esLiquido;
+
 	protected Boolean esRefrigerado;
 	
 	public Insumo() {
@@ -58,6 +60,10 @@ public class Insumo implements Comparable<Insumo> {
 	public void setUnidadDeMedida(UnidadDeMedida unidadDeMedida) {
 		this.unidadDeMedida = unidadDeMedida;
 	}
+	
+	public void setUnidadDeMedida(String tipo) {
+		this.unidadDeMedida = UnidadDeMedida.valueOf(tipo);
+	}
 
 	public Double getCosto() {
 		return costo;
@@ -90,6 +96,15 @@ public class Insumo implements Comparable<Insumo> {
 	public void setEsRefrigerado(Boolean esRefrigerado) {
 		this.esRefrigerado = esRefrigerado;
 	}
+	
+	public Boolean getEsLiquido() {
+		return esLiquido;
+	}
+
+	public void setEsLiquido(Boolean esLiquido) {
+		this.esLiquido = esLiquido;
+	}
+
 	
 	@Override
 	public int compareTo(Insumo insumo) {

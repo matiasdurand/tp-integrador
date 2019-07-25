@@ -1,7 +1,9 @@
 package isi.died.tp.gui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import isi.died.tp.aplicacion.Aplicacion;
+import isi.died.tp.controladores.ControladorCamiones;
 import isi.died.tp.controladores.ControladorInsumos;
 import isi.died.tp.controladores.ControladorPaneles;
 import isi.died.tp.dominio.Insumo;
@@ -47,7 +50,7 @@ public class PanelInsumo extends JPanel {
 	private JButton btnEditar;
 	private JButton btnEliminar;
 	private ControladorInsumos controlador;
-	private int idSeleccionado;
+	private Integer idSeleccionado;
 	
 	public PanelInsumo() {
 		super();
@@ -57,14 +60,216 @@ public class PanelInsumo extends JPanel {
 		configurarEventos();
 	}
 	
+	public Dimension getPreferredSize() {
+        return new Dimension(450,250);
+    }
+	
 	private void armar() {
 		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();  
-		/*CONFIGURAR APARIENCIA DEL PANEL.
+		//
+		
+		int fila = 0;
+    	int col = 0;
+    	
+    	GridBagConstraints c = new GridBagConstraints();    	
+
+    	this.lblPanelTitulo = new JLabel("GESTIÓN DE INSUMOS");
+    	this.lblPanelTitulo.setFont(ControladorCamiones.FUENTE_TITULO);
+    	this.lblPanelTitulo.setForeground(ControladorCamiones.COLOR_TITULO);
+    	c.gridx=col;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.gridwidth=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblPanelTitulo,c);
+    	
+    	//Primer fila
+    	
+    	col =0;
+    	fila++;
+
+    	this.lblNombre = new JLabel("Nombre:");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblNombre,c);
+    	
+    	this.nombre = new JTextField(30);
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weightx=0.5;
+    	this.add(nombre,c);
+    	
+    	this.lblOrdenarPor = new JLabel("Ordenar por:");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblOrdenarPor,c);
+    	
+    	this.cmboxOrdenarPor = new JComboBox<String>();
+    	cmboxOrdenarPor.addItem("Costo");
+    	cmboxOrdenarPor.addItem("Nombre");
+    	cmboxOrdenarPor.addItem("Stock total");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weightx=0.5;
+    	this.add(cmboxOrdenarPor,c);
+    	
+    	this.rbtnAscendente = new JRadioButton("Ascendente");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weightx=0.5;
+    	rbtnAscendente.setSelected(true);
+    	this.add(rbtnAscendente,c);
+    	
+    	this.rbtnDescendente = new JRadioButton("Descendente");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weightx=0.5;
+    	this.add(rbtnDescendente,c);
+    	
+    	//Segunda fila
+    	
+    	col =0;
+    	fila++;
+    	
+    	this.lblCostoMinimo = new JLabel("Costo mínimo:");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblCostoMinimo,c);
+    	
+    	this.costoMinimo = new JTextField(30);
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weightx=0.5;
+    	this.add(costoMinimo,c);
+    	
+    	this.lblCostoMaximo = new JLabel("Costo máximo:");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblCostoMaximo,c);
+    	
+    	this.costoMaximo = new JTextField(30);
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weightx=0.5;
+    	this.add(costoMaximo,c);
+    	
+    	this.lblStockMinimo = new JLabel("Stock mínimo:");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblStockMinimo,c);
+    	
+    	this.stockMinimo = new JTextField(30);
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weightx=0.5;
+    	this.add(stockMinimo,c);
+    	
+    	this.lblStockMaximo = new JLabel("Stock máximo:");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblStockMaximo,c);
+    	
+    	this.stockMaximo = new JTextField(30);
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weightx=0.5;
+    	this.add(stockMaximo,c);
+    	
+    	//Tercera fila
+    	
+    	col =0;
+    	fila++;
+    	
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=8;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weighty=1.0;
+    	c.weightx=1.0;
+		
 		gtm = crearModeloTabla();
     	tablaInsumos = new JTable(gtm);
     	tablaInsumos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    	JScrollPane scrollPane = new JScrollPane(tablaInsumos);*/
+    	JScrollPane scrollPane = new JScrollPane(tablaInsumos);
+    	this.add(scrollPane,c);
+    	
+    	//Cuarta fila
+    	
+    	col =0;
+    	fila++;
+    	
+    	JPanel panelBotones = new JPanel();
+
+    	this.btnBuscar = new JButton("Buscar");
+    	this.btnRegistrar = new JButton("Registrar");
+    	this.btnEditar = new JButton("Editar");
+    	this.btnEliminar = new JButton("Eliminar");
+    	this.btnEditar.setEnabled(false);
+    	this.btnEliminar.setEnabled(false);
+    	panelBotones.add(btnBuscar);
+    	panelBotones.add(btnRegistrar);
+    	panelBotones.add(btnEditar);
+    	panelBotones.add(btnEliminar);
+    	c.fill=GridBagConstraints.BOTH;
+    	c.anchor=GridBagConstraints.CENTER;
+    	c.gridy=fila;
+    	c.gridwidth=8;
+    	c.weighty=0.0;
+    	c.weightx=0.0;
+    	this.add(panelBotones,c);
 	}
 	
 	private void configurarEventos() {
@@ -73,6 +278,7 @@ public class PanelInsumo extends JPanel {
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
 		});
+		
 		btnRegistrar.addActionListener( e -> {
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelRegistrarInsumo());
@@ -80,6 +286,7 @@ public class PanelInsumo extends JPanel {
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
     	});
+		
 		btnEditar.addActionListener( e -> {
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
@@ -87,12 +294,15 @@ public class PanelInsumo extends JPanel {
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
 		});
+		
 		btnEliminar.addActionListener( e -> {
-			int resultado = JOptionPane.showConfirmDialog(null, "Eliminar insumo", "¿Desea eliminar el insumo seleccionado?", JOptionPane.YES_NO_OPTION);
-    		if(resultado == 0) controlador.eliminarInsumo(idSeleccionado);
-	    	btnEliminar.setEnabled(false);
-	    	btnEditar.setEnabled(false);
+			int confirmar = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el insumo seleccionado?", "Eliminar insumo", JOptionPane.YES_NO_OPTION);
+			if(confirmar==0) {
+				controlador.borrarInsumo(idSeleccionado);
+				btnEliminar.setEnabled(false);
+			}
 		});
+		
 		tablaInsumos.getSelectionModel().addListSelectionListener( e -> {
     		if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && e.getFirstIndex()<gtm.getDatos().size()) {
 	    		Insumo auxiliar = gtm.datos.get(e.getFirstIndex());
@@ -102,13 +312,21 @@ public class PanelInsumo extends JPanel {
     		}
         });
 		cmboxOrdenarPor.addActionListener( e -> {
-			actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected()));
+			if(tablaInsumos.getRowCount()>0) {
+				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected()));
+			}
 		});
 		rbtnDescendente.addActionListener( e -> {
-			actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), true));
+			rbtnAscendente.setSelected(false);
+			if(tablaInsumos.getRowCount()>0) {
+				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), true));
+			}
 		});
 		rbtnAscendente.addActionListener( e -> {
-			actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), false));
+			rbtnDescendente.setSelected(false);
+			if(tablaInsumos.getRowCount()>0) {
+				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), false));
+			}
 		});
 		
 	}
@@ -119,11 +337,12 @@ public class PanelInsumo extends JPanel {
     	lista.add(new GenericTableColumn("Id" , "getId"));
     	lista.add(new GenericTableColumn("Nombre" , "getNombre"));
     	lista.add(new GenericTableColumn("Descripción" , "getDescripcion"));
-    	lista.add(new GenericTableColumn("UDM" , "getUnidadDeMedida"));
-    	lista.add(new GenericTableColumn("Costo por UDM" , "getCosto"));
+    	lista.add(new GenericTableColumn("Unidad de medida" , "getUnidadDeMedida"));
+    	lista.add(new GenericTableColumn("Costo por unidad" , "getCosto"));
     	lista.add(new GenericTableColumn("Stock total" , "getStock"));
     	lista.add(new GenericTableColumn("Peso (KG)" , "getPeso"));
-    	lista.add(new GenericTableColumn("Refrigeración" , "getEsRefrigerado"));
+    	lista.add(new GenericTableColumn("Líquido", "getEsLiquido"));
+    	lista.add(new GenericTableColumn("Refrigerado" , "getEsRefrigerado"));
     	gtm.setColumnas(lista);
     	return gtm;
     }

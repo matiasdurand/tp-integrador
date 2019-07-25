@@ -71,7 +71,7 @@ public class ControladorInsumos {
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(listaInsumos);
-					JOptionPane.showMessageDialog((Component)pInsumo, "Insumo Registrado");
+					JOptionPane.showMessageDialog((Component)pInsumo, "El insumo ha sido creado correctamente");
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
@@ -92,7 +92,7 @@ public class ControladorInsumos {
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(listaInsumos);
-					JOptionPane.showMessageDialog((Component)pInsumo, "Insumo Actualizado");
+					JOptionPane.showMessageDialog((Component)pInsumo, "El insumo ha sido actualizado correctamente");
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
@@ -102,14 +102,14 @@ public class ControladorInsumos {
 		hilo.start();
 	}
 	
-	public void eliminarInsumo(Integer id) {
+	public void borrarInsumo(Integer id) {
 		Runnable r = () -> {
 			dao.borrar(id);
 			List<Insumo> listaInsumos = dao.buscarTodos();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(listaInsumos);
-					JOptionPane.showMessageDialog((Component)pInsumo, "Proyecto borrado");
+					JOptionPane.showMessageDialog((Component)pInsumo, "El insumo ha sido eliminado correctamente");
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();

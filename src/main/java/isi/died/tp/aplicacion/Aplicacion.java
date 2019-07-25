@@ -58,10 +58,10 @@ public class Aplicacion {
 	
 	private static void mostrarVentanaPrincipal() {
 		
-		f = new JFrame("Aplicacion");
+		f = new JFrame("Sistema de Gestión Logística");
 		
+		//f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //f.setSize(1500, 1000);
         f.setMinimumSize(new Dimension(1000, 750));
         
         JMenuBar menuBar = new JMenuBar();
@@ -103,7 +103,7 @@ public class Aplicacion {
       	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelGrafo());
       	  f.pack(); } );
         menu2.add(menuItem4);
-        
+       
         f.pack();
         f.setVisible(true);
 		

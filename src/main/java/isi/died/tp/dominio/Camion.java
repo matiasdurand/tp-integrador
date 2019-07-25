@@ -15,6 +15,27 @@ public class Camion {
 		
 	}
 	
+	public Camion(String marca, String modelo, Integer año, String dominio, Integer capacidad, Double costoPorKm, boolean aptoParaLiquidos) {
+		this.marca=marca;
+		this.modelo=modelo;
+		this.año=año;
+		this.dominio=dominio;
+		this.capacidad=capacidad;
+		this.costoPorKm=costoPorKm;
+		this.aptoParaLiquidos=aptoParaLiquidos;
+	}
+	
+	public Camion(Integer id, String marca, String modelo, Integer año, String dominio, Integer capacidad, Double costoPorKm, boolean aptoParaLiquidos) {
+		this.id=id;
+		this.marca=marca;
+		this.modelo=modelo;
+		this.año=año;
+		this.dominio=dominio;
+		this.capacidad=capacidad;
+		this.costoPorKm=costoPorKm;
+		this.aptoParaLiquidos=aptoParaLiquidos;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

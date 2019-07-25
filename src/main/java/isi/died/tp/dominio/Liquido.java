@@ -4,6 +4,9 @@ public class Liquido extends Insumo {
 	
 	private Double densidad;
 	
+	public Liquido() {
+		
+	}
 	
 	public Liquido(String nombre, String descripcion, Double costo, Integer stock, Boolean esRefrigerado, Double densidad) {
 		super(nombre, descripcion, UnidadDeMedida.Litro, costo, stock, 1*0.001*densidad , esRefrigerado);
