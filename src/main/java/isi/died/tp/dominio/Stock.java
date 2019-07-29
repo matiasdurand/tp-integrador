@@ -1,4 +1,4 @@
-package isi.died.tp.dominio;
+ package isi.died.tp.dominio;
 
 public class Stock {
 	
@@ -31,6 +31,10 @@ public class Stock {
 	
 	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
+	}
+	
+	public void aumentarStock(Integer cantidad) {
+		this.cantidad += cantidad;
 	}
 	
 	public Integer getPuntoPedido() {

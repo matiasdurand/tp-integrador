@@ -1,5 +1,6 @@
 package isi.died.tp.gui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -57,6 +58,10 @@ public class PanelEditarInsumo extends JPanel {
 		cargarInterfaz(idInsumo);
 		configurarEventos();
 	}
+	
+	public Dimension getPreferredSize() {
+        return new Dimension(1000,750);
+    }
 	
 	private void cargarInterfaz(Integer idInsumo) {
 		if(controlador.esLiquido(idInsumo)) {
@@ -314,14 +319,14 @@ public class PanelEditarInsumo extends JPanel {
 				else controlador.actualizarInsumo(idSeleccionado, nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), Double.parseDouble(peso.getText()), checkBoxRefrigerado.isSelected(), -1.00);
 			}
 			Aplicacion.f.getContentPane().removeAll();
-			Aplicacion.f.setContentPane(ControladorPaneles.getInstance().getPanelInsumo());
+			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
 			Aplicacion.f.pack();
 			Aplicacion.f.revalidate();
 			Aplicacion.f.repaint();
 		});
 		btnCancelar.addActionListener( e -> {
 			Aplicacion.f.getContentPane().removeAll();
-			Aplicacion.f.setContentPane(ControladorPaneles.getInstance().getPanelInsumo());
+			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
 			Aplicacion.f.pack();
 			Aplicacion.f.revalidate();
 			Aplicacion.f.repaint();

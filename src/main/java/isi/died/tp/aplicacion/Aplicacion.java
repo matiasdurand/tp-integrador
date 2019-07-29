@@ -53,26 +53,31 @@ public class Aplicacion {
 	
 	public static void main( String[] args )
     {
-    	SwingUtilities.invokeLater(new Runnable(){ public void run(){ mostrarVentanaPrincipal(); cargarDatosParaProbar(); } } );
+    	SwingUtilities.invokeLater(new Runnable(){ public void run(){ 
+    		mostrarVentanaPrincipal();
+    		cargarDatosParaProbar();
+    		} 
+    	} );
     }
 	
 	private static void mostrarVentanaPrincipal() {
 		
 		f = new JFrame("Sistema de Gestión Logística");
-		
 		//f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setMinimumSize(new Dimension(1000, 750));
         
         JMenuBar menuBar = new JMenuBar();
-        JMenu menu1, menu2;
+        JMenu menu0, menu1, menu2;
         JMenuItem menuItem1, menuItem2, menuItem3, menuItem4;
         
         f.setJMenuBar(menuBar);
- 
+        
+        menu0 = new JMenu("Menú principal");
         menu1 = new JMenu("Administrar");
         menu2 = new JMenu("Ver");
         
+        menuBar.add(menu0);
         menuBar.add(menu1);
         menuBar.add(menu2);
         

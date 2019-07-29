@@ -53,9 +53,9 @@ public class ControladorGrafoView {
 	
 	public void inicializarGrafoView() {
 		Runnable r = () -> {
-			//List<Planta> listaPlantas = controladorPlantas.buscarTodas();
+			List<Planta> plantas = controladorPlantas.buscarPlantas();
 			//PARA PROBAR LA VISUALIZACION: 
-			List<Planta> plantas = Aplicacion.listaPlantas;//probar
+			//List<Planta> plantas = Aplicacion.listaPlantas;//probar
 			List<VerticeView> vertices = new ArrayList<VerticeView>();
 			int y = 100, x = 0, i = 0;
 			for(Planta p: plantas){
@@ -83,8 +83,8 @@ public class ControladorGrafoView {
 	
 	public void cargarComboInsumos(JComboBox<Insumo> combo){
 		Runnable r = () -> {
-				//List<Insumo> insumos = controladorInsumos.buscarTodos();
-				List<Insumo> insumos = Aplicacion.listaInsumos;//para probar
+				List<Insumo> insumos = controladorInsumos.buscarTodos();
+				//List<Insumo> insumos = Aplicacion.listaInsumos;//para probar
 				try {
 					SwingUtilities.invokeAndWait(() -> {
 						for(Insumo i: insumos){

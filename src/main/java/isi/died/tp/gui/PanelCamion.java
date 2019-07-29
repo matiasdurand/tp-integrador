@@ -305,7 +305,7 @@ public class PanelCamion extends JPanel {
 	}
 	
 	public Dimension getPreferredSize() {
-        return new Dimension(450,250);
+        return new Dimension(1000,750);
     }
 	
 	private void configurarEventos() {

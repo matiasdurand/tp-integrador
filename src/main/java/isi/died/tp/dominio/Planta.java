@@ -17,6 +17,11 @@ public class Planta {
 			this.nombre = nombre;
 		}
 		
+		public Planta(Integer id, String nombre) {
+			this.id=id;
+			this.nombre=nombre;
+		}
+		
 		public Planta(String nombre, List<Stock> listaStock) {
 			this.nombre = nombre;
 			this.listaStock = listaStock;
@@ -62,5 +67,13 @@ public class Planta {
 		public boolean equals(Object obj) {
 			Planta p = (Planta)obj;
 			return id.equals(p.getId()) && nombre.equals(p.getNombre());
+		}
+
+		public Stock buscarStock(String nombre) {
+			for(Stock s: listaStock) {
+				if(s.getInsumo().getNombre().equals(nombre))
+					return s;
+			}
+			return null;
 		}
 }
