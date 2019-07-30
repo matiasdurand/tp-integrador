@@ -2,8 +2,9 @@ package isi.died.tp.controladores;
 
 import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.JComboBox;
@@ -63,17 +64,20 @@ public class ControladorInsumos {
 		this.pEInsumo = pEInsumo;
 	}
 	
-	public void crearInsumo(String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
+	public Insumo crearInsumo(String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
+		
+		Insumo i;
+		if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
+		else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
+		
 		Runnable r = () -> {
-			Insumo i;
-			if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
-			else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
 			dao.crear(i);
 			List<Insumo> listaInsumos = dao.buscarTodos();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(listaInsumos);
 					JOptionPane.showMessageDialog((Component)pInsumo, "El insumo ha sido creado correctamente");
+					
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
@@ -81,6 +85,8 @@ public class ControladorInsumos {
 		};
 		Thread hilo = new Thread(r);
 		hilo.start();
+		
+		return i;
 	}
 	
 	public void actualizarInsumo(Integer id, String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
@@ -152,19 +158,50 @@ public class ControladorInsumos {
 	
 	public List<Insumo> ordenarPor(String criterio, Boolean descendente) {
 		List<Insumo> listaInsumos = dao.buscarTodos();
+		
 		if(criterio.equals("Nombre")) {
-			if(descendente) listaInsumos.sort( (i1,i2) -> i1.getNombre().compareTo(i2.getNombre()));
-			else listaInsumos.sort( (i1,i2) -> i2.getNombre().compareTo(i1.getNombre()));
+			if(descendente) {
+				Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getNombre().compareTo(i2.getNombre()));
+				arbol.addAll(listaInsumos);
+				listaInsumos.clear();
+				listaInsumos.addAll(arbol);
+			}
+			else {
+				Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getNombre().compareTo(i1.getNombre()));
+				arbol.addAll(listaInsumos);
+				listaInsumos.clear();
+				listaInsumos.addAll(arbol);
+			}
 		}
 		else {
 			if(criterio.equals("Stock total")) {
-				if(descendente) listaInsumos.sort( (i1,i2) -> i1.getStock().compareTo(i2.getStock()));
-				else listaInsumos.sort( (i1,i2) -> i2.getStock().compareTo(i1.getStock()));
+				if(descendente) {
+					Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getStock().compareTo(i2.getStock()));
+					arbol.addAll(listaInsumos);
+					listaInsumos.clear();
+					listaInsumos.addAll(arbol);
+				}
+				else {
+					Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getStock().compareTo(i1.getStock()));
+					arbol.addAll(listaInsumos);
+					listaInsumos.clear();
+					listaInsumos.addAll(arbol);
+				}
 			}
 			else {
 				if(criterio.equals("Costo")) {
-					if(descendente) listaInsumos.sort( (i1,i2) -> i1.getCosto().compareTo(i2.getCosto()));
-					else listaInsumos.sort( (i1,i2) -> i2.getCosto().compareTo(i1.getCosto()));
+					if(descendente) {
+						Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getCosto().compareTo(i2.getCosto()));
+						arbol.addAll(listaInsumos);
+						listaInsumos.clear();
+						listaInsumos.addAll(arbol);
+					}
+					else {
+						Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getCosto().compareTo(i1.getCosto()));
+						arbol.addAll(listaInsumos);
+						listaInsumos.clear();
+						listaInsumos.addAll(arbol);
+					}
 				}
 			}
 		}
@@ -222,5 +259,10 @@ public class ControladorInsumos {
 	public List<Insumo> buscarTodos() {
 		return dao.buscarTodos();
 	}
+
+	public void almacenar(Insumo i) {
+		ControladorPlantas.getInstance().almacenar(i);
+	}
+
 
 }

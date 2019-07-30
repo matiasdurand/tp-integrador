@@ -6,6 +6,8 @@ public class Arista<T> {
 	private double distancia;
 	private double tiempo;
 	private double pesoMax;
+	private double capResidualOrigen;
+	private double capResidualDestino;
 
 	public Arista(Vertice<T> ini, Vertice<T> fin, Double distancia, Double tiempo, Double pesoMax){
 		this.inicio = ini;
@@ -13,8 +15,23 @@ public class Arista<T> {
 		this.distancia = distancia;
 		this.tiempo = tiempo;
 		this.pesoMax = pesoMax;
+		this.capResidualOrigen = -1;
+		this.capResidualDestino = -1;
 	} 
 	
+	public double getCapResidualOrigen() {
+		return capResidualOrigen;
+	}
+
+	public double getCapResidualDestino() {
+		return capResidualDestino;
+	}
+
+
+	public void setCapacidades(double capResidualOrigen, double capResidualDestino) {
+		this.capResidualOrigen = capResidualOrigen;
+		this.capResidualDestino = capResidualDestino;
+	}
 	/*public Arista(Vertice<T> ini, Vertice<T> fin){
 		this();
 		this.inicio = ini;
@@ -71,9 +88,9 @@ public class Arista<T> {
 		return (obj instanceof Arista<?>) && ((Arista<?>)obj).getValor().equals(this.valor); 
 	}*/
 
-	/*@Override
+	@Override
 	public String toString() {
 		return "( "+this.inicio.getValor()+" --> "+this.fin.getValor()+" )";
-	}*/
+	}
 	
 }

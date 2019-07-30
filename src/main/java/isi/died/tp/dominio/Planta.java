@@ -1,5 +1,6 @@
 package isi.died.tp.dominio;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,22 +10,11 @@ public class Planta {
 		private String nombre;
 		private List<Stock> listaStock;
 		
-		public Planta() {
-			
-		}
+		public Planta() {};
 		
 		public Planta(String nombre) {
 			this.nombre = nombre;
-		}
-		
-		public Planta(Integer id, String nombre) {
-			this.id=id;
-			this.nombre=nombre;
-		}
-		
-		public Planta(String nombre, List<Stock> listaStock) {
-			this.nombre = nombre;
-			this.listaStock = listaStock;
+			listaStock = new ArrayList<Stock>();
 		}
 		
 		public Integer getId() {
@@ -68,12 +58,28 @@ public class Planta {
 			Planta p = (Planta)obj;
 			return id.equals(p.getId()) && nombre.equals(p.getNombre());
 		}
+		
+		@Override
+		public String toString() {
+			return nombre;
+		}
 
-		public Stock buscarStock(String nombre) {
-			for(Stock s: listaStock) {
-				if(s.getInsumo().getNombre().equals(nombre))
-					return s;
+		public void agregar(Stock s) {
+			if(!listaStock.contains(s)) listaStock.add(s);
+			else {
+				listaStock.remove(s);
+				listaStock.add(s);
 			}
-			return null;
+		}
+
+		public boolean validarCantidad(Insumo i, Integer cantidad) {
+			//comparo cantidad ingresada con lo disponible en la planta de acopio.
+			Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
+			Integer disponible = stock.getCantidad();
+			if(disponible>=cantidad) {
+				stock.setCantidad(disponible-cantidad);
+				return true;
+			}
+			return false;
 		}
 }

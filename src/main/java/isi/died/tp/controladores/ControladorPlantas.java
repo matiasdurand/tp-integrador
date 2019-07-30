@@ -12,6 +12,8 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import isi.died.tp.dao.InsumoDao;
+import isi.died.tp.dao.InsumoDaoH2;
 import isi.died.tp.dao.PlantaDao;
 import isi.died.tp.dao.PlantaDaoH2;
 import isi.died.tp.dominio.Insumo;
@@ -20,6 +22,7 @@ import isi.died.tp.dominio.Stock;
 import isi.died.tp.estructuras.Arista;
 import isi.died.tp.estructuras.GrafoPlantas;
 import isi.died.tp.gui.PanelPlanta;
+import isi.died.tp.gui.PanelPrincipal;
 
 public class ControladorPlantas {
 
@@ -28,11 +31,13 @@ public class ControladorPlantas {
 	private GrafoPlantas grafoPlantas;
 	private ControladorInsumos controladorInsumos;
 	private PlantaDao dao;
+	private PanelPrincipal pPrincipal;
 	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
 	public static final Color COLOR_TITULO = new Color(5,85,244);
 	
 	
 	private ControladorPlantas() {
+		controladorInsumos = ControladorInsumos.getInstance();
 		dao = new PlantaDaoH2();
 		grafoPlantas = GrafoPlantas.getInstance();
 	}
@@ -48,6 +53,14 @@ public class ControladorPlantas {
 
 	public void setpPlanta(PanelPlanta pPlanta) {
 		this.pPlanta = pPlanta;
+	}
+	
+	public PanelPrincipal getpPrincipal() {
+		return pPrincipal;
+	}
+	
+	public void setpPrincipal(PanelPrincipal pPrincipal) {
+		this.pPrincipal = pPrincipal;
 	}
 	
 	public List<Planta> buscarPlantas(){
@@ -78,7 +91,6 @@ public class ControladorPlantas {
 	public void cargarComboInsumos(JComboBox<Insumo> combo){
 		Runnable r = () -> {
 				List<Insumo> insumos = controladorInsumos.buscarTodos();
-				//List<Insumo> insumos = Aplicacion.listaInsumos;//para probar
 				try {
 					SwingUtilities.invokeAndWait(() -> {
 						for(Insumo i: insumos){
@@ -91,11 +103,12 @@ public class ControladorPlantas {
 			};
 			Thread hilo = new Thread(r);
 			hilo.start();	
-	}
+		}
 	
 	public void crearPlanta(String nombre) {
 		Runnable r = () -> {
 			Planta p = new Planta(nombre);
+			grafoPlantas.addNodo(p);
 			dao.crear(p);
 			List<Planta> lista = dao.buscarTodas();
 			try {
@@ -107,15 +120,35 @@ public class ControladorPlantas {
 				e.printStackTrace();
 			}
 		};
-		
 		Thread hilo = new Thread(r);
-		
+		hilo.start();
+	}
+	
+	public void crearAcopios(String nombre1, String nombre2) {
+		Runnable r = () -> {
+			Planta acopioInicial = new Planta(nombre1);
+			Planta acopioFinal = new Planta(nombre2);
+			grafoPlantas.addNodo(acopioInicial);
+			grafoPlantas.addNodo(acopioFinal);
+			dao.crear(acopioInicial);
+			dao.crear(acopioFinal);
+			List<Planta> lista = dao.buscarTodas();
+			try {
+				SwingUtilities.invokeAndWait(() -> {
+					pPlanta.actualizarDatosTabla(lista);
+				});
+			} catch (InvocationTargetException | InterruptedException e) {
+				e.printStackTrace();
+			}
+		};
+		Thread hilo = new Thread(r);
 		hilo.start();
 	}
 	
 	public void actualizarPlanta(Integer id, String nombre) {
 		Runnable r = () -> {
-			Planta p = new Planta(id, nombre);
+			Planta p = new Planta(nombre);
+			p.setId(id);
 			dao.actualizar(p);
 			List<Planta> lista = dao.buscarTodas();
 			try {
@@ -152,15 +185,14 @@ public class ControladorPlantas {
 		hilo.start();
 	}
 
-	public void cargarComboPlantasExceptoSeleccionada(JComboBox<String> combo, Integer id) {
+	public void cargarComboPlantasExceptoSeleccionada(JComboBox<Planta> combo, Integer id) {
 		Runnable r = () -> {
 			List<Planta> plantas = dao.buscarTodas();
-			//List<Planta> plantas = Aplicacion.listaPlantas;//para probar
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					for(Planta p: plantas){
 						if(p.getId()!=id) {
-							combo.addItem(p.getNombre());
+							combo.addItem(p);
 						}
 					}
 				});
@@ -170,7 +202,6 @@ public class ControladorPlantas {
 		};
 		Thread hilo = new Thread(r);
 		hilo.start();
-		
 	}
 	
 	public Planta obtenerPlanta(Integer id) {
@@ -199,10 +230,23 @@ public class ControladorPlantas {
 	}
 	
 	public void cargarStock(Integer id, Insumo i, Integer cantidad, Integer puntoPedido) {
-		//Comportamiento
-		Stock aux = dao.buscar(id).buscarStock(i.getNombre());
-		aux.aumentarStock(cantidad);
-		aux.setPuntoPedido(puntoPedido);
+		Planta acopioInicial = dao.buscar(1);
+		if(acopioInicial.validarCantidad(i, cantidad)) {
+			Stock s = new Stock(cantidad, puntoPedido, i);
+			dao.buscar(id).agregar(s);
+		}
+	}
+	
+	public List<Planta> pageRank(){
+		return grafoPlantas.pageRank();
+	}
+
+	public void calcularFlujoMaximo() {
+		pPrincipal.mostrarFlujoMaximo(grafoPlantas.flujoMaximo());
+	}
+
+	public void almacenar(Insumo i) {
+		dao.buscar(1).agregar(new Stock(i.getStock(), 0, i));
 	}
 	
 }

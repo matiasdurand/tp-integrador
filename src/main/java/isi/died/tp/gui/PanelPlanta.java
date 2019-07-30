@@ -46,7 +46,6 @@ public class PanelPlanta extends JPanel {
 	
 	//agregrar como atributos todos los componentes de la interfaz
 	
-	
 	public PanelPlanta() {
 		super();
 		controlador = ControladorPlantas.getInstance();
@@ -285,7 +284,7 @@ public class PanelPlanta extends JPanel {
 					controlador.crearPlanta(nombre.getText());
 				}
 				else {
-					controlador.actualizarPlanta(idSeleccionado,nombre.getText());
+					controlador.actualizarPlanta(idSeleccionado, nombre.getText());
 				}
 			}
 			else {
@@ -306,8 +305,8 @@ public class PanelPlanta extends JPanel {
 		});
 		
 		this.btnConectar.addActionListener(e -> {
-			JComboBox<String> cmboxPlantas = new JComboBox<String>();
-			controlador.cargarComboPlantasExceptoSeleccionada(cmboxPlantas,idSeleccionado);
+			JComboBox<Planta> cmboxPlantas = new JComboBox<Planta>();
+			controlador.cargarComboPlantasExceptoSeleccionada(cmboxPlantas, idSeleccionado);
 			JTextField distancia = new JTextField();
 			distancia.setText("");
 			JTextField duracion = new JTextField();
@@ -359,10 +358,8 @@ public class PanelPlanta extends JPanel {
 			
 			if(opcion == JOptionPane.OK_OPTION) {
 				if(!cantidad.getText().isEmpty() && !puntoPedido.getText().isEmpty()) {
-					if(((Insumo)cmboxInsumos.getSelectedItem()).getStock() >= Integer.valueOf(cantidad.getText())) {
 						controlador.cargarStock(idSeleccionado,(Insumo)cmboxInsumos.getSelectedItem(),Integer.valueOf(cantidad.getText()), Integer.valueOf(puntoPedido.getText()));
 						JOptionPane.showMessageDialog(null, "Stock cargado exitosamente");
-					}
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
@@ -372,18 +369,22 @@ public class PanelPlanta extends JPanel {
 			
 		});
 		
-		this.tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
-    		if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()< gtm.getDatos().size()) {
-	    		Planta aux = gtm.datos.get(lse.getFirstIndex());
-	    		idSeleccionado = aux.getId();
-	    		nombre.setText(aux.getNombre());
-	    		btnConectar.setEnabled(true);
-	    		btnEditar.setEnabled(true);
-	    		btnEliminar.setEnabled(true);
-	    		btnCargarStock.setEnabled(true);
-	    		cargarTablaStock(idSeleccionado);
-    		}
+		tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
+			
+    			if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()<gtm.getDatos().size()) {
+    	    		Planta aux = gtm.datos.get(lse.getFirstIndex());
+    	    		idSeleccionado = tablaPlantas.getSelectedRow()+1;
+    	    		nombre.setText(aux.getNombre());
+    	    		btnConectar.setEnabled(true);
+    	    		btnEditar.setEnabled(true);
+    	    		btnEliminar.setEnabled(true);
+    	    		btnCargarStock.setEnabled(true);
+    	    		//cargarTablaStock(idSeleccionado);
+    	    		System.out.println(idSeleccionado);
+    			}
+    			
         });
+		
 		
 	}
 	
@@ -403,6 +404,10 @@ public class PanelPlanta extends JPanel {
     public void actualizarDatosTabla(List<Planta> lista) {
     	this.gtm.setDatos(lista);
     	this.gtm.fireTableDataChanged();
+    }
+    
+    public void crearAcopios() {
+    	controlador.crearAcopios("Acopio Inicial", "Acopio Final");
     }
 	
 }

@@ -16,11 +16,17 @@ public class AristaView {
     private Shape linea;
     private Stroke formatoLinea;
     private Paint color;
+    private String distancia;
+    private String tiempo;
+    private String peso;
 
-    public AristaView(VerticeView origen, VerticeView destino) {
+    public AristaView(VerticeView origen, VerticeView destino, String distancia, String tiempo, String peso) {
     	this.origen = origen;
     	this.destino = destino;
     	this.color = Color.BLACK;
+    	this.distancia = distancia;
+    	this.tiempo = tiempo;
+    	this.peso = peso;
     }
 
     public Paint getColor() {
@@ -68,6 +74,10 @@ public class AristaView {
 
     public void setDestino(VerticeView destino) {
         this.destino = destino;
+    }
+    
+    public String etiqueta() {
+    	return "["+distancia+"KM]["+tiempo+"MIN]["+peso+"KG]";
     }
     
     public void update() {

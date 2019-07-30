@@ -412,7 +412,7 @@ public class PanelCamion extends JPanel {
 		this.tablaCamiones.getSelectionModel().addListSelectionListener(lse -> {
     		if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()< gtm.getDatos().size()) {
 	    		Camion aux = gtm.datos.get(lse.getFirstIndex());
-	    		idSeleccionado = aux.getId();
+	    		idSeleccionado = tablaCamiones.getSelectedRow()+1;
 	    		marca.setText(aux.getMarca());
 	    		modelo.setText(aux.getModelo());
 	    		año.setText(aux.getAño().toString());

@@ -66,7 +66,6 @@ public class PanelInsumo extends JPanel {
 	
 	private void armar() {
 		setLayout(new GridBagLayout());
-		//
 		
 		int fila = 0;
     	int col = 0;
@@ -119,9 +118,10 @@ public class PanelInsumo extends JPanel {
     	this.add(lblOrdenarPor,c);
     	
     	this.cmboxOrdenarPor = new JComboBox<String>();
-    	cmboxOrdenarPor.addItem("Costo");
-    	cmboxOrdenarPor.addItem("Nombre");
-    	cmboxOrdenarPor.addItem("Stock total");
+    	//cmboxOrdenarPor.addItem("Costo");
+    	//cmboxOrdenarPor.addItem("Nombre");
+    	//cmboxOrdenarPor.addItem("Stock total");
+    	controlador.cargarComboOrdenarPor(cmboxOrdenarPor);
     	c.gridx=col++;
     	c.gridy=fila;
     	c.anchor = GridBagConstraints.CENTER;
@@ -273,30 +273,31 @@ public class PanelInsumo extends JPanel {
 	}
 	
 	private void configurarEventos() {
+		
 		btnBuscar.addActionListener( e -> {
-			actualizarTablaInsumos(controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText()));
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
+			actualizarTablaInsumos(controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText()));
 		});
 		
 		btnRegistrar.addActionListener( e -> {
+    		btnEliminar.setEnabled(false);
+    		btnEditar.setEnabled(false);
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelRegistrarInsumo());
 			Aplicacion.f.pack();
 			Aplicacion.f.revalidate();
 			Aplicacion.f.repaint();
-    		btnEliminar.setEnabled(false);
-    		btnEditar.setEnabled(false);
     	});
 		
 		btnEditar.addActionListener( e -> {
+    		btnEliminar.setEnabled(false);
+    		btnEditar.setEnabled(false);
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.setContentPane(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
 			Aplicacion.f.pack();
 			Aplicacion.f.revalidate();
 			Aplicacion.f.repaint();
-    		btnEliminar.setEnabled(false);
-    		btnEditar.setEnabled(false);
 		});
 		
 		btnEliminar.addActionListener( e -> {
@@ -308,30 +309,35 @@ public class PanelInsumo extends JPanel {
 		});
 		
 		tablaInsumos.getSelectionModel().addListSelectionListener( e -> {
+			
     		if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && e.getFirstIndex()<gtm.getDatos().size()) {
-	    		Insumo auxiliar = gtm.datos.get(e.getFirstIndex());
-	    		idSeleccionado = auxiliar.getId();
+	    		//Insumo auxiliar = gtm.datos.get(e.getFirstIndex());
+	    		idSeleccionado = tablaInsumos.getSelectedRow()+1;
 	    		btnEliminar.setEnabled(true);
 	    		btnEditar.setEnabled(true);
     		}
+
         });
+		
 		cmboxOrdenarPor.addActionListener( e -> {
 			if(tablaInsumos.getRowCount()>0) {
 				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected()));
 			}
 		});
-		rbtnDescendente.addActionListener( e -> {
+		
+		/*rbtnDescendente.addActionListener( e -> {
 			rbtnAscendente.setSelected(false);
 			if(tablaInsumos.getRowCount()>0) {
 				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), true));
 			}
 		});
+		
 		rbtnAscendente.addActionListener( e -> {
 			rbtnDescendente.setSelected(false);
 			if(tablaInsumos.getRowCount()>0) {
 				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), false));
 			}
-		});
+		});*/
 		
 	}
 	

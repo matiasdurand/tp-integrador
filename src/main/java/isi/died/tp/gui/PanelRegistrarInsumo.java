@@ -18,6 +18,7 @@ import isi.died.tp.aplicacion.Aplicacion;
 import isi.died.tp.controladores.ControladorCamiones;
 import isi.died.tp.controladores.ControladorInsumos;
 import isi.died.tp.controladores.ControladorPaneles;
+import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 
 public class PanelRegistrarInsumo extends JPanel {
@@ -280,7 +281,9 @@ public class PanelRegistrarInsumo extends JPanel {
 	}
 	
 	private void configurarEventos() {
+		
 		checkBoxLiquido.addActionListener( e -> {
+			
 			if(checkBoxLiquido.isSelected()) {
 				cmboxUDM.setEnabled(false);
 				cmboxUDM.setSelectedItem(UnidadDeMedida.Litro);
@@ -290,29 +293,35 @@ public class PanelRegistrarInsumo extends JPanel {
 				densidad.setEnabled(true);
 			}
 			else {
-				cmboxUDM.setSelectedItem(UnidadDeMedida.Gramo);
+				cmboxUDM.setSelectedItem(UnidadDeMedida.Kilogramo);
 				cmboxUDM.setEnabled(true);
 				peso.setEnabled(true);
 				peso.setText("");
 				densidad.setText("");
 				densidad.setEnabled(false);
 			}
+			
 		});
 		
 		btnGuardar.addActionListener( e -> {
+			
 			if(controlador.validarDatos(checkBoxLiquido.isSelected(), nombre.getText(), descripcion.getText(), costo.getText(), stock.getText(), peso.getText(), densidad.getText())) {
+				Insumo i;
 				if(checkBoxLiquido.isSelected()) {
-					controlador.crearInsumo(nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), -1.00, checkBoxRefrigerado.isSelected(), Double.parseDouble(densidad.getText()));
+					i = controlador.crearInsumo(nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), -1.00, checkBoxRefrigerado.isSelected(), Double.parseDouble(densidad.getText()));
 				}
 				else {
-					controlador.crearInsumo(nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), Double.parseDouble(peso.getText()), checkBoxRefrigerado.isSelected(), -1.00);
+					i = controlador.crearInsumo(nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), Double.parseDouble(peso.getText()), checkBoxRefrigerado.isSelected(), -1.00);
 				}
+				controlador.almacenar(i);
 			}
+			
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
 			Aplicacion.f.pack();
 			Aplicacion.f.revalidate();
 			Aplicacion.f.repaint();
+			
 		});
 		
 		btnCancelar.addActionListener( e -> {
@@ -322,6 +331,8 @@ public class PanelRegistrarInsumo extends JPanel {
 			Aplicacion.f.pack();
 			Aplicacion.f.revalidate();
 			Aplicacion.f.repaint();
+			
 		});
+		
 	}
 }

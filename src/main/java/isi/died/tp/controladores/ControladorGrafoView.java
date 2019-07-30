@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -14,13 +13,9 @@ import java.util.stream.Collectors;
 import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 
-import isi.died.tp.aplicacion.Aplicacion;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Planta;
-import isi.died.tp.dominio.Stock;
 import isi.died.tp.estructuras.Arista;
-import isi.died.tp.estructuras.Grafo;
-import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.gui.AristaView;
 import isi.died.tp.gui.PanelGrafoView;
 import isi.died.tp.gui.VerticeView;
@@ -54,8 +49,6 @@ public class ControladorGrafoView {
 	public void inicializarGrafoView() {
 		Runnable r = () -> {
 			List<Planta> plantas = controladorPlantas.buscarPlantas();
-			//PARA PROBAR LA VISUALIZACION: 
-			//List<Planta> plantas = Aplicacion.listaPlantas;//probar
 			List<VerticeView> vertices = new ArrayList<VerticeView>();
 			int y = 100, x = 0, i = 0;
 			for(Planta p: plantas){
@@ -74,7 +67,7 @@ public class ControladorGrafoView {
 			for(Arista<Planta> arista: aristas) {
 				v1 = vertices.stream().filter(v->v.getId().equals(arista.getInicio().getValor().getId())).collect(Collectors.toList()).get(0);
 				v2 = vertices.stream().filter(v->v.getId().equals(arista.getFin().getValor().getId())).collect(Collectors.toList()).get(0);
-				pGrafo.agregar(new AristaView(v1, v2));
+				pGrafo.agregar(new AristaView(v1, v2, arista.getDistancia().toString(), arista.getTiempo().toString(), arista.getPesoMax().toString()));
 			}
 		};
 		Thread hilo = new Thread(r);
@@ -84,7 +77,6 @@ public class ControladorGrafoView {
 	public void cargarComboInsumos(JComboBox<Insumo> combo){
 		Runnable r = () -> {
 				List<Insumo> insumos = controladorInsumos.buscarTodos();
-				//List<Insumo> insumos = Aplicacion.listaInsumos;//para probar
 				try {
 					SwingUtilities.invokeAndWait(() -> {
 						for(Insumo i: insumos){
@@ -144,8 +136,7 @@ public class ControladorGrafoView {
 	}
 
 	public List<Integer> verticesAPintar(Insumo i) {
-		//return controladorPlantas.necesitanInsumo(i).stream().map(p->p.getId()).collect(Collectors.toList());
-		return Aplicacion.listaPlantas.stream().filter(p->p.necesitaInsumo(i)).map(Planta::getId).collect(Collectors.toList());
+		return controladorPlantas.necesitanInsumo(i).stream().map(p->p.getId()).collect(Collectors.toList());
 	}
 	
 }

@@ -53,4 +53,9 @@ public class Stock {
 		this.insumo = insumo;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return insumo.equals(((Stock)obj).getInsumo());
+	}
+	
 }

@@ -1,6 +1,7 @@
 package isi.died.tp.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -31,8 +32,6 @@ public class PanelGrafoView extends JPanel {
 	
 	private JComboBox<Insumo> cmboxInsumo;
 	private JTextArea textArea;
-	//GenericTableModel<Insumo> gtm;
-	//private JTable tablaResultados;
 	private JRadioButton rbtnDistancia;
 	private JRadioButton rbtnTiempo;
 	private JButton btnMostrarInfo;
@@ -53,9 +52,18 @@ public class PanelGrafoView extends JPanel {
 		vertices = new ArrayList<>();
         aristas = new ArrayList<>();
         aristasAMover = new ArrayList<>();
-		controlador.inicializarGrafoView();
 		armar();
 		configurarEventos();
+	}
+	
+	public Dimension getPreferredSize() {
+        return new Dimension(1000,750);
+    }
+	
+	public void inicializarGrafoView() {
+		vertices.clear();
+		aristas.clear();
+		controlador.inicializarGrafoView();
 	}
 	
 	private void armar() {
@@ -64,7 +72,6 @@ public class PanelGrafoView extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();  
 		
 		cmboxInsumo = new JComboBox<Insumo>();
-		controlador.cargarComboInsumos(cmboxInsumo);
 		c.gridx=0;
 		c.gridy=2;
 		add(cmboxInsumo,c);
@@ -165,10 +172,14 @@ public class PanelGrafoView extends JPanel {
         		//controlador.buscarMejorCamino((Insumo)cmboxInsumo.getSelectedItem(), rbtnDistancia.isSelected());
         });
         
-        /*btnMostrarCaminos.addActionListener( e -> {
+        btnMostrarCaminos.addActionListener( e -> {
         	textArea.setText("");
-        	controlador.buscarCaminos(1, 6);
-        });*/
+        	controlador.buscarCaminos(idNodoInicio, idNodoFin);
+        });
+	}
+	
+	public void cargarComboInsumos() {
+		controlador.cargarComboInsumos(cmboxInsumo);
 	}
 	
 	public void agregar(AristaView arista){
@@ -199,6 +210,7 @@ public class PanelGrafoView extends JPanel {
     private void dibujarAristas(Graphics2D g2d) {
         for (AristaView a: aristas) {
             g2d.setPaint(a.getColor());
+            g2d.drawString(a.etiqueta(), (a.getOrigen().getCoordenadaX()+a.getDestino().getCoordenadaX())/2, (a.getOrigen().getCoordenadaY()+a.getDestino().getCoordenadaY())/2);
             g2d.setStroke(a.getFormatoLinea());
             g2d.draw(a.getLinea());
         }

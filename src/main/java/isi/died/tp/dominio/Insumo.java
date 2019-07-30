@@ -2,7 +2,7 @@ package isi.died.tp.dominio;
 
 public class Insumo implements Comparable<Insumo> {
 	
-	public enum UnidadDeMedida { Gramo, Kilogramo, Metro, MetroCuadrado, MetroCubico, Litro, Pieza };
+	public enum UnidadDeMedida { Kilogramo, Gramo, Metro, MetroCuadrado, MetroCubico, Litro, Pieza };
 	
 	protected Integer id;
 	protected String nombre;
@@ -105,7 +105,6 @@ public class Insumo implements Comparable<Insumo> {
 		this.esLiquido = esLiquido;
 	}
 
-	
 	@Override
 	public int compareTo(Insumo insumo) {
 		return stock.compareTo(insumo.getStock());
@@ -114,6 +113,11 @@ public class Insumo implements Comparable<Insumo> {
 	@Override
 	public String toString() {
 		return nombre;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return nombre.equals(((Insumo)obj).getNombre());
 	}
 	
 }

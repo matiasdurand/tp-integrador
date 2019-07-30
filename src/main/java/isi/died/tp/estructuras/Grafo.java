@@ -44,6 +44,12 @@ public class Grafo<T> {
 		aristas.add(new Arista<T>(nodo1, nodo2, d, t, p));
 	}
 	
+	public void conectar(Vertice<T> nodo1, Vertice<T> nodo2, Double d, Double t, Double p, Double capROrigen, Double capRDestino){
+		Arista<T> a = new Arista<T>(nodo1, nodo2, d, t, p);
+		a.setCapacidades(capROrigen, capRDestino);
+		aristas.add(a);
+	}
+	
 	public Vertice<T> getNodo(T valor){
 		return vertices.get(vertices.indexOf(new Vertice<T>(valor)));
 	}
