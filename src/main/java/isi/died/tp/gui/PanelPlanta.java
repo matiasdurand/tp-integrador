@@ -396,7 +396,7 @@ public class PanelPlanta extends JPanel {
 		this.gtmStock.fireTableDataChanged();
 	}
 	
-	public void actualizarDatosTablaStocl(List<Stock> lista) {
+	public void actualizarDatosTablaStock(List<Stock> lista) {
     	this.gtmStock.setDatos(lista);
     	this.gtmStock.fireTableDataChanged();
 	}

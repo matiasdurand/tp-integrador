@@ -32,6 +32,7 @@ public class ControladorPlantas {
 	private ControladorInsumos controladorInsumos;
 	private PlantaDao dao;
 	private PanelPrincipal pPrincipal;
+	public static final Font FUENTE_TITULO_PRINCIPAL = new Font("Calibri",Font.BOLD,24);
 	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
 	public static final Color COLOR_TITULO = new Color(5,85,244);
 	
