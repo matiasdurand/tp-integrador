@@ -235,6 +235,25 @@ public class ControladorPlantas {
 		if(acopioInicial.validarCantidad(i, cantidad)) {
 			Stock s = new Stock(cantidad, puntoPedido, i);
 			dao.buscar(id).agregar(s);
+			
+			//
+			Runnable r = () -> {
+				dao.cargarStock(id, i.getId(), cantidad, puntoPedido);
+				List<Stock> lista = dao.buscar(id).getListaStock();
+				try {
+					SwingUtilities.invokeAndWait(() -> {
+						pPlanta.actualizarDatosTablaStock(lista);
+						JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
+					});
+				} catch (InvocationTargetException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			};
+			
+			Thread hilo = new Thread(r);
+			
+			hilo.start();
+			//
 		}
 	}
 	

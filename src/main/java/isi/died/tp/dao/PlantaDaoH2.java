@@ -158,6 +158,7 @@ public class PlantaDaoH2 implements PlantaDao {
 						aux.setId(rs.getInt("ID"));
 						aux.setCantidad(rs.getInt("CANTIDAD"));
 						aux.setPuntoPedido(rs.getInt("PUNTO_PEDIDO"));
+						
 						resultado.add(aux);
 					}
 				}
