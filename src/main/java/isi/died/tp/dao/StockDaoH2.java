@@ -64,6 +64,7 @@ public class StockDaoH2 implements StockDao{
 			try(PreparedStatement pst = conn.prepareStatement(SQL_UPDATE)){
 				pst.setInt(1, s.getCantidad());
 				pst.setInt(2, s.getPuntoPedido());
+				pst.setInt(3, idPlanta);
 				pst.executeUpdate();
 			}
 		} catch (SQLException e1) {

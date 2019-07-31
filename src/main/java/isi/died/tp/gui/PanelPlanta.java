@@ -41,6 +41,7 @@ public class PanelPlanta extends JPanel {
 	private JTable tablaPlantas;
 	private JTable tablaStock;
 	private Integer idSeleccionado;
+	private Integer contador=0;
 	GenericTableModel<Planta> gtm;
 	GenericTableModel<Stock> gtmStock;
 	
@@ -358,30 +359,37 @@ public class PanelPlanta extends JPanel {
 		});
 		
 		tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
-			
-    			if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()<gtm.getDatos().size()) {
-    	    		Planta aux = gtm.datos.get(lse.getFirstIndex());
-    	    		idSeleccionado = tablaPlantas.getSelectedRow()+1;
-    	    		nombre.setText(aux.getNombre());
-    	    		btnConectar.setEnabled(true);
-    	    		btnEditar.setEnabled(true);
-    	    		btnEliminar.setEnabled(true);
-    	    		btnCargarStock.setEnabled(true);
-    	    		cargarTablaStock(idSeleccionado);
-    	    		System.out.println(idSeleccionado);
-    			}
-    			
+				if(contador==1) {
+					if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()<gtm.getDatos().size()) {
+						Planta aux = gtm.datos.get(lse.getFirstIndex());
+						idSeleccionado = tablaPlantas.getSelectedRow()+1;
+						nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
+						if(idSeleccionado.equals(Integer.valueOf(1)) || idSeleccionado.equals(Integer.valueOf(2))) {
+							btnConectar.setEnabled(true);
+							btnEditar.setEnabled(false);
+							btnEliminar.setEnabled(false);
+							btnCargarStock.setEnabled(false);
+						}
+						else {
+							btnConectar.setEnabled(true);
+							btnEditar.setEnabled(true);
+							btnEliminar.setEnabled(true);
+							btnCargarStock.setEnabled(true);
+						}
+						if(idSeleccionado>0) {
+							List<Stock> listaStock = controlador.buscarStock(idSeleccionado);
+							actualizarDatosTablaStock(listaStock);
+						}
+						contador=0;
+    	    			System.out.println(idSeleccionado);
+					}
+				}
+				else {
+					contador++;
+				}
         });
 		
 		
-	}
-	
-	
-	private void cargarTablaStock(Integer id) {
-		//Cargar tabla stock segun la planta seleccionada
-		List<Stock> listaStock = controlador.buscarStock(id);
-		this.gtmStock.setDatos(listaStock);
-		this.gtmStock.fireTableDataChanged();
 	}
 	
 	public void actualizarDatosTablaStock(List<Stock> lista) {

@@ -242,7 +242,9 @@ public class ControladorPlantas {
 				daoStock.actualizar(id,s);
 			else
 				daoStock.crear(id,s);
+			daoStock.actualizar(1, new Stock(acopioInicial.disponible(i),0,i));
 			JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
+			pPlanta.actualizarDatosTablaStock(dao.buscar(id).getListaStock());
 		}
 	}
 	

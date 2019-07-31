@@ -92,4 +92,13 @@ public class Planta {
 			}
 			return true;
 		}
+		
+		public Integer disponible(Insumo i) {
+			if(!listaStock.isEmpty()) {
+				Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
+				Integer disponible = stock.getCantidad();
+				return disponible;
+			}
+			return -1;
+		}
 }
