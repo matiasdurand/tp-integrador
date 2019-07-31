@@ -64,43 +64,25 @@ public class Planta {
 			return nombre;
 		}
 
-		public Boolean agregar(Stock s) {
-			Boolean resultado=true;
-			if(!listaStock.contains(s)) {
-				listaStock.add(s);
-				resultado=false;
-			}
+		public Boolean existeStock(Stock s) {
+			if(!listaStock.contains(s)) return false;
 			else {
-				Stock stock = listaStock.stream().filter( st -> st.equals(s)).collect(Collectors.toList()).get(0);
-				s.aumentarStock(stock.getCantidad());
-				listaStock.remove(s);
-				listaStock.add(s);
+				Stock aux = listaStock.stream().filter( st -> st.equals(s)).collect(Collectors.toList()).get(0);
+				s.aumentarStock(aux.getCantidad());
+				s.setId(aux.getId());
+				return true;
 			}
-			return resultado;
 		}
 
 		public boolean validarCantidad(Insumo i, Integer cantidad) {
-			//comparo cantidad ingresada con lo disponible en la planta de acopio.
-			if(!listaStock.isEmpty()) {
-				Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
-				Integer disponible = stock.getCantidad();
-				if(disponible>=cantidad) {
-					stock.setCantidad(disponible-cantidad);
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
-			return true;
+			Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
+			if(stock.getCantidad()>=cantidad) return true;
+			else return false;
 		}
 		
-		public Integer disponible(Insumo i) {
-			if(!listaStock.isEmpty()) {
-				Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
-				Integer disponible = stock.getCantidad();
-				return disponible;
-			}
-			return -1;
+		public Stock actualizarStock(Insumo i, Integer cantidad) {
+			Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
+			stock.setCantidad(stock.getCantidad()-cantidad);
+			return stock;
 		}
 }

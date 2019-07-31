@@ -58,4 +58,9 @@ public class Stock {
 		return insumo.equals(((Stock)obj).getInsumo());
 	}
 	
+	@Override
+	public String toString() {
+		return "["+insumo+" "+cantidad+"]";
+	}
+	
 }

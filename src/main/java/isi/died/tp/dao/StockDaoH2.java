@@ -19,7 +19,7 @@ public class StockDaoH2 implements StockDao{
 			"INSERT INTO Stock (CANTIDAD, PUNTO_PEDIDO, ID_INSUMO, ID_PLANTA) VALUES (?,?,?,?)";
 	
 	private static final String SQL_UPDATE =
-			"UPDATE Stock SET CANTIDAD =?, PUNTO_PEDIDO =? WHERE ID =?";
+			"UPDATE Stock SET CANTIDAD =?, PUNTO_PEDIDO =? WHERE ID_INSUMO =? AND ID_PLANTA =?";
 		
 	private static final String SQL_SELECT =
 			"SELECT ID, CANTIDAD, PUNTO_PEDIDO, ID_INSUMO FROM Stock";
@@ -64,7 +64,8 @@ public class StockDaoH2 implements StockDao{
 			try(PreparedStatement pst = conn.prepareStatement(SQL_UPDATE)){
 				pst.setInt(1, s.getCantidad());
 				pst.setInt(2, s.getPuntoPedido());
-				pst.setInt(3, idPlanta);
+				pst.setInt(3, s.getInsumo().getId());
+				pst.setInt(4, idPlanta);
 				pst.executeUpdate();
 			}
 		} catch (SQLException e1) {

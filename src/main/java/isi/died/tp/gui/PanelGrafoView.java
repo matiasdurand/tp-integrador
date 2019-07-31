@@ -280,7 +280,7 @@ public class PanelGrafoView extends JPanel {
         		pintarVertices(Color.YELLOW);
         		pintarVertices(controlador.verticesAPintar((Insumo)cmboxInsumo.getSelectedItem()), Color.RED);
         		repaint();
-        		//controlador.buscarMejorCamino((Insumo)cmboxInsumo.getSelectedItem(), rbtnDistancia.isSelected());
+        		controlador.buscarMejorCamino((Insumo)cmboxInsumo.getSelectedItem(), rbtnDistancia.isSelected());
         });
         
         btnMostrarCaminos.addActionListener( e -> {

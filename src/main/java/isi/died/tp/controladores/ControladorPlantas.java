@@ -81,6 +81,7 @@ public class ControladorPlantas {
 
 	public List<List<Planta>> buscarMejorCamino(Insumo i, Boolean priorizarDistancia) {
 		List<Planta> plantas = necesitanInsumo(i);
+		System.out.println("Necesitan el insumo: "+ plantas);
 		return grafoPlantas.buscarMejoresCaminos(plantas, priorizarDistancia);
 		
 	}
@@ -233,21 +234,33 @@ public class ControladorPlantas {
 	}
 	
 	public void cargarStock(Integer id, Insumo i, Integer cantidad, Integer puntoPedido) {
+
+
 		Planta acopioInicial = dao.buscar(1);
+		
 		if(acopioInicial.validarCantidad(i, cantidad)) {
-			Stock s = new Stock(cantidad, puntoPedido, i);
-			Boolean existe = dao.buscar(id).agregar(s);
 			
-			if(existe) {
-				s.setId(daoStock.buscar(id, i.getId()).getId());
-				daoStock.actualizar(id,s);
-			}
-			else
-				daoStock.crear(id,s);
-			daoStock.actualizar(1, new Stock(acopioInicial.disponible(i),0,i));
-			JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
+			Stock s = new Stock(cantidad, puntoPedido, i);
+			
+			Planta p = dao.buscar(id);
+			
+			Boolean existe = p.existeStock(s);
+			
+			if(existe) daoStock.actualizar(id,s);
+			else daoStock.crear(id,s);
+			
+			daoStock.actualizar(1, acopioInicial.actualizarStock(i, cantidad));
+			
 			pPlanta.actualizarDatosTablaStock(dao.buscar(id).getListaStock());
+			
+			grafoPlantas.actualizar(dao.buscar(id));
+			grafoPlantas.actualizar(dao.buscar(1));
+			
+			JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
+			
+
 		}
+		
 	}
 	
 	public List<Planta> pageRank(){
@@ -259,9 +272,7 @@ public class ControladorPlantas {
 	}
 
 	public void almacenar(Insumo i) {
-		Stock aux = new Stock(i.getStock(), 0, i);
-		dao.buscar(1).agregar(aux);
-		daoStock.crear(1,aux);
+		daoStock.crear(1, new Stock(i.getStock(), 0, i));
 	}
 	
 }
