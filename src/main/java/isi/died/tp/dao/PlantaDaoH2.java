@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import isi.died.tp.dominio.Planta;
+import isi.died.tp.dominio.Stock;
 
 public class PlantaDaoH2 implements PlantaDao {
 	
@@ -107,7 +108,8 @@ public class PlantaDaoH2 implements PlantaDao {
 						Planta aux = new Planta();
 						aux.setId(rs.getInt("ID"));
 						aux.setNombre(rs.getString("NOMBRE"));
-						aux.setListaStock(daoStock.buscarTodos(aux.getId()));
+						List<Stock> listaStock = daoStock.buscarTodos(rs.getInt("ID"));
+						aux.setListaStock(listaStock);
 						resultado.add(aux);
 					}
 				}

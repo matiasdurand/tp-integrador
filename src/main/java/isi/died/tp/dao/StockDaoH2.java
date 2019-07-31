@@ -13,9 +13,7 @@ import isi.died.tp.dominio.Stock;
 public class StockDaoH2 implements StockDao{
 	
 	private static final String SQL_CREATE = 
-			"CREATE TABLE IF NOT EXISTS Stock (ID IDENTITY NOT NULL PRIMARY KEY, CANTIDAD INTEGER, PUNTO_PEDIDO INTEGER, ID_INSUMO INTEGER, ID_PLANTA INTEGER,"
-			+ "CONSTRAINT FK_STOCK_INSUMO FOREIGN KEY (ID_INSUMO) REFERENCES Insumo (ID)),"
-			+ "CONSTRAINT FK_PLANTA_STOCK FOREIGN KEY (ID_PLANTA) REFERENCES Planta (ID))";
+			"CREATE TABLE IF NOT EXISTS Stock (ID IDENTITY NOT NULL PRIMARY KEY, CANTIDAD INTEGER, PUNTO_PEDIDO INTEGER, ID_INSUMO INTEGER, ID_PLANTA INTEGER)";
 	
 	private static final String SQL_INSERT =
 			"INSERT INTO Stock (CANTIDAD, PUNTO_PEDIDO, ID_INSUMO, ID_PLANTA) VALUES (?,?,?,?)";
@@ -24,7 +22,7 @@ public class StockDaoH2 implements StockDao{
 			"UPDATE Stock SET CANTIDAD =?, PUNTO_PEDIDO =? WHERE ID =?";
 		
 	private static final String SQL_SELECT =
-			"SELECT ID, CANTIDAD, PUNTO_PEDIDO, ID_INSUMO, ID_PLANTA FROM Stock";
+			"SELECT ID, CANTIDAD, PUNTO_PEDIDO, ID_INSUMO FROM Stock";
 		
 	private static final String SQL_DELETE = "DELETE FROM Stock WHERE ID_PLANTA =?";
 	
@@ -108,7 +106,7 @@ public class StockDaoH2 implements StockDao{
 						aux.setId(rs.getInt("ID"));
 						aux.setCantidad(rs.getInt("CANTIDAD"));
 						aux.setPuntoPedido(rs.getInt("PUNTO_PEDIDO"));
-						aux.setInsumo(daoInsumo.buscar(aux.getId()));
+						aux.setInsumo(daoInsumo.buscar(rs.getInt("ID_INSUMO")));
 						resultado.add(aux);
 					}
 				}

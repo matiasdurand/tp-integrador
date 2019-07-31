@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -45,6 +46,7 @@ public class PanelGrafoView extends JPanel {
 	private Integer idNodoFin = -1;
 	private JLabel lblPanelTitulo;
 	private JLabel lblInsumo;
+	private JLabel lblPriorizar;
 	
 	public PanelGrafoView() {
 		super();
@@ -117,7 +119,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=1;
     	c.weightx=0.0;
     	c.anchor = GridBagConstraints.NORTH;
-    	c.fill=GridBagConstraints.BOTH;
+    	c.fill=GridBagConstraints.NONE;
     	c.insets = new Insets(10, 10, 10, 10);
 		panelFila1.add(btnMostrarInfo,c);
 		
@@ -127,7 +129,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=1;
     	c.weightx=0.5;
     	c.anchor = GridBagConstraints.NORTH;
-    	c.fill=GridBagConstraints.HORIZONTAL;
+    	c.fill=GridBagConstraints.NONE;
     	c.insets = new Insets(10, 10, 10, 10);
 		panelFila1.add(textArea,c);
 
@@ -137,15 +139,40 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=1;
     	c.weightx=0.0;
     	c.anchor = GridBagConstraints.NORTH;
-    	c.fill=GridBagConstraints.BOTH;
+    	c.fill=GridBagConstraints.NONE;
     	c.insets = new Insets(10, 10, 10, 10);
 		btnMostrarCaminos.setEnabled(false);
 		panelFila1.add(btnMostrarCaminos,c);
 		
+		lblPriorizar = new JLabel("Priorizar:");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	panelFila1.add(lblPriorizar,c);
+		
+		ButtonGroup grupo = new ButtonGroup();
+		rbtnDistancia = new JRadioButton("Distancia");
+		rbtnTiempo = new JRadioButton("Duración");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.NONE;
+    	c.weightx=0.0;
+    	rbtnDistancia.setSelected(true);
+    	grupo.add(rbtnDistancia);
+    	grupo.add(rbtnTiempo);
+    	
+    	panelFila1.add(rbtnDistancia,c);
+    	panelFila1.add(rbtnTiempo,c);	
+    	
 		this.add(panelFila1,c);
-		
+
 		//Segunda fila
-		
+    	
 		col=0;
     	fila++;
 		
@@ -153,7 +180,8 @@ public class PanelGrafoView extends JPanel {
 		
     	c.gridx=col++;
     	c.gridy=fila;
-    	c.gridwidth=4;
+    	c.gridwidth=6;
+    	c.gridheight=1;
     	c.anchor = GridBagConstraints.CENTER;
     	c.fill=GridBagConstraints.BOTH;
     	c.weighty=1.0;
@@ -161,7 +189,7 @@ public class PanelGrafoView extends JPanel {
 		
     	this.add(panelFila2,c);
     	panelFila2.setOpaque(false);
-		
+
 	}
 	
 	private void configurarEventos() {

@@ -219,7 +219,7 @@ public class ControladorPlantas {
 		return null;
 	}
 	
-	public List<Stock> obtenerInsumos(Integer id){
+	public List<Stock> buscarStock(Integer id){
 		Planta aux = dao.buscar(id);
 		return aux.getListaStock();
 	}

@@ -113,17 +113,6 @@ public class PanelPlanta extends JPanel {
 	    	c.insets = new Insets(10, 10, 10, 10);
 	    	this.add(panelBotones1,c);
 	    	
-	    	/*this.lblListaStock = new JLabel("Lista de Stock");
-	    	c.gridx=col++;
-	    	c.gridy=fila;
-	    	c.gridwidth=1;
-	    	c.gridheight=1;
-	    	c.weightx=0.0;
-	    	c.anchor = GridBagConstraints.CENTER;
-	    	c.fill=GridBagConstraints.NONE;
-	    	c.insets = new Insets(10, 10, 10, 10);
-	    	this.add(lblListaStock,c);*/
-	    	
 	    	//Segunda fila
 	    	
 	    	col=0;
@@ -391,7 +380,7 @@ public class PanelPlanta extends JPanel {
 	
 	private void cargarTablaStock(Integer id) {
 		//Cargar tabla stock segun la planta seleccionada
-		List<Stock> listaStock = controlador.obtenerInsumos(id);
+		List<Stock> listaStock = controlador.buscarStock(id);
 		this.gtmStock.setDatos(listaStock);
 		this.gtmStock.fireTableDataChanged();
 	}
