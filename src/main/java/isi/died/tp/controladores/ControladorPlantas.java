@@ -12,10 +12,9 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import isi.died.tp.dao.InsumoDao;
-import isi.died.tp.dao.InsumoDaoH2;
 import isi.died.tp.dao.PlantaDao;
 import isi.died.tp.dao.PlantaDaoH2;
+import isi.died.tp.dao.StockDao;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Planta;
 import isi.died.tp.dominio.Stock;
@@ -31,6 +30,7 @@ public class ControladorPlantas {
 	private GrafoPlantas grafoPlantas;
 	private ControladorInsumos controladorInsumos;
 	private PlantaDao dao;
+	private StockDao daoStock;
 	private PanelPrincipal pPrincipal;
 	public static final Font FUENTE_TITULO_PRINCIPAL = new Font("Calibri",Font.BOLD,24);
 	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
@@ -234,26 +234,13 @@ public class ControladorPlantas {
 		Planta acopioInicial = dao.buscar(1);
 		if(acopioInicial.validarCantidad(i, cantidad)) {
 			Stock s = new Stock(cantidad, puntoPedido, i);
-			dao.buscar(id).agregar(s);
+			Boolean existe = dao.buscar(id).agregar(s);
 			
-			//
-			Runnable r = () -> {
-				dao.cargarStock(id, i.getId(), cantidad, puntoPedido);
-				List<Stock> lista = dao.buscar(id).getListaStock();
-				try {
-					SwingUtilities.invokeAndWait(() -> {
-						pPlanta.actualizarDatosTablaStock(lista);
-						JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
-					});
-				} catch (InvocationTargetException | InterruptedException e) {
-					e.printStackTrace();
-				}
-			};
-			
-			Thread hilo = new Thread(r);
-			
-			hilo.start();
-			//
+			if(existe)
+				daoStock.actualizar(id,s);
+			else
+				daoStock.crear(id,s);
+			JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
 		}
 	}
 	

@@ -64,12 +64,17 @@ public class Planta {
 			return nombre;
 		}
 
-		public void agregar(Stock s) {
-			if(!listaStock.contains(s)) listaStock.add(s);
+		public Boolean agregar(Stock s) {
+			Boolean resultado=true;
+			if(!listaStock.contains(s)) {
+				listaStock.add(s);
+				resultado=false;
+			}
 			else {
 				listaStock.remove(s);
 				listaStock.add(s);
 			}
+			return resultado;
 		}
 
 		public boolean validarCantidad(Insumo i, Integer cantidad) {
