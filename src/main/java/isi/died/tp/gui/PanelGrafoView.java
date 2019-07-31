@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
@@ -18,15 +19,13 @@ import java.util.stream.IntStream;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JList;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 import isi.died.tp.controladores.ControladorGrafoView;
 import isi.died.tp.dominio.Insumo;
-import isi.died.tp.gui.util.GenericTableModel;
 
 public class PanelGrafoView extends JPanel {
 	
@@ -44,6 +43,8 @@ public class PanelGrafoView extends JPanel {
 	private int contador = 0;
 	private Integer idNodoInicio = -1;
 	private Integer idNodoFin = -1;
+	private JLabel lblPanelTitulo;
+	private JLabel lblInsumo;
 	
 	public PanelGrafoView() {
 		super();
@@ -67,30 +68,99 @@ public class PanelGrafoView extends JPanel {
 	}
 	
 	private void armar() {
-		//CONFIGURAR APARIENCIA DEL PANEL.
+		
 		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();  
+		GridBagConstraints c = new GridBagConstraints(); 
 		
+		int fila = 0;
+    	int col = 0; 	
+
+    	this.lblPanelTitulo = new JLabel("GRAFO DE PLANTAS");
+    	this.lblPanelTitulo.setFont(ControladorGrafoView.FUENTE_TITULO);
+    	this.lblPanelTitulo.setForeground(ControladorGrafoView.COLOR_TITULO);
+    	c.gridx=col;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.gridwidth=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblPanelTitulo,c);
+		
+    	//Primer fila
+    	
+    	col=0;
+    	fila++;
+    	    	
+    	JPanel panelFila1 = new JPanel();
+    	
+    	this.lblInsumo = new JLabel("Seleccione un insumo:");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	panelFila1.add(lblInsumo,c);
+    	
 		cmboxInsumo = new JComboBox<Insumo>();
-		c.gridx=0;
-		c.gridy=2;
-		add(cmboxInsumo,c);
+		controlador.cargarComboInsumos(cmboxInsumo);
+    	c.gridwidth=1;
+    	c.weightx=0.5;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(10, 10, 10, 10);
+		panelFila1.add(cmboxInsumo,c);
 		
-		btnMostrarInfo = new JButton("MOSTRAR INFORMACION");
-		c.gridx=0;
-		c.gridy=3;
-		add(btnMostrarInfo,c);
+		btnMostrarInfo = new JButton("Mostrar información");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.insets = new Insets(10, 10, 10, 10);
+		panelFila1.add(btnMostrarInfo,c);
 		
 		textArea = new JTextArea();
-		c.gridx=1;
-		c.gridy=4;
-		add(textArea,c);
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.weightx=0.5;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(10, 10, 10, 10);
+		panelFila1.add(textArea,c);
 
-		btnMostrarCaminos = new JButton("MOSTRAR CAMINOS");
-		c.gridx=0;
-		c.gridy=5;
+		btnMostrarCaminos = new JButton("Mostrar caminos");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.insets = new Insets(10, 10, 10, 10);
 		btnMostrarCaminos.setEnabled(false);
-		add(btnMostrarCaminos,c);
+		panelFila1.add(btnMostrarCaminos,c);
+		
+		this.add(panelFila1,c);
+		
+		//Segunda fila
+		
+		col=0;
+    	fila++;
+		
+		JPanel panelFila2 = new JPanel();
+		
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=4;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weighty=1.0;
+    	c.weightx=1.0;
+		
+    	this.add(panelFila2,c);
+    	panelFila2.setOpaque(false);
 		
 	}
 	

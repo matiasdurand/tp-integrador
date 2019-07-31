@@ -379,7 +379,7 @@ public class PanelPlanta extends JPanel {
     	    		btnEditar.setEnabled(true);
     	    		btnEliminar.setEnabled(true);
     	    		btnCargarStock.setEnabled(true);
-    	    		//cargarTablaStock(idSeleccionado);
+    	    		cargarTablaStock(idSeleccionado);
     	    		System.out.println(idSeleccionado);
     			}
     			

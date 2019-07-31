@@ -24,7 +24,7 @@ public class StockDaoH2 implements StockDao{
 			"UPDATE Stock SET CANTIDAD =?, PUNTO_PEDIDO =? WHERE ID =?";
 		
 	private static final String SQL_SELECT =
-			"SELECT ID, CANTIDAD, PUNTO_PEDIDO, ID_INSUMO, ID_PLANTA FORM Stock WHERE= ?";
+			"SELECT ID, CANTIDAD, PUNTO_PEDIDO, ID_INSUMO, ID_PLANTA FROM Stock";
 		
 	private static final String SQL_DELETE = "DELETE FROM Stock WHERE ID_PLANTA =?";
 	
@@ -96,10 +96,12 @@ public class StockDaoH2 implements StockDao{
 		return resultado;
 	}
 	
-	public List<Stock> buscarTodos(){
+	public List<Stock> buscarTodos(Integer idPlanta){
 		List<Stock> resultado = new ArrayList<Stock>();
+		String sqlById = SQL_SELECT + " WHERE ID_PLANTA = ?";
 		try(Connection conn = DBConnection.get()){
-			try(PreparedStatement pst = conn.prepareStatement(SQL_SELECT)){
+			try(PreparedStatement pst = conn.prepareStatement(sqlById)){
+				pst.setInt(1, idPlanta);
 				try(ResultSet rs = pst.executeQuery()){
 					while(rs.next()) {
 						Stock aux = new Stock();

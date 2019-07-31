@@ -28,6 +28,7 @@ import isi.died.tp.gui.util.GenericTableModel;
 
 public class PanelInsumo extends JPanel {
 	
+	private static final long serialVersionUID = 1L;
 	private JLabel lblPanelTitulo;
 	private JLabel lblNombre;
 	private JLabel lblCostoMinimo;
@@ -118,9 +119,6 @@ public class PanelInsumo extends JPanel {
     	this.add(lblOrdenarPor,c);
     	
     	this.cmboxOrdenarPor = new JComboBox<String>();
-    	//cmboxOrdenarPor.addItem("Costo");
-    	//cmboxOrdenarPor.addItem("Nombre");
-    	//cmboxOrdenarPor.addItem("Stock total");
     	controlador.cargarComboOrdenarPor(cmboxOrdenarPor);
     	c.gridx=col++;
     	c.gridy=fila;
@@ -325,19 +323,19 @@ public class PanelInsumo extends JPanel {
 			}
 		});
 		
-		/*rbtnDescendente.addActionListener( e -> {
+		rbtnDescendente.addActionListener( e -> {
 			rbtnAscendente.setSelected(false);
-			if(tablaInsumos.getRowCount()>0) {
+			/*if(tablaInsumos.getRowCount()>0) {
 				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), true));
-			}
+			}*/
 		});
 		
 		rbtnAscendente.addActionListener( e -> {
 			rbtnDescendente.setSelected(false);
-			if(tablaInsumos.getRowCount()>0) {
+			/*if(tablaInsumos.getRowCount()>0) {
 				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), false));
-			}
-		});*/
+			}*/
+		});
 		
 	}
 	

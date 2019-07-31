@@ -87,7 +87,7 @@ public class PanelPrincipal extends JPanel {
     	JScrollPane scrollPane = new JScrollPane(tablaPlantas);
     	c.gridx=col++;
     	c.gridy=fila;
-    	c.gridwidth=1;
+    	c.gridwidth=2;
     	c.anchor = GridBagConstraints.CENTER;
     	c.fill=GridBagConstraints.BOTH;
     	c.weighty=1.0;
@@ -100,19 +100,31 @@ public class PanelPrincipal extends JPanel {
     	fila++;
     	
     	JPanel panelFila3 = new JPanel();
-    	    	
-    	btnFlujoMaximo = new JButton("Calcular flujo máximo");
+    	
+    	btnMejorSeleccionEnvio = new JButton("Mejor selección de envío");
     	c.fill=GridBagConstraints.HORIZONTAL;
     	c.anchor=GridBagConstraints.CENTER;
     	c.gridx=col++;
     	c.gridy=fila;
-    	c.gridwidth=3;
+    	c.gridwidth=1;
+    	c.weighty=0.0;
+    	c.weightx=0.0;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	panelFila3.add(btnMejorSeleccionEnvio,c);
+    	    	
+    	btnFlujoMaximo = new JButton("Calcular flujo máximo");
+    	c.fill=GridBagConstraints.HORIZONTAL;
+    	c.anchor=GridBagConstraints.CENTER;
+    	c.gridwidth=1;
+    	c.gridx=col++;
+    	c.gridy=fila;
     	c.weighty=0.0;
     	c.weightx=0.0;
     	c.insets = new Insets(10, 10, 10, 10);
     	panelFila3.add(btnFlujoMaximo, c);
     	
     	flujoMaximo = new JTextField(10);
+    	flujoMaximo.setEditable(false);
     	panelFila3.add(flujoMaximo, c);
     	
     	this.add(panelFila3,c);

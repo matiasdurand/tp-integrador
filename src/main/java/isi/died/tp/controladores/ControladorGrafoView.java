@@ -1,7 +1,7 @@
 package isi.died.tp.controladores;
 
 import java.awt.Color;
-
+import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.ArrayList;
@@ -23,6 +23,8 @@ import isi.died.tp.gui.VerticeView;
 public class ControladorGrafoView {
 
 	private static ControladorGrafoView _INSTANCIA = null;
+	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
+	public static final Color COLOR_TITULO = new Color(5,85,244);
 	private PanelGrafoView pGrafo;
 	private ControladorPlantas controladorPlantas;
 	private ControladorInsumos controladorInsumos;
@@ -50,7 +52,7 @@ public class ControladorGrafoView {
 		Runnable r = () -> {
 			List<Planta> plantas = controladorPlantas.buscarPlantas();
 			List<VerticeView> vertices = new ArrayList<VerticeView>();
-			int y = 100, x = 0, i = 0;
+			int y = 250, x = 50, i = 0;
 			for(Planta p: plantas){
 				i++;
 				x += 30; 

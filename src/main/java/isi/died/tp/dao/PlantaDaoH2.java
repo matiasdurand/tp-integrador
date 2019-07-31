@@ -18,6 +18,8 @@ public class PlantaDaoH2 implements PlantaDao {
 	private static final String SQL_DELETE = "DELETE FROM Planta WHERE ID =?";
 	private static final String SQL_SELECT = "SELECT ID, NOMBRE FROM Planta";
 	
+	private StockDao daoStock;
+	
 	public PlantaDaoH2() {
 		try(Connection conn = DBConnection.get()){
 			try(Statement st = conn.createStatement()){
@@ -85,6 +87,7 @@ public class PlantaDaoH2 implements PlantaDao {
 						resultado = new Planta();
 						resultado.setId(rs.getInt("ID"));
 						resultado.setNombre(rs.getString("NOMBRE"));
+						resultado.setListaStock(daoStock.buscarTodos(resultado.getId()));
 					}
 				}
 			}
@@ -104,6 +107,7 @@ public class PlantaDaoH2 implements PlantaDao {
 						Planta aux = new Planta();
 						aux.setId(rs.getInt("ID"));
 						aux.setNombre(rs.getString("NOMBRE"));
+						aux.setListaStock(daoStock.buscarTodos(aux.getId()));
 						resultado.add(aux);
 					}
 				}
