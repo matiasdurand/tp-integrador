@@ -26,9 +26,10 @@ public class StockDaoH2 implements StockDao{
 		
 	private static final String SQL_DELETE = "DELETE FROM Stock WHERE ID_PLANTA =?";
 	
-	private static InsumoDao daoInsumo;
+	private InsumoDao daoInsumo;
 	
 	public StockDaoH2() {
+		daoInsumo = new InsumoDaoH2();
 		try(Connection conn = DBConnection.get()){
 			try(Statement st = conn.createStatement()){
 				st.executeUpdate(SQL_CREATE);				

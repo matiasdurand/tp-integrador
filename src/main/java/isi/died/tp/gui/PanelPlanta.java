@@ -348,7 +348,6 @@ public class PanelPlanta extends JPanel {
 			if(opcion == JOptionPane.OK_OPTION) {
 				if(!cantidad.getText().isEmpty() && !puntoPedido.getText().isEmpty()) {
 						controlador.cargarStock(idSeleccionado,(Insumo)cmboxInsumos.getSelectedItem(),Integer.valueOf(cantidad.getText()), Integer.valueOf(puntoPedido.getText()));
-						JOptionPane.showMessageDialog(null, "Stock cargado exitosamente");
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Debe completar todos los campos");

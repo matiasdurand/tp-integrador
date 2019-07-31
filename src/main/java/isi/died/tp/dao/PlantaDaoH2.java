@@ -22,6 +22,7 @@ public class PlantaDaoH2 implements PlantaDao {
 	private StockDao daoStock;
 	
 	public PlantaDaoH2() {
+		daoStock = new StockDaoH2();
 		try(Connection conn = DBConnection.get()){
 			try(Statement st = conn.createStatement()){
 				st.executeUpdate(SQL_CREATE);				

@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 import isi.died.tp.dao.PlantaDao;
 import isi.died.tp.dao.PlantaDaoH2;
 import isi.died.tp.dao.StockDao;
+import isi.died.tp.dao.StockDaoH2;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Planta;
 import isi.died.tp.dominio.Stock;
@@ -40,6 +41,7 @@ public class ControladorPlantas {
 	private ControladorPlantas() {
 		controladorInsumos = ControladorInsumos.getInstance();
 		dao = new PlantaDaoH2();
+		daoStock = new StockDaoH2();
 		grafoPlantas = GrafoPlantas.getInstance();
 	}
 	
@@ -253,7 +255,9 @@ public class ControladorPlantas {
 	}
 
 	public void almacenar(Insumo i) {
-		dao.buscar(1).agregar(new Stock(i.getStock(), 0, i));
+		Stock aux = new Stock(i.getStock(), 0, i);
+		dao.buscar(1).agregar(aux);
+		daoStock.crear(1,aux);
 	}
 	
 }

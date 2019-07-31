@@ -79,12 +79,17 @@ public class Planta {
 
 		public boolean validarCantidad(Insumo i, Integer cantidad) {
 			//comparo cantidad ingresada con lo disponible en la planta de acopio.
-			Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
-			Integer disponible = stock.getCantidad();
-			if(disponible>=cantidad) {
-				stock.setCantidad(disponible-cantidad);
-				return true;
+			if(!listaStock.isEmpty()) {
+				Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
+				Integer disponible = stock.getCantidad();
+				if(disponible>=cantidad) {
+					stock.setCantidad(disponible-cantidad);
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
-			return false;
+			return true;
 		}
 }

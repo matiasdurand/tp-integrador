@@ -67,11 +67,10 @@ public class ControladorInsumos {
 	public Insumo crearInsumo(String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
 		
 		Insumo i;
-		if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
-		else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
-		
+		/*if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
+		else*/ i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
+		i=dao.crear(i);
 		Runnable r = () -> {
-			dao.crear(i);
 			List<Insumo> listaInsumos = dao.buscarTodos();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
