@@ -89,8 +89,28 @@ public class PanelGrafoView extends JPanel {
 		
     	//Primer fila
     	
-    	col=0;
+    	
+		col=0;
     	fila++;
+		
+		JPanel panelFila2 = new JPanel();
+		
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=5;
+    	c.gridheight=2;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weighty=1.0;
+    	c.weightx=1.0;
+		
+    	this.add(panelFila2,c);
+    	panelFila2.setOpaque(false);
+
+		//Segunda fila
+    	
+    	col=0;
+    	fila+=2;
     	    	
     	JPanel panelFila1 = new JPanel();
     	
@@ -98,6 +118,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=1;
+    	c.gridheight=1;
     	c.weightx=0.0;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.NONE;
@@ -107,36 +128,18 @@ public class PanelGrafoView extends JPanel {
 		cmboxInsumo = new JComboBox<Insumo>();
 		controlador.cargarComboInsumos(cmboxInsumo);
     	c.gridwidth=1;
+    	c.gridheight=1;
     	c.weightx=0.5;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.HORIZONTAL;
     	c.insets = new Insets(10, 10, 10, 10);
 		panelFila1.add(cmboxInsumo,c);
 		
-		btnMostrarInfo = new JButton("Mostrar información");
-    	c.gridx=col++;
-    	c.gridy=fila;
-    	c.gridwidth=1;
-    	c.weightx=0.0;
-    	c.anchor = GridBagConstraints.NORTH;
-    	c.fill=GridBagConstraints.NONE;
-    	c.insets = new Insets(10, 10, 10, 10);
-		panelFila1.add(btnMostrarInfo,c);
-		
-		textArea = new JTextArea();
-    	c.gridx=col++;
-    	c.gridy=fila;
-    	c.gridwidth=1;
-    	c.weightx=0.5;
-    	c.anchor = GridBagConstraints.NORTH;
-    	c.fill=GridBagConstraints.NONE;
-    	c.insets = new Insets(10, 10, 10, 10);
-		panelFila1.add(textArea,c);
-
 		btnMostrarCaminos = new JButton("Mostrar caminos");
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=1;
+    	c.gridheight=1;
     	c.weightx=0.0;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.NONE;
@@ -144,10 +147,22 @@ public class PanelGrafoView extends JPanel {
 		btnMostrarCaminos.setEnabled(false);
 		panelFila1.add(btnMostrarCaminos,c);
 		
+		btnMostrarInfo = new JButton("Mostrar información");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+		panelFila1.add(btnMostrarInfo,c);
+		
 		lblPriorizar = new JLabel("Priorizar:");
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=1;
+    	c.gridheight=1;
     	c.weightx=0.0;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.NONE;
@@ -170,25 +185,23 @@ public class PanelGrafoView extends JPanel {
     	panelFila1.add(rbtnTiempo,c);	
     	
 		this.add(panelFila1,c);
-
-		//Segunda fila
     	
-		col=0;
+    	//Tercera fila
+    	
+    	col=0;
     	fila++;
-		
-		JPanel panelFila2 = new JPanel();
-		
+    	
+		textArea = new JTextArea();
     	c.gridx=col++;
     	c.gridy=fila;
-    	c.gridwidth=6;
+    	c.gridwidth=5;
     	c.gridheight=1;
+    	c.weightx=1.0;
+    	c.weighty=1.0;
     	c.anchor = GridBagConstraints.CENTER;
     	c.fill=GridBagConstraints.BOTH;
-    	c.weighty=1.0;
-    	c.weightx=1.0;
-		
-    	this.add(panelFila2,c);
-    	panelFila2.setOpaque(false);
+    	c.insets = new Insets(10, 10, 10, 10);
+		this.add(textArea,c);
 
 	}
 	
@@ -277,6 +290,7 @@ public class PanelGrafoView extends JPanel {
 	}
 	
 	public void cargarComboInsumos() {
+		cmboxInsumo.removeAllItems();
 		controlador.cargarComboInsumos(cmboxInsumo);
 	}
 	

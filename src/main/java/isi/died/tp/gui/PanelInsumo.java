@@ -289,8 +289,6 @@ public class PanelInsumo extends JPanel {
     	});
 		
 		btnEditar.addActionListener( e -> {
-    		btnEliminar.setEnabled(false);
-    		btnEditar.setEnabled(false);
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.setContentPane(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
 			Aplicacion.f.pack();

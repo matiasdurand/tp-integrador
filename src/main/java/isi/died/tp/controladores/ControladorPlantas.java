@@ -238,8 +238,10 @@ public class ControladorPlantas {
 			Stock s = new Stock(cantidad, puntoPedido, i);
 			Boolean existe = dao.buscar(id).agregar(s);
 			
-			if(existe)
+			if(existe) {
+				s.setId(daoStock.buscar(id, i.getId()).getId());
 				daoStock.actualizar(id,s);
+			}
 			else
 				daoStock.crear(id,s);
 			daoStock.actualizar(1, new Stock(acopioInicial.disponible(i),0,i));

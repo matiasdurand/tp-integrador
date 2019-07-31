@@ -361,9 +361,8 @@ public class PanelPlanta extends JPanel {
 		tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
 				if(contador==1) {
 					if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()<gtm.getDatos().size()) {
-						Planta aux = gtm.datos.get(lse.getFirstIndex());
+						gtm.datos.get(lse.getFirstIndex());
 						idSeleccionado = tablaPlantas.getSelectedRow()+1;
-						nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
 						if(idSeleccionado.equals(Integer.valueOf(1)) || idSeleccionado.equals(Integer.valueOf(2))) {
 							btnConectar.setEnabled(true);
 							btnEditar.setEnabled(false);
@@ -377,6 +376,7 @@ public class PanelPlanta extends JPanel {
 							btnCargarStock.setEnabled(true);
 						}
 						if(idSeleccionado>0) {
+							nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
 							List<Stock> listaStock = controlador.buscarStock(idSeleccionado);
 							actualizarDatosTablaStock(listaStock);
 						}

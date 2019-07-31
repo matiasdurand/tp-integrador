@@ -71,6 +71,8 @@ public class Planta {
 				resultado=false;
 			}
 			else {
+				Stock stock = listaStock.stream().filter( st -> st.equals(s)).collect(Collectors.toList()).get(0);
+				s.aumentarStock(stock.getCantidad());
 				listaStock.remove(s);
 				listaStock.add(s);
 			}

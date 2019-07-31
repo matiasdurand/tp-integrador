@@ -75,7 +75,7 @@ public class StockDaoH2 implements StockDao{
 	
 	public Stock buscar(Integer idPlanta, Integer idInsumo) {
 		Stock resultado = null;
-		String sqlById = SQL_SELECT + " WHERE ID_PLANTA = ?, ID_INSUMO =?";
+		String sqlById = SQL_SELECT + " WHERE ID_PLANTA = ? AND ID_INSUMO =?";
 		try(Connection conn = DBConnection.get()){
 			try(PreparedStatement pst = conn.prepareStatement(sqlById)){
 				pst.setInt(1, idPlanta);
