@@ -276,6 +276,7 @@ public class PanelInsumo extends JPanel {
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
 			actualizarTablaInsumos(controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText()));
+			idSeleccionado=-1;
 		});
 		
 		btnRegistrar.addActionListener( e -> {
@@ -289,6 +290,8 @@ public class PanelInsumo extends JPanel {
     	});
 		
 		btnEditar.addActionListener( e -> {
+    		btnEliminar.setEnabled(false);
+    		btnEditar.setEnabled(false);
 			Aplicacion.f.getContentPane().removeAll();
 			Aplicacion.f.setContentPane(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
 			Aplicacion.f.pack();
@@ -301,38 +304,33 @@ public class PanelInsumo extends JPanel {
 			if(confirmar==0) {
 				controlador.borrarInsumo(idSeleccionado);
 				btnEliminar.setEnabled(false);
+				btnEditar.setEnabled(false);
 			}
 		});
 		
 		tablaInsumos.getSelectionModel().addListSelectionListener( e -> {
-			
-    		if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && e.getFirstIndex()<gtm.getDatos().size()) {
-	    		//Insumo auxiliar = gtm.datos.get(e.getFirstIndex());
-	    		idSeleccionado = tablaInsumos.getSelectedRow()+1;
-	    		btnEliminar.setEnabled(true);
-	    		btnEditar.setEnabled(true);
-    		}
-
+			if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && e.getFirstIndex()<gtm.getDatos().size()) {
+				gtm.datos.get(e.getFirstIndex());
+				idSeleccionado = tablaInsumos.getSelectedRow()+1;
+				if(idSeleccionado>0) {
+					btnEliminar.setEnabled(true);
+					btnEditar.setEnabled(true);
+				}
+			}
         });
 		
 		cmboxOrdenarPor.addActionListener( e -> {
-			if(tablaInsumos.getRowCount()>0) {
+			/*if(tablaInsumos.getRowCount()>0) {
 				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected()));
-			}
+			}*/
 		});
 		
 		rbtnDescendente.addActionListener( e -> {
 			rbtnAscendente.setSelected(false);
-			/*if(tablaInsumos.getRowCount()>0) {
-				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), true));
-			}*/
 		});
 		
 		rbtnAscendente.addActionListener( e -> {
 			rbtnDescendente.setSelected(false);
-			/*if(tablaInsumos.getRowCount()>0) {
-				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), false));
-			}*/
 		});
 		
 	}

@@ -310,6 +310,22 @@ public class PanelEditarInsumo extends JPanel {
     	c.weighty=0.0;
     	c.weightx=0.0;
     	this.add(panelBotones,c);
+    	
+    	//Sexta fila
+    	
+    	JPanel panelFila6 = new JPanel();
+    	
+    	col =0;
+    	fila++;
+    	
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=8;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weighty=1.0;
+    	c.weightx=1.0;
+    	this.add(panelFila6,c);
 	}
 	
 	private void configurarEventos() {
