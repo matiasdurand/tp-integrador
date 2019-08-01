@@ -4,23 +4,30 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import isi.died.tp.dao.CamionDao;
+import isi.died.tp.dao.CamionDaoH2;
 import isi.died.tp.dao.PlantaDao;
 import isi.died.tp.dao.PlantaDaoH2;
 import isi.died.tp.dao.StockDao;
 import isi.died.tp.dao.StockDaoH2;
+import isi.died.tp.dominio.Camion;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Planta;
 import isi.died.tp.dominio.Stock;
 import isi.died.tp.estructuras.Arista;
 import isi.died.tp.estructuras.GrafoPlantas;
+import isi.died.tp.gui.PanelMejorEnvio;
 import isi.died.tp.gui.PanelPlanta;
 import isi.died.tp.gui.PanelPrincipal;
 
@@ -30,9 +37,11 @@ public class ControladorPlantas {
 	private PanelPlanta pPlanta;
 	private GrafoPlantas grafoPlantas;
 	private ControladorInsumos controladorInsumos;
-	private PlantaDao dao;
+	private PlantaDao daoPlanta;
 	private StockDao daoStock;
+	private CamionDao daoCamion;
 	private PanelPrincipal pPrincipal;
+	private PanelMejorEnvio pMEnvio;
 	public static final Font FUENTE_TITULO_PRINCIPAL = new Font("Calibri",Font.BOLD,24);
 	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
 	public static final Color COLOR_TITULO = new Color(5,85,244);
@@ -40,8 +49,9 @@ public class ControladorPlantas {
 	
 	private ControladorPlantas() {
 		controladorInsumos = ControladorInsumos.getInstance();
-		dao = new PlantaDaoH2();
+		daoPlanta = new PlantaDaoH2();
 		daoStock = new StockDaoH2();
+		daoCamion = new CamionDaoH2();
 		grafoPlantas = GrafoPlantas.getInstance();
 	}
 	
@@ -67,7 +77,11 @@ public class ControladorPlantas {
 	}
 	
 	public List<Planta> buscarPlantas(){
-		return dao.buscarTodas();
+		return daoPlanta.buscarTodas();
+	}
+	
+	public void setpMEnvio(PanelMejorEnvio pMEnvio) {
+		this.pMEnvio = pMEnvio;
 	}
 	
 	public List<Planta> necesitanInsumo(Insumo i){
@@ -87,8 +101,8 @@ public class ControladorPlantas {
 	}
 
 	public HashMap<List<Planta>, Double[]> buscarCaminos(Integer idOrigen, Integer idDestino) {
-		Planta origen = dao.buscar(idOrigen);
-		Planta destino = dao.buscar(idDestino);
+		Planta origen = daoPlanta.buscar(idOrigen);
+		Planta destino = daoPlanta.buscar(idDestino);
 		return grafoPlantas.buscarCaminos(origen, destino);
 	}
 	
@@ -112,8 +126,8 @@ public class ControladorPlantas {
 	public void crearPlanta(String nombre) {
 		Runnable r = () -> {
 			Planta p = new Planta(nombre);
-			grafoPlantas.addNodo(dao.crear(p));
-			List<Planta> lista = dao.buscarTodas();
+			grafoPlantas.addNodo(daoPlanta.crear(p));
+			List<Planta> lista = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pPlanta.actualizarDatosTabla(lista);
@@ -131,9 +145,9 @@ public class ControladorPlantas {
 		Runnable r = () -> {
 			Planta acopioInicial = new Planta(nombre1);
 			Planta acopioFinal = new Planta(nombre2);
-			grafoPlantas.addNodo(dao.crear(acopioInicial));
-			grafoPlantas.addNodo(dao.crear(acopioFinal));
-			List<Planta> lista = dao.buscarTodas();
+			grafoPlantas.addNodo(daoPlanta.crear(acopioInicial));
+			grafoPlantas.addNodo(daoPlanta.crear(acopioFinal));
+			List<Planta> lista = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pPlanta.actualizarDatosTabla(lista);
@@ -150,8 +164,8 @@ public class ControladorPlantas {
 		Runnable r = () -> {
 			Planta p = new Planta(nombre);
 			p.setId(id);
-			dao.actualizar(p);
-			List<Planta> lista = dao.buscarTodas();
+			daoPlanta.actualizar(p);
+			List<Planta> lista = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pPlanta.actualizarDatosTabla(lista);
@@ -169,8 +183,8 @@ public class ControladorPlantas {
 	
 	public void borrarPlanta(Integer id) {
 		Runnable r = () -> {
-			dao.borrar(id);
-			List<Planta> lista = dao.buscarTodas();
+			daoPlanta.borrar(id);
+			List<Planta> lista = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pPlanta.actualizarDatosTabla(lista);
@@ -188,7 +202,7 @@ public class ControladorPlantas {
 
 	public void cargarComboPlantasExceptoSeleccionada(JComboBox<Planta> combo, Integer id) {
 		Runnable r = () -> {
-			List<Planta> plantas = dao.buscarTodas();
+			List<Planta> plantas = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					for(Planta p: plantas){
@@ -206,11 +220,11 @@ public class ControladorPlantas {
 	}
 	
 	public Planta obtenerPlanta(Integer id) {
-		return dao.buscar(id);
+		return daoPlanta.buscar(id);
 	}
 	
 	public Planta obtenerPlanta(String nombre) {
-		List<Planta> plantas = dao.buscarTodas();
+		List<Planta> plantas = daoPlanta.buscarTodas();
 		for(Planta p: plantas) {
 			if(p.getNombre().equals(nombre)) {
 				return p;
@@ -220,26 +234,26 @@ public class ControladorPlantas {
 	}
 	
 	public List<Stock> buscarStock(Integer id){
-		Planta aux = dao.buscar(id);
+		Planta aux = daoPlanta.buscar(id);
 		return aux.getListaStock();
 	}
 
 	public void conectarPlantas(Integer idPlanta1, Integer idPlanta2, Double distancia, Double duracion, Double pesoMax) {
-		Planta p1 = dao.buscar(idPlanta1);
-		Planta p2 = dao.buscar(idPlanta2);
+		Planta p1 = daoPlanta.buscar(idPlanta1);
+		Planta p2 = daoPlanta.buscar(idPlanta2);
 		grafoPlantas.conectar(p1, p2, distancia, duracion, pesoMax);
 	}
 	
 	public void cargarStock(Integer id, Insumo i, Integer cantidad, Integer puntoPedido) {
 
 
-		Planta acopioInicial = dao.buscar(1);
+		Planta acopioInicial = daoPlanta.buscar(1);
 		
 		if(acopioInicial.validarCantidad(i, cantidad)) {
 			
 			Stock s = new Stock(cantidad, puntoPedido, i);
 			
-			Planta p = dao.buscar(id);
+			Planta p = daoPlanta.buscar(id);
 			
 			Boolean existe = p.existeStock(s);
 			
@@ -248,10 +262,10 @@ public class ControladorPlantas {
 			
 			daoStock.actualizar(1, acopioInicial.actualizarStock(i, cantidad));
 			
-			pPlanta.actualizarDatosTablaStock(dao.buscar(id).getListaStock());
+			pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
 
-			grafoPlantas.actualizar(dao.buscar(id));
-			grafoPlantas.actualizar(dao.buscar(1));
+			grafoPlantas.actualizar(daoPlanta.buscar(id));
+			grafoPlantas.actualizar(daoPlanta.buscar(1));
 			
 			JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
 			
@@ -271,5 +285,87 @@ public class ControladorPlantas {
 	public void almacenar(Insumo i) {
 		daoStock.crear(1, new Stock(i.getStock(), 0, i));
 	}
+
+	public List<Stock> buscarStockFaltante(Integer idPlantaSeleccionada) {
+		List<Stock> stock = buscarStock(idPlantaSeleccionada);
+		return stock.stream().filter(s -> s.getCantidad()<=s.getPuntoPedido()).collect(Collectors.toList());
+	}
+
+	/*public void mejorEnvio(Integer idCamionSeleccionado) {
+		
+		Camion camion = daoCamion.buscar(idCamionSeleccionado);
+		
+		List<Planta> plantas = daoPlanta.buscarTodas();
+		
+		Set<Insumo> insumosFaltantes = new HashSet<Insumo>();
+		
+		for(Planta p: plantas) {
+			insumosFaltantes.addAll(buscarStockFaltante(p.getId()).stream().map(Stock::getInsumo).collect(Collectors.toList()));
+		}
+		
+		System.out.println(insumosFaltantes);
+		
+		int[] pesos = new int[insumosFaltantes.size()];
+		Double[] valores = new Double[insumosFaltantes.size()];
+		
+		int index=0;
+		for(Insumo i: insumosFaltantes) {
+			pesos[index] = i.getPeso();
+			valores[index] = i.getCosto();
+			index++;
+		}
+		
+		Insumo[] insumosAEnviar = resolver()
+
+	    
+	}
+
+	public Insumo[] resolver(Double[] pesos, Double[] valores, Double pesoMaximo) {
+	    
+	    int N = 4; // items
+	    int W = 5; // max peso
+	    
+	    int[][] opt = new int[N][W]; //matriz que guarda el valor de cada esecenario
+	    boolean[][] sol = new boolean[N][W]; // matriz que guarda si el element esta en el esceario
+	    
+	    for (int n = 1; n < N; n++) {
+	        for (int w = 0; w < W; w++) {
+	            int option1 = n < 1 ? 0 : opt[n - 1][w]; //completar
+	            int option2 = Integer.MIN_VALUE;
+	                if (peso[n]<=w) { //Hay espacio en la mochila?
+	                option2 = valor[n] + opt[n-1][w-peso[n]]; //actualizar el valor de agregar a la mochila el elemento
+	                }
+	                
+	            opt[n][w] = Math.max(option1, option2);
+	            sol[n][w] = (option2 > option1);
+	        }
+	    }
+	    
+	// determinar la combinación óptima
+	    Boolean[] esSolucion= new Boolean[N];
+	    for (int n = N-1, w = W-1; n >= 0; n--) {
+	        if (sol[n][w]) {
+	            esSolucion [n] = true;
+	            w = w - peso[n];
+	        } else {
+	            esSolucion [n] = false;
+	        }
+	    }
+	    System.out.println("Pares peso valor en solucion optima");
+	    boolean b=false;
+	    for(int i=0;i<N;i++){
+	        
+	        if(esSolucion[i]){
+	           if(b) System.out.print(" - ");
+	            System.out.print("("+peso[i]+" "+valor[i]+")");
+	               b=true;
+	        }
+	     
+	    }
+	    System.out.println("\n");
+	    return esSolucion;
+	    
+	    }*/
+
 	
 }

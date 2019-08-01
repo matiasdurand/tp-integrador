@@ -136,6 +136,9 @@ public class ControladorInsumos {
 		Double costoMin, costoMax;
 		Integer stockMin, stockMax;
 		List<Insumo> filtrado = dao.buscarTodos();
+		if(!nombre.isEmpty() && !filtrado.isEmpty()) {
+			filtrado = filtrado.stream().filter( i -> i.getNombre().equals(nombre)).collect(Collectors.toList());
+		}
 		if(!costoMinimo.isEmpty() && !filtrado.isEmpty()) {
 			costoMin = Double.parseDouble(costoMinimo);
 			filtrado = filtrado.stream().filter( i -> i.getCosto()>=costoMin).collect(Collectors.toList());
@@ -155,56 +158,55 @@ public class ControladorInsumos {
 		return filtrado;
 	}
 	
-	public List<Insumo> ordenarPor(String criterio, Boolean descendente) {
-		List<Insumo> listaInsumos = dao.buscarTodos();
+	public List<Insumo> ordenarPor(List<Insumo> insumos, String criterio, Boolean descendente) {
 		
 		if(criterio.equals("Nombre")) {
-			if(descendente) {
+			if(!descendente) {
 				Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getNombre().compareTo(i2.getNombre()));
-				arbol.addAll(listaInsumos);
-				listaInsumos.clear();
-				listaInsumos.addAll(arbol);
+				arbol.addAll(insumos);
+				insumos.clear();
+				insumos.addAll(arbol);
 			}
 			else {
 				Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getNombre().compareTo(i1.getNombre()));
-				arbol.addAll(listaInsumos);
-				listaInsumos.clear();
-				listaInsumos.addAll(arbol);
+				arbol.addAll(insumos);
+				insumos.clear();
+				insumos.addAll(arbol);
 			}
 		}
 		else {
 			if(criterio.equals("Stock total")) {
-				if(descendente) {
+				if(!descendente) {
 					Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getStock().compareTo(i2.getStock()));
-					arbol.addAll(listaInsumos);
-					listaInsumos.clear();
-					listaInsumos.addAll(arbol);
+					arbol.addAll(insumos);
+					insumos.clear();
+					insumos.addAll(arbol);
 				}
 				else {
 					Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getStock().compareTo(i1.getStock()));
-					arbol.addAll(listaInsumos);
-					listaInsumos.clear();
-					listaInsumos.addAll(arbol);
+					arbol.addAll(insumos);
+					insumos.clear();
+					insumos.addAll(arbol);
 				}
 			}
 			else {
 				if(criterio.equals("Costo")) {
-					if(descendente) {
+					if(!descendente) {
 						Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getCosto().compareTo(i2.getCosto()));
-						arbol.addAll(listaInsumos);
-						listaInsumos.clear();
-						listaInsumos.addAll(arbol);
+						arbol.addAll(insumos);
+						insumos.clear();
+						insumos.addAll(arbol);
 					}
 					else {
 						Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getCosto().compareTo(i1.getCosto()));
-						arbol.addAll(listaInsumos);
-						listaInsumos.clear();
-						listaInsumos.addAll(arbol);
+						arbol.addAll(insumos);
+						insumos.clear();
+						insumos.addAll(arbol);
 					}
 				}
 			}
 		}
-		return listaInsumos;
+		return insumos;
 	}
 	
 	public void cargarComboOrdenarPor(JComboBox<String> combo){

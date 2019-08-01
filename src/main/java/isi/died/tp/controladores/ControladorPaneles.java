@@ -1,9 +1,12 @@
 package isi.died.tp.controladores;
 
+import java.awt.Component;
+
 import isi.died.tp.gui.PanelCamion;
 import isi.died.tp.gui.PanelEditarInsumo;
 import isi.died.tp.gui.PanelGrafoView;
 import isi.died.tp.gui.PanelInsumo;
+import isi.died.tp.gui.PanelMejorEnvio;
 import isi.died.tp.gui.PanelPlanta;
 import isi.died.tp.gui.PanelPrincipal;
 import isi.died.tp.gui.PanelRegistrarInsumo;
@@ -61,6 +64,10 @@ public class ControladorPaneles {
 		if(panelPrincipal == null) panelPrincipal = new PanelPrincipal();
 		panelPrincipal.pageRank();
 		return panelPrincipal;
+	}
+
+	public PanelMejorEnvio getPanelMejorEnvio() {
+		return new PanelMejorEnvio();
 	}
 	
 }

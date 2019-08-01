@@ -11,8 +11,6 @@ import javax.swing.SwingUtilities;
 import isi.died.tp.controladores.ControladorPaneles;
 
 public class Aplicacion {
-
-	public static JFrame f;
 	
 	public static void main( String[] args )
     {
@@ -27,12 +25,13 @@ public class Aplicacion {
     }
 	
 	private static void createAndShowGUI() {
+		
 		ControladorPaneles.getInstance().getPanelPlanta().crearAcopios();
 		ControladorPaneles.getInstance().getPanelInsumo();
 		ControladorPaneles.getInstance().getPanelCamion();
 		ControladorPaneles.getInstance().getPanelGrafoView();
 		
-		f = new JFrame("Sistema de Gestión Logística");
+		JFrame f = new JFrame("Sistema de Gestión Logística");
 		
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setMinimumSize(new Dimension(1000, 750));
@@ -95,6 +94,7 @@ public class Aplicacion {
         menu1.add(menuItem5);
        
         f.getContentPane().add(ControladorPaneles.getInstance().getPanelPrincipal());
+        
         f.pack();
         f.setVisible(true);
 		

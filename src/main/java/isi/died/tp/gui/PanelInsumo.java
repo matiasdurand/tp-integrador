@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import isi.died.tp.aplicacion.Aplicacion;
 import isi.died.tp.controladores.ControladorCamiones;
@@ -275,28 +277,32 @@ public class PanelInsumo extends JPanel {
 		btnBuscar.addActionListener( e -> {
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
-			actualizarTablaInsumos(controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText()));
-			idSeleccionado=-1;
+    		List<Insumo> filtrada = controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText());
+    		if(filtrada.size()==0 || filtrada.size()==1) actualizarTablaInsumos(filtrada);
+    		else actualizarTablaInsumos(controlador.ordenarPor(filtrada, (String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected()));
+    		idSeleccionado=-1;
 		});
 		
 		btnRegistrar.addActionListener( e -> {
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
-			Aplicacion.f.getContentPane().removeAll();
-			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelRegistrarInsumo());
-			Aplicacion.f.pack();
-			Aplicacion.f.revalidate();
-			Aplicacion.f.repaint();
+    		JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelRegistrarInsumo());
+			frame.pack();
+			frame.revalidate();
+			frame.repaint();
     	});
 		
 		btnEditar.addActionListener( e -> {
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
-			Aplicacion.f.getContentPane().removeAll();
-			Aplicacion.f.setContentPane(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
-			Aplicacion.f.pack();
-			Aplicacion.f.revalidate();
-			Aplicacion.f.repaint();
+    		JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
+			frame.pack();
+			frame.revalidate();
+			frame.repaint();
 		});
 		
 		btnEliminar.addActionListener( e -> {
@@ -318,12 +324,6 @@ public class PanelInsumo extends JPanel {
 				}
 			}
         });
-		
-		cmboxOrdenarPor.addActionListener( e -> {
-			/*if(tablaInsumos.getRowCount()>0) {
-				actualizarTablaInsumos(controlador.ordenarPor((String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected()));
-			}*/
-		});
 		
 		rbtnDescendente.addActionListener( e -> {
 			rbtnAscendente.setSelected(false);

@@ -8,13 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
+import isi.died.tp.aplicacion.Aplicacion;
+import isi.died.tp.controladores.ControladorPaneles;
 import isi.died.tp.controladores.ControladorPlantas;
 import isi.died.tp.dominio.Planta;
 import isi.died.tp.gui.util.GenericTableColumn;
@@ -133,8 +137,16 @@ public class PanelPrincipal extends JPanel {
 	public void configurarEventos() {
 		
 		btnFlujoMaximo.addActionListener(e -> {
-			controlador.calcularFlujoMaximo();
-			
+			controlador.calcularFlujoMaximo();	
+		});
+		
+		btnMejorSeleccionEnvio.addActionListener(e -> {
+			JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelMejorEnvio());
+			frame.pack();
+			frame.revalidate();
+			frame.repaint();
 		});
 		
 	}

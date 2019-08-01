@@ -9,10 +9,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import isi.died.tp.aplicacion.Aplicacion;
 import isi.died.tp.controladores.ControladorCamiones;
@@ -332,21 +334,23 @@ public class PanelRegistrarInsumo extends JPanel {
 				controlador.almacenar(i);
 			}
 			
-			Aplicacion.f.getContentPane().removeAll();
-			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
-			Aplicacion.f.pack();
-			Aplicacion.f.revalidate();
-			Aplicacion.f.repaint();
+			JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
+			frame.pack();
+			frame.revalidate();
+			frame.repaint();
 			
 		});
 		
 		btnCancelar.addActionListener( e -> {
 			
-			Aplicacion.f.getContentPane().removeAll();
-			Aplicacion.f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
-			Aplicacion.f.pack();
-			Aplicacion.f.revalidate();
-			Aplicacion.f.repaint();
+			JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
+			frame.pack();
+			frame.revalidate();
+			frame.repaint();
 			
 		});
 		
