@@ -67,7 +67,7 @@ public class PanelEditarInsumo extends JPanel {
 	
 	private void cargarInterfaz(Integer idInsumo) {
 		if(controlador.esLiquido(idInsumo)) {
-			Liquido aux= controlador.buscarLiquido(idInsumo);
+			Liquido aux = controlador.buscarLiquido(idInsumo);
 			nombre.setText(aux.getNombre());
 			costo.setText(aux.getCosto().toString());
 			stock.setText(aux.getStock().toString());

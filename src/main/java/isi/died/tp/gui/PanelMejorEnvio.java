@@ -254,9 +254,9 @@ public class PanelMejorEnvio extends JPanel {
 			else contador++;
 		});
 		
-		/*btnGenerarSolucion.addActionListener( e -> {
-			controladorPlantas.mejorEnvio(idCamionSeleccionado);
-		});*/
+		btnGenerarSolucion.addActionListener( e -> {
+			controladorPlantas.mejorEnvio(idPlantaSeleccionada, idCamionSeleccionado);
+		});
 		
 		btnCancelar.addActionListener(e -> {
 			JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));

@@ -20,7 +20,7 @@ public class Insumo implements Comparable<Insumo> {
 		
 	}
 	
-	public Insumo(String nombre, String descripcion, UnidadDeMedida unidadDeMedida, Double costo, Integer stock, Double peso, Boolean esRefrigerado) {
+	public Insumo(String nombre, String descripcion, UnidadDeMedida unidadDeMedida, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Boolean esLiquido) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.unidadDeMedida = unidadDeMedida;
@@ -28,6 +28,7 @@ public class Insumo implements Comparable<Insumo> {
 		this.stock = stock;
 		this.peso = peso;
 		this.esRefrigerado = esRefrigerado;
+		this.esLiquido = esLiquido;
 	}
 
 	public Integer getId() {

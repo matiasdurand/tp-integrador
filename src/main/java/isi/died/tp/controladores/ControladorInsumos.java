@@ -64,11 +64,8 @@ public class ControladorInsumos {
 	
 	public Insumo crearInsumo(String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
 		Insumo i;
-		if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
-		else {
-			i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
-			i.setEsLiquido(false);
-		}
+		if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad, true);
+		else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado, false);
 		i=dao.crear(i);
 		Runnable r = () -> {
 			List<Insumo> listaInsumos = dao.buscarTodos();
@@ -91,8 +88,8 @@ public class ControladorInsumos {
 	public void actualizarInsumo(Integer id, String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
 		Runnable r = () -> {
 			Insumo i;
-			if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
-			else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
+			if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad, true);
+			else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado, false);
 			i.setId(id);
 			dao.actualizar(i);
 			List<Insumo> listaInsumos = dao.buscarTodos();

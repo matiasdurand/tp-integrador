@@ -8,8 +8,8 @@ public class Liquido extends Insumo {
 		
 	}
 	
-	public Liquido(String nombre, String descripcion, Double costo, Integer stock, Boolean esRefrigerado, Double densidad) {
-		super(nombre, descripcion, UnidadDeMedida.Litro, costo, stock, 1*0.001*densidad , esRefrigerado);
+	public Liquido(String nombre, String descripcion, Double costo, Integer stock, Boolean esRefrigerado, Double densidad, Boolean esLiquido) {
+		super(nombre, descripcion, UnidadDeMedida.Litro, costo, stock, 1*0.001*densidad , esRefrigerado, esLiquido);
 		this.densidad = densidad;
 	}
 	
@@ -19,7 +19,6 @@ public class Liquido extends Insumo {
 
 	public void setDensidad(Double densidad) {
 		this.densidad = densidad;
-		this.esLiquido= true;
 	}
 
 	public Double calcularPeso(Double litros) {

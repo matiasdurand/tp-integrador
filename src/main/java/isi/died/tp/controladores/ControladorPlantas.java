@@ -296,81 +296,73 @@ public class ControladorPlantas {
 		pMEnvio.actualizarDatosTablaPlantas(listaPlantas);
 	}
 
-	/*public void mejorEnvio(Integer idCamionSeleccionado) {
+public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado) {
 		
 		Camion camion = daoCamion.buscar(idCamionSeleccionado);
+		System.out.println("Camion: "+camion.getDominio());
+		List<Stock> stockFaltante = buscarStockFaltante(idPlantaSeleccionada);
 		
-		List<Planta> plantas = daoPlanta.buscarTodas();
-		
-		Set<Insumo> insumosFaltantes = new HashSet<Insumo>();
-		
-		for(Planta p: plantas) {
-			insumosFaltantes.addAll(buscarStockFaltante(p.getId()).stream().map(Stock::getInsumo).collect(Collectors.toList()));
-		}
-		
-		System.out.println(insumosFaltantes);
-		
-		int[] pesos = new int[insumosFaltantes.size()];
-		Double[] valores = new Double[insumosFaltantes.size()];
+		int cantidadInsumos = stockFaltante.size();
+		System.out.println("Cantidad insumos a enviar: "+cantidadInsumos);
+		int[] pesos = new int[cantidadInsumos];
+		double[] valores = new double[cantidadInsumos];
 		
 		int index=0;
-		for(Insumo i: insumosFaltantes) {
-			pesos[index] = i.getPeso();
-			valores[index] = i.getCosto();
+		for(Stock s: stockFaltante) {
+			Insumo i = s.getInsumo();
+			int cantidadAEnviar = s.getPuntoPedido()-s.getCantidad()+10;
+			pesos[index] = (int)((i.getPeso().doubleValue()*cantidadAEnviar)+1);
+			valores[index] = i.getCosto().doubleValue();
 			index++;
 		}
 		
-		Insumo[] insumosAEnviar = resolver()
-
+		for(int j=0; j<cantidadInsumos; j++) {
+			System.out.println("Peso y valor de insumo "+j+" a transportar: "+pesos[j]+" "+valores[j]);
+		}
+		
+		Boolean[] seleccionados = resolver(pesos, valores, cantidadInsumos, camion.getCapacidad().intValue());
+		
+		List<Insumo> insumosAEnviar = new ArrayList<Insumo>();
+		
+		for(int x=0; x<seleccionados.length; x++) {
+			if(seleccionados[x]) insumosAEnviar.add(stockFaltante.get(x).getInsumo());
+			System.out.println(seleccionados[x]);
+		}
+		System.out.println(insumosAEnviar);
+	    //pMEnvio.mostrarMejorSeleccionEnvio(insumosAEnviar.toString());
 	    
 	}
 
-	public Insumo[] resolver(Double[] pesos, Double[] valores, Double pesoMaximo) {
+	public Boolean[] resolver(int[] pesos, double[] valores, int cantidadInsumos, int pesoMaximo) {
 	    
-	    int N = 4; // items
-	    int W = 5; // max peso
+	    int N = cantidadInsumos;
+	    int W = pesoMaximo;
 	    
-	    int[][] opt = new int[N][W]; //matriz que guarda el valor de cada esecenario
-	    boolean[][] sol = new boolean[N][W]; // matriz que guarda si el element esta en el esceario
+	    double[][] opt = new double[N][W];
+	    boolean[][] sol = new boolean[N][W];
 	    
 	    for (int n = 1; n < N; n++) {
 	        for (int w = 0; w < W; w++) {
-	            int option1 = n < 1 ? 0 : opt[n - 1][w]; //completar
-	            int option2 = Integer.MIN_VALUE;
-	                if (peso[n]<=w) { //Hay espacio en la mochila?
-	                option2 = valor[n] + opt[n-1][w-peso[n]]; //actualizar el valor de agregar a la mochila el elemento
-	                }
-	                
+	            double option1 = n < 1 ? 0 : opt[n - 1][w];
+	            double option2 = Double.MIN_VALUE;
+	            if (pesos[n]<=w) option2 = valores[n] + opt[n-1][w-pesos[n]];
 	            opt[n][w] = Math.max(option1, option2);
 	            sol[n][w] = (option2 > option1);
 	        }
 	    }
-	    
-	// determinar la combinación óptima
-	    Boolean[] esSolucion= new Boolean[N];
+
+	    Boolean[] esSolucion = new Boolean[N];
 	    for (int n = N-1, w = W-1; n >= 0; n--) {
 	        if (sol[n][w]) {
-	            esSolucion [n] = true;
-	            w = w - peso[n];
-	        } else {
-	            esSolucion [n] = false;
-	        }
+	            esSolucion[n] = true;
+	            w = w - pesos[n];
+	        } 
+	        else esSolucion[n] = false;
 	    }
-	    System.out.println("Pares peso valor en solucion optima");
-	    boolean b=false;
-	    for(int i=0;i<N;i++){
-	        
-	        if(esSolucion[i]){
-	           if(b) System.out.print(" - ");
-	            System.out.print("("+peso[i]+" "+valor[i]+")");
-	               b=true;
-	        }
-	     
-	    }
-	    System.out.println("\n");
+	    
 	    return esSolucion;
 	    
-	    }*/
+	}
 
 	
 }
