@@ -277,6 +277,10 @@ public class PanelGrafoView extends JPanel {
         });
         btnMostrarInfo.addActionListener( e -> {
         		textArea.setText("");
+        		contador=0;
+        		idNodoInicio=-1;
+        		idNodoFin=-1;
+        		btnMostrarCaminos.setEnabled(false);
         		pintarVertices(Color.YELLOW);
         		pintarVertices(controlador.verticesAPintar((Insumo)cmboxInsumo.getSelectedItem()), Color.RED);
         		repaint();
@@ -288,6 +292,7 @@ public class PanelGrafoView extends JPanel {
         	controlador.buscarCaminos(idNodoInicio, idNodoFin);
         });
 	}
+	
 	
 	public void cargarComboInsumos() {
 		cmboxInsumo.removeAllItems();

@@ -1,5 +1,7 @@
 package isi.died.tp.dominio;
 
+import isi.died.tp.estructuras.Vertice;
+
 public class Insumo implements Comparable<Insumo> {
 	
 	public enum UnidadDeMedida { Kilogramo, Gramo, Metro, MetroCuadrado, MetroCubico, Litro, Pieza };
@@ -117,7 +119,19 @@ public class Insumo implements Comparable<Insumo> {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return nombre.equals(((Insumo)obj).getNombre());
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Insumo other = (Insumo)obj;
+		if (nombre==null) {
+			if (other.getNombre() != null)
+				return false;
+		} else if (!nombre.equals(other.getNombre()))
+			return false;
+		return true;
 	}
 	
 }

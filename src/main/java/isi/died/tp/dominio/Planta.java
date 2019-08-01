@@ -50,7 +50,7 @@ public class Planta {
 		}
 		
 		public Boolean necesitaInsumo(Insumo i) {
-			return listaStock.stream().anyMatch((s) -> s.getInsumo()==i && s.getCantidad()<=s.getPuntoPedido());
+			return listaStock.stream().anyMatch((s) -> s.getInsumo().equals(i) && s.getCantidad()<=s.getPuntoPedido());
 		}
 		
 		@Override

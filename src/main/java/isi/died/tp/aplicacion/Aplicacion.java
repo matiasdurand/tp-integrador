@@ -1,6 +1,7 @@
 package isi.died.tp.aplicacion;
 
 import java.awt.Dimension;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -8,8 +9,6 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
 import isi.died.tp.controladores.ControladorPaneles;
-import isi.died.tp.dao.PlantaDaoH2;
-import isi.died.tp.dominio.Planta;
 
 public class Aplicacion {
 
@@ -28,7 +27,6 @@ public class Aplicacion {
     }
 	
 	private static void createAndShowGUI() {
-		
 		ControladorPaneles.getInstance().getPanelPlanta().crearAcopios();
 		ControladorPaneles.getInstance().getPanelInsumo();
 		ControladorPaneles.getInstance().getPanelCamion();

@@ -73,6 +73,7 @@ public class ControladorPlantas {
 	public List<Planta> necesitanInsumo(Insumo i){
 		List<Planta> plantas = buscarPlantas();
 		return plantas.stream().filter(p->p.necesitaInsumo(i)).collect(Collectors.toList());
+		
 	}
 
 	public List<Arista<Planta>> getAristasGrafoPlantas() {
@@ -81,7 +82,6 @@ public class ControladorPlantas {
 
 	public List<List<Planta>> buscarMejorCamino(Insumo i, Boolean priorizarDistancia) {
 		List<Planta> plantas = necesitanInsumo(i);
-		System.out.println("Necesitan el insumo: "+ plantas);
 		return grafoPlantas.buscarMejoresCaminos(plantas, priorizarDistancia);
 		
 	}
@@ -112,8 +112,7 @@ public class ControladorPlantas {
 	public void crearPlanta(String nombre) {
 		Runnable r = () -> {
 			Planta p = new Planta(nombre);
-			grafoPlantas.addNodo(p);
-			dao.crear(p);
+			grafoPlantas.addNodo(dao.crear(p));
 			List<Planta> lista = dao.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
@@ -132,10 +131,8 @@ public class ControladorPlantas {
 		Runnable r = () -> {
 			Planta acopioInicial = new Planta(nombre1);
 			Planta acopioFinal = new Planta(nombre2);
-			grafoPlantas.addNodo(acopioInicial);
-			grafoPlantas.addNodo(acopioFinal);
-			dao.crear(acopioInicial);
-			dao.crear(acopioFinal);
+			grafoPlantas.addNodo(dao.crear(acopioInicial));
+			grafoPlantas.addNodo(dao.crear(acopioFinal));
 			List<Planta> lista = dao.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
@@ -252,7 +249,7 @@ public class ControladorPlantas {
 			daoStock.actualizar(1, acopioInicial.actualizarStock(i, cantidad));
 			
 			pPlanta.actualizarDatosTablaStock(dao.buscar(id).getListaStock());
-			
+
 			grafoPlantas.actualizar(dao.buscar(id));
 			grafoPlantas.actualizar(dao.buscar(1));
 			

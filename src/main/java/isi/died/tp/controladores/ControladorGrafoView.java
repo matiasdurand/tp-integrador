@@ -49,7 +49,6 @@ public class ControladorGrafoView {
 	}
 	
 	public void inicializarGrafoView() {
-		Runnable r = () -> {
 			List<Planta> plantas = controladorPlantas.buscarPlantas();
 			List<VerticeView> vertices = new ArrayList<VerticeView>();
 			int y = 250, x = 50, i = 0;
@@ -71,9 +70,6 @@ public class ControladorGrafoView {
 				v2 = vertices.stream().filter(v->v.getId().equals(arista.getFin().getValor().getId())).collect(Collectors.toList()).get(0);
 				pGrafo.agregar(new AristaView(v1, v2, arista.getDistancia().toString(), arista.getTiempo().toString(), arista.getPesoMax().toString()));
 			}
-		};
-		Thread hilo = new Thread(r);
-		hilo.start();	
 	}
 	
 	public void cargarComboInsumos(JComboBox<Insumo> combo){

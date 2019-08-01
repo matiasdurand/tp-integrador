@@ -264,8 +264,7 @@ public class GrafoPlantas extends Grafo<Planta> {
     }
 
 	public void actualizar(Planta nodo) {
-		Vertice<Planta> nuevoVertice = new Vertice<Planta>(nodo);
-		for(Vertice<Planta> v: vertices) if(v.getValor().getId().equals(nodo.getId())) v=nuevoVertice;
+		for(Vertice<Planta> v: vertices) if(v.getValor().getId().equals(nodo.getId())) v.setValor(nodo);
 	}
 	
 }
