@@ -291,6 +291,11 @@ public class ControladorPlantas {
 		return stock.stream().filter(s -> s.getCantidad()<=s.getPuntoPedido()).collect(Collectors.toList());
 	}
 
+	public void cargarPlantas() {
+		List<Planta> listaPlantas = daoPlanta.buscarTodas();
+		pMEnvio.actualizarDatosTablaPlantas(listaPlantas);
+	}
+
 	/*public void mejorEnvio(Integer idCamionSeleccionado) {
 		
 		Camion camion = daoCamion.buscar(idCamionSeleccionado);

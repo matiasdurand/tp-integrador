@@ -19,10 +19,16 @@ public class Liquido extends Insumo {
 
 	public void setDensidad(Double densidad) {
 		this.densidad = densidad;
+		this.esLiquido= true;
 	}
 
 	public Double calcularPeso(Double litros) {
 		return (litros*0.001*densidad);
+	}
+	
+	@Override
+	public Boolean getEsLiquido() {
+		return esLiquido;
 	}
 
 }

@@ -69,7 +69,6 @@ public class PlantaDaoH2 implements PlantaDao {
 		try(Connection conn = DBConnection.get()){
 			try(PreparedStatement pst = conn.prepareStatement(SQL_DELETE)){
 				pst.setInt(1, id);
-				pst.setInt(2, id);
 				pst.executeUpdate();
 			}
 		} catch (SQLException e1) {

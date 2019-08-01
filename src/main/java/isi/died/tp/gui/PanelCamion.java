@@ -356,6 +356,7 @@ public class PanelCamion extends JPanel {
 			if(confirmar==0) {
 				controlador.borrarCamion(idSeleccionado);
 				btnEliminar.setEnabled(false);
+				btnEditar.setEnabled(false);
 			}
 		});
 		

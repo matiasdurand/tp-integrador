@@ -13,11 +13,13 @@ import isi.died.tp.dao.CamionDao;
 import isi.died.tp.dao.CamionDaoH2;
 import isi.died.tp.dominio.Camion;
 import isi.died.tp.gui.PanelCamion;
+import isi.died.tp.gui.PanelMejorEnvio;
 
 public class ControladorCamiones {
 
 	private static ControladorCamiones _INSTANCIA = null;
 	private PanelCamion pCamion;
+	private PanelMejorEnvio pMEnvio;
 	private CamionDao dao;
 	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
 	public static final Color COLOR_TITULO = new Color(5,85,244);
@@ -97,5 +99,15 @@ public class ControladorCamiones {
 		Thread hilo = new Thread(r);
 		
 		hilo.start();	
+	}
+
+	public void cargarCamiones() {
+		List<Camion> listaCamiones = dao.buscarTodos();
+		pMEnvio.actualizarDatosTablaCamiones(listaCamiones);
+		
+	}
+
+	public void setpMEnvio(PanelMejorEnvio pMEnvio) {
+		this.pMEnvio=pMEnvio;		
 	}
 }

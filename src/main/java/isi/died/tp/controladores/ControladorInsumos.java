@@ -13,7 +13,6 @@ import javax.swing.SwingUtilities;
 
 import isi.died.tp.dao.InsumoDao;
 import isi.died.tp.dao.InsumoDaoH2;
-import isi.died.tp.dao.LiquidoDao;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
@@ -28,7 +27,6 @@ public class ControladorInsumos {
 	private PanelRegistrarInsumo pRInsumo;
 	private PanelEditarInsumo pEInsumo;
 	private InsumoDao dao;
-	private LiquidoDao daoLiquido;
 	
 	private ControladorInsumos() {
 		//EL CONTROLADOR NO PUEDE SER INSTANCIADO FUERA DE ESTE AMBITO
@@ -65,10 +63,12 @@ public class ControladorInsumos {
 	}
 	
 	public Insumo crearInsumo(String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
-		
 		Insumo i;
-		/*if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
-		else*/ i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
+		if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad);
+		else {
+			i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado);
+			i.setEsLiquido(false);
+		}
 		i=dao.crear(i);
 		Runnable r = () -> {
 			List<Insumo> listaInsumos = dao.buscarTodos();
@@ -251,10 +251,6 @@ public class ControladorInsumos {
 	
 	public Insumo buscarInsumo(Integer id){
 		return dao.buscar(id);
-	}
-	
-	public Liquido buscarLiquido(Integer id) {
-		return daoLiquido.buscar(id);
 	}
 
 	public List<Insumo> buscarTodos() {

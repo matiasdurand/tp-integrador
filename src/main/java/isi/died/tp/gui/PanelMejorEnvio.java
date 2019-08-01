@@ -3,6 +3,7 @@ package isi.died.tp.gui;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
+import isi.died.tp.controladores.ControladorCamiones;
 import isi.died.tp.controladores.ControladorPaneles;
 import isi.died.tp.controladores.ControladorPlantas;
 import isi.died.tp.dominio.Camion;
@@ -39,14 +41,18 @@ public class PanelMejorEnvio extends JPanel {
 	private GenericTableModel<Stock> gtmStock;
 	private GenericTableModel<Camion> gtmCamiones;
 	private ControladorPlantas controladorPlantas;
-	private Integer idPlantaSeleccionada;
-	private Integer idCamionSeleccionado;
+	private ControladorCamiones controladorCamiones;
+	private Integer idPlantaSeleccionada=-1;
+	private Integer idCamionSeleccionado=-1;
 	private int contador = 0;
+	private JLabel lblPanelTitulo;
 	
 	public PanelMejorEnvio() {
 		super();
 		controladorPlantas = ControladorPlantas.getInstance();
 		controladorPlantas.setpMEnvio(this);
+		controladorCamiones = ControladorCamiones.getInstance();
+		controladorCamiones.setpMEnvio(this);
 		armar();
 		configurarEventos();
 	}
@@ -56,48 +62,161 @@ public class PanelMejorEnvio extends JPanel {
     }
 
 	private void armar() {
-		
 		setLayout(new GridBagLayout());
-		
-		GridBagConstraints c = new GridBagConstraints();
+		int fila = 0;
+    	int col = 0;
+    	
+    	GridBagConstraints c = new GridBagConstraints();    	
+
+    	this.lblPanelTitulo = new JLabel("MEJOR SELECCIÓN DE ENVÍO");
+    	this.lblPanelTitulo.setFont(ControladorCamiones.FUENTE_TITULO);
+    	this.lblPanelTitulo.setForeground(ControladorCamiones.COLOR_TITULO);
+    	c.gridx=col;
+    	c.gridy=fila;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.gridwidth=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	this.add(lblPanelTitulo,c);
+    	
+    	//Primer fila
+    	
+    	col=0;
+    	fila++;
+    	
+    	lblTablaPlantas = new JLabel("Tabla de plantas");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.weighty=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	add(lblTablaPlantas,c);
+    	
+    	lblTablaStock = new JLabel("Tabla de stock");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.weighty=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	add(lblTablaStock,c);
+    	
+    	//Segunda fila
+    	
+    	col=0;
+    	fila++;
+    	
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weighty=1.0;
+    	c.weightx=1.0;
 		
 		gtmPlantas = crearModeloTablaPlanta();
     	tablaPlantas = new JTable(gtmPlantas);
     	tablaPlantas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     	JScrollPane scrollPane1 = new JScrollPane(tablaPlantas);
-    	c.gridx = 0;
-    	c.gridy = 0;
     	add(scrollPane1, c);
+    	controladorPlantas.cargarPlantas();
+    	
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weighty=1.0;
+    	c.weightx=1.0;
 		
     	gtmStock = crearModeloTablaStock();
     	tablaStock = new JTable(gtmStock);
     	tablaStock.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     	JScrollPane scrollPane2 = new JScrollPane(tablaStock);
-    	c.gridx = 1;
-    	c.gridy = 0;
     	add(scrollPane2, c);
+    	
+    	//Tercer fila
+    	
+    	col=0;
+    	fila++;
+    	
+    	lblTablaCamiones = new JLabel("Tabla de Camiones");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=2;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.weighty=0.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	add(lblTablaCamiones,c);
+    	
+    	//Cuarta fila
+    	
+    	col=0;
+    	fila++;
+    	
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=2;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.weighty=1.0;
+    	c.weightx=1.0;
 		
     	gtmCamiones = crearModeloTablaCamiones();
     	tablaCamiones = new JTable(gtmCamiones);
     	tablaCamiones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     	JScrollPane scrollPane3 = new JScrollPane(tablaCamiones);
-    	c.gridx = 0;
-    	c.gridy = 1;
     	add(scrollPane3, c);
+    	controladorCamiones.cargarCamiones();
+    	
+    	//Quinta fila
+    	
+    	col=0;
+    	fila++;
+    	
+    	JPanel panelBotones = new JPanel();
 		
-		btnGenerarSolucion = new JButton("GENERAR SOLUCION");
-		c.gridx = 1;
-		c.gridy = 1;
-		add(btnGenerarSolucion, c);
-		
+		btnGenerarSolucion = new JButton("GENERAR SOLUCIÓN");
+		btnGenerarSolucion.setEnabled(false);
 		btnCancelar = new JButton("CANCELAR");
-		c.gridx = 0;
-		c.gridy = 3;
-		add(btnCancelar, c);
+		panelBotones.add(btnGenerarSolucion);
+		panelBotones.add(btnCancelar);
+		
+    	c.fill=GridBagConstraints.HORIZONTAL;
+    	c.anchor=GridBagConstraints.WEST;
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=2;
+    	c.weighty=0.0;
+    	c.weightx=0.0;
+    	c.insets = new Insets(10, 10, 10, 10);
+    	
+    	this.add(panelBotones,c);
+    	
+    	//Sexta fila
+    	
+    	col=0;
+    	fila++;
 		
 		textArea = new JTextArea();
-		c.gridx = 0;
-		c.gridy = 2;
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=2;
+    	c.gridheight=1;
+    	c.weightx=1.0;
+    	c.weighty=1.0;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill=GridBagConstraints.BOTH;
+    	c.insets = new Insets(10, 10, 10, 10);
 		add(textArea, c);
 
 	}
@@ -111,6 +230,9 @@ public class PanelMejorEnvio extends JPanel {
 					idPlantaSeleccionada = tablaPlantas.getSelectedRow()+1;
 					System.out.println(idPlantaSeleccionada);
 					if(idPlantaSeleccionada>0) actualizarDatosTablaStock(controladorPlantas.buscarStockFaltante(idPlantaSeleccionada));
+					if(idCamionSeleccionado>0) {
+						btnGenerarSolucion.setEnabled(true);
+					}
 					contador=0;
 				}
 			}
@@ -122,7 +244,9 @@ public class PanelMejorEnvio extends JPanel {
 				if(gtmCamiones.getDatos()!=null && !gtmCamiones.getDatos().isEmpty() && lse.getFirstIndex()<gtmCamiones.getDatos().size()) {
 					gtmCamiones.datos.get(lse.getFirstIndex());
 					idCamionSeleccionado = tablaCamiones.getSelectedRow()+1;
-					btnGenerarSolucion.setEnabled(true);
+					if(idPlantaSeleccionada>0) {
+						btnGenerarSolucion.setEnabled(true);
+					}
 					System.out.println(idCamionSeleccionado);
 					contador=0;
 				}
@@ -172,8 +296,8 @@ public class PanelMejorEnvio extends JPanel {
     private GenericTableModel<Stock> crearModeloTablaStock() {
     	gtmStock = new GenericTableModel<Stock>();
     	List<GenericTableColumn> columnas = new ArrayList<GenericTableColumn>();
-    	columnas.add(new GenericTableColumn("Insumo", "getInsumo"));
     	columnas.add(new GenericTableColumn("Id", "getId"));
+    	columnas.add(new GenericTableColumn("Insumo", "getInsumo"));
     	columnas.add(new GenericTableColumn("Cantidad en stock", "getCantidad"));
     	columnas.add(new GenericTableColumn("Punto de pedido", "getPuntoPedido"));
     	gtmStock.setColumnas(columnas);

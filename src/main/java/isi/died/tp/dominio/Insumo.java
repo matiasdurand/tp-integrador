@@ -14,7 +14,6 @@ public class Insumo implements Comparable<Insumo> {
 	protected Integer stock;
 	protected Double peso;
 	protected Boolean esLiquido;
-
 	protected Boolean esRefrigerado;
 	
 	public Insumo() {
@@ -99,12 +98,12 @@ public class Insumo implements Comparable<Insumo> {
 		this.esRefrigerado = esRefrigerado;
 	}
 	
+	public void setEsLiquido(Boolean esLiquido) {
+		this.esLiquido=esLiquido;
+	}
+	
 	public Boolean getEsLiquido() {
 		return esLiquido;
-	}
-
-	public void setEsLiquido(Boolean esLiquido) {
-		this.esLiquido = esLiquido;
 	}
 
 	@Override
