@@ -134,7 +134,7 @@ public class ControladorInsumos {
 		Integer stockMin, stockMax;
 		List<Insumo> filtrado = dao.buscarTodos();
 		if(!nombre.isEmpty() && !filtrado.isEmpty()) {
-			filtrado = filtrado.stream().filter( i -> i.getNombre().equals(nombre)).collect(Collectors.toList());
+			filtrado = filtrado.stream().filter( i -> (i.getNombre().toLowerCase()).contains((nombre.toLowerCase()))).collect(Collectors.toList());
 		}
 		if(!costoMinimo.isEmpty() && !filtrado.isEmpty()) {
 			costoMin = Double.parseDouble(costoMinimo);
@@ -221,24 +221,7 @@ public class ControladorInsumos {
 			};
 			Thread hilo = new Thread(r);
 			hilo.start();	
-		}
-	
-	public void cargarComboUDM(JComboBox<UnidadDeMedida> combo){
-		Runnable r = () -> {
-				UnidadDeMedida[] unidadesDeMedida = UnidadDeMedida.values();
-				try {
-					SwingUtilities.invokeAndWait(() -> {
-						for(UnidadDeMedida udm: unidadesDeMedida){
-							combo.addItem(udm);
-						}
-					});
-				} catch (InvocationTargetException | InterruptedException e) {
-					e.printStackTrace();
-				}
-			};
-			Thread hilo = new Thread(r);
-			hilo.start();	
-		}
+	}
 	
 	public Boolean esLiquido(Integer idInsumo) {
 		Insumo i = dao.buscar(idInsumo);

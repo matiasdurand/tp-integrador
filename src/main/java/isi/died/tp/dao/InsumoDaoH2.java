@@ -9,14 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import isi.died.tp.dominio.Insumo;
+import isi.died.tp.dominio.Insumo.UnidadDeMedida;
+import isi.died.tp.dominio.Liquido;
 
 public class InsumoDaoH2 implements InsumoDao{
 
-	private static final String SQL_CREATE = "CREATE TABLE IF NOT EXISTS Insumo (ID IDENTITY NOT NULL PRIMARY KEY, NOMBRE VARCHAR(30), DESCRIPCION VARCHAR(140), UNIDAD_DE_MEDIDA ENUM('Gramo', 'Kilogramo', 'Metro', 'MetroCuadrado', 'MetroCubico', 'Litro', 'Pieza'), COSTO DOUBLE, STOCK INTEGER, PESO DOUBLE, ES_REFRIGERADO BOOLEAN)";
-	private static final String SQL_INSERT = "INSERT INTO Insumo (NOMBRE,DESCRIPCION,UNIDAD_DE_MEDIDA,COSTO,STOCK,PESO,ES_REFRIGERADO) VALUES (?,?,?,?,?,?,?)";
-	private static final String SQL_UPDATE = "UPDATE Insumo SET NOMBRE =?, DESCRIPCION=?, UNIDAD_DE_MEDIDA=?, COSTO=?, STOCK=?, PESO=?, ES_REFRIGERADO=? WHERE ID = ?";
+	private static final String SQL_CREATE = "CREATE TABLE IF NOT EXISTS Insumo (ID IDENTITY NOT NULL PRIMARY KEY, NOMBRE VARCHAR(30), DESCRIPCION VARCHAR(140), UNIDAD_DE_MEDIDA ENUM('Gramo', 'Kilogramo', 'Metro', 'MetroCuadrado', 'MetroCubico', 'Litro', 'Pieza'), COSTO DOUBLE, STOCK INTEGER, PESO DOUBLE, ES_REFRIGERADO BOOLEAN, DENSIDAD DOUBLE)";
+	private static final String SQL_INSERT = "INSERT INTO Insumo (NOMBRE,DESCRIPCION,UNIDAD_DE_MEDIDA,COSTO,STOCK,PESO,ES_REFRIGERADO,DENSIDAD) VALUES (?,?,?,?,?,?,?,?)";
+	private static final String SQL_UPDATE = "UPDATE Insumo SET NOMBRE =?, DESCRIPCION=?, UNIDAD_DE_MEDIDA=?, COSTO=?, STOCK=?, PESO=?, ES_REFRIGERADO=?, DENSIDAD=? WHERE ID = ?";
 	private static final String SQL_DELETE = "DELETE FROM Insumo WHERE ID =?";
-	private static final String SQL_SELECT = "SELECT ID, NOMBRE, DESCRIPCION, UNIDAD_DE_MEDIDA, COSTO, STOCK, PESO, ES_REFRIGERADO FROM Insumo";
+	private static final String SQL_SELECT = "SELECT ID, NOMBRE, DESCRIPCION, UNIDAD_DE_MEDIDA, COSTO, STOCK, PESO, ES_REFRIGERADO, DENSIDAD FROM Insumo";
 		
 	public InsumoDaoH2() {
 		try(Connection conn = DBConnection.get()){
@@ -34,11 +36,12 @@ public class InsumoDaoH2 implements InsumoDao{
 			try(PreparedStatement pst = conn.prepareStatement(SQL_INSERT,PreparedStatement.RETURN_GENERATED_KEYS)){
 				pst.setString(1, i.getNombre());
 				pst.setString(2, i.getDescripcion());
-				pst.setString(3, i.getUnidadDeMedida().name());
+				pst.setString(3, i.getUnidadDeMedida().toString());
 				pst.setDouble(4, i.getCosto());
 				pst.setInt(5, i.getStock());
 				pst.setDouble(6, i.getPeso());
 				pst.setBoolean(7, i.getEsRefrigerado());
+				pst.setDouble(8, i.getDensidad());
 				pst.executeUpdate();
 				try(ResultSet rs = pst.getGeneratedKeys()){
 					if(rs.next()) {
@@ -58,12 +61,13 @@ public class InsumoDaoH2 implements InsumoDao{
 			try(PreparedStatement pst = conn.prepareStatement(SQL_UPDATE)){
 				pst.setString(1, i.getNombre());
 				pst.setString(2, i.getDescripcion());
-				pst.setString(3, i.getUnidadDeMedida().name());
+				pst.setString(3, i.getUnidadDeMedida().toString());
 				pst.setDouble(4, i.getCosto());
 				pst.setInt(5, i.getStock());
 				pst.setDouble(6, i.getPeso());
 				pst.setBoolean(7, i.getEsRefrigerado());
-				pst.setInt(8, i.getId());
+				pst.setDouble(8, i.getDensidad());
+				pst.setInt(9, i.getId());
 				pst.executeUpdate();
 			}
 		} catch (SQLException e1) {
@@ -93,7 +97,14 @@ public class InsumoDaoH2 implements InsumoDao{
 				pst.setInt(1, id);
 				try(ResultSet rs = pst.executeQuery()){
 					if(rs.next()) {
-						resultado = new Insumo();
+						if(rs.getDouble("DENSIDAD")>0) {
+							resultado = new Liquido();
+							resultado.setEsLiquido(true);
+						}
+						else { 
+							resultado = new Insumo();
+							resultado.setEsLiquido(false);
+						}
 						resultado.setId(rs.getInt("ID"));
 						resultado.setNombre(rs.getString("NOMBRE"));
 						resultado.setDescripcion(rs.getString("DESCRIPCION"));
@@ -102,6 +113,7 @@ public class InsumoDaoH2 implements InsumoDao{
 						resultado.setStock(rs.getInt("STOCK"));
 						resultado.setPeso(rs.getDouble("PESO"));
 						resultado.setEsRefrigerado(rs.getBoolean("ES_REFRIGERADO"));
+						resultado.setDensidad(rs.getDouble("DENSIDAD"));
 					}
 				}
 			}
@@ -118,8 +130,15 @@ public class InsumoDaoH2 implements InsumoDao{
 			try(PreparedStatement pst = conn.prepareStatement(SQL_SELECT)){
 				try(ResultSet rs = pst.executeQuery()){
 					while(rs.next()) {
-						Insumo aux = new Insumo();
-						aux = new Insumo();
+						Insumo aux;
+						if(rs.getDouble("DENSIDAD")>0) {
+							aux = new Liquido();
+							aux.setEsLiquido(true);
+						}
+						else {
+							aux = new Insumo();
+							aux.setEsLiquido(false);
+						}
 						aux.setId(rs.getInt("ID"));
 						aux.setNombre(rs.getString("NOMBRE"));
 						aux.setDescripcion(rs.getString("DESCRIPCION"));
@@ -128,6 +147,7 @@ public class InsumoDaoH2 implements InsumoDao{
 						aux.setStock(rs.getInt("STOCK"));
 						aux.setPeso(rs.getDouble("PESO"));
 						aux.setEsRefrigerado(rs.getBoolean("ES_REFRIGERADO"));
+						aux.setDensidad(rs.getDouble("DENSIDAD"));
 						resultado.add(aux);
 					}
 				}

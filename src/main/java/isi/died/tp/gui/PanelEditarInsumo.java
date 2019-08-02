@@ -16,7 +16,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import isi.died.tp.aplicacion.Aplicacion;
 import isi.died.tp.controladores.ControladorCamiones;
 import isi.died.tp.controladores.ControladorInsumos;
 import isi.died.tp.controladores.ControladorPaneles;
@@ -66,8 +65,8 @@ public class PanelEditarInsumo extends JPanel {
     }
 	
 	private void cargarInterfaz(Integer idInsumo) {
-		if(controlador.esLiquido(idInsumo)) {
-			Liquido aux = controlador.buscarLiquido(idInsumo);
+		if(insumoLiquido) {
+			Liquido aux = (Liquido) controlador.buscarInsumo(idInsumo);
 			nombre.setText(aux.getNombre());
 			costo.setText(aux.getCosto().toString());
 			stock.setText(aux.getStock().toString());
@@ -75,8 +74,11 @@ public class PanelEditarInsumo extends JPanel {
 			densidad.setText(aux.getDensidad().toString());
 			descripcion.setText(aux.getDescripcion());
 			cmboxUDM.setSelectedItem(aux.getUnidadDeMedida());
-			//checkBoxLiquido.setSelected(aux.getEsLiquido());
+			checkBoxLiquido.setSelected(aux.getEsLiquido());
 			checkBoxRefrigerado.setSelected(aux.getEsRefrigerado());
+			cmboxUDM.setEnabled(false);
+			checkBoxLiquido.setEnabled(false);
+			peso.setEnabled(false);
 		}
 		else {
 			Insumo aux= controlador.buscarInsumo(idInsumo);
@@ -87,9 +89,11 @@ public class PanelEditarInsumo extends JPanel {
 			densidad.setEnabled(false);
 			descripcion.setText(aux.getDescripcion());
 			cmboxUDM.setSelectedItem(aux.getUnidadDeMedida());
-			//checkBoxLiquido.setSelected(aux.getEsLiquido());
+			checkBoxLiquido.setSelected(aux.getEsLiquido());
 			checkBoxRefrigerado.setSelected(aux.getEsRefrigerado());
+			checkBoxLiquido.setEnabled(false);
 		}
+		stock.setEnabled(false);
 		
 	}
 	
@@ -149,6 +153,8 @@ public class PanelEditarInsumo extends JPanel {
     	
     	this.cmboxUDM = new JComboBox<UnidadDeMedida>();
     	cmboxUDM.setModel(new DefaultComboBoxModel<>(UnidadDeMedida.values()));
+    	if(!insumoLiquido)
+    		cmboxUDM.removeItem(UnidadDeMedida.Litro);
     	c.gridx=col++;
     	c.gridy=fila;
     	c.anchor = GridBagConstraints.CENTER;

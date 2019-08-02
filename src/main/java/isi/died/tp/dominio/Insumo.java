@@ -1,7 +1,5 @@
 package isi.died.tp.dominio;
 
-import isi.died.tp.estructuras.Vertice;
-
 public class Insumo implements Comparable<Insumo> {
 	
 	public enum UnidadDeMedida { Kilogramo, Gramo, Metro, MetroCuadrado, MetroCubico, Litro, Pieza };
@@ -105,6 +103,14 @@ public class Insumo implements Comparable<Insumo> {
 	
 	public Boolean getEsLiquido() {
 		return esLiquido;
+	}
+	
+	public Double getDensidad(){
+		return 0.0;
+	}
+	
+	public void setDensidad(Double densidad) {
+		
 	}
 
 	@Override
