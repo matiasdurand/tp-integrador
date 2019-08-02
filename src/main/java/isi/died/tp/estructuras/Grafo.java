@@ -367,5 +367,9 @@ public class Grafo<T> {
 		}
 		return false;
 	}
+
+	public Planta buscarPlanta(Planta inicial, Insumo i, Integer saltos) {
+		return null;
+	}
   
 }

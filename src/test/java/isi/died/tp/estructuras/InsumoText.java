@@ -14,7 +14,7 @@ public class InsumoText {
 	
 	@Before
 	public void preTest() {
-		insumoLiquido = new Liquido("DescripcionLiquido", 50.00, 25, true, 997.00);
+		insumoLiquido = new Liquido("Insumo1", "DescripcionLiquido", 50.00, 25, true, 997.00, true);
 	}
 	
 	@Test

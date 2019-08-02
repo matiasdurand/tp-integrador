@@ -21,7 +21,7 @@ public class GrafoPlantas extends Grafo<Planta> {
 	
 	private static GrafoPlantas _INSTANCIA = null;
 	
-	private GrafoPlantas() {
+	public GrafoPlantas() {
 		
 	}
 	
@@ -53,6 +53,7 @@ public class GrafoPlantas extends Grafo<Planta> {
 	  
     }*/
   
+	@Override
   	public Planta buscarPlanta(Planta inicial, Insumo i, Integer saltos) {
   		
   		Planta resultado = null;
@@ -263,8 +264,20 @@ public class GrafoPlantas extends Grafo<Planta> {
     	}
     }
 
-	public void actualizar(Planta nodo) {
+	public void actualizarNodo(Planta nodo) {
+		
 		for(Vertice<Planta> v: vertices) if(v.getValor().getId().equals(nodo.getId())) v.setValor(nodo);
+		
+	}
+
+	public void eliminarNodo(Planta nodo) {
+		
+		Vertice<Planta> nodoAEliminar = new Vertice<Planta>(nodo);
+		
+		vertices.remove(nodoAEliminar);
+		
+		for(Arista<Planta> a: aristas) if(a.getInicio().equals(nodoAEliminar) || a.getFin().equals(nodoAEliminar)) aristas.remove(a);
+	
 	}
 	
 }

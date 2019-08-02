@@ -53,6 +53,7 @@ public class PanelInsumo extends JPanel {
 	private JButton btnEliminar;
 	private ControladorInsumos controlador;
 	private Integer idSeleccionado;
+	private int contador=0;
 	
 	public PanelInsumo() {
 		super();
@@ -314,16 +315,17 @@ public class PanelInsumo extends JPanel {
 		});
 		
 		tablaInsumos.getSelectionModel().addListSelectionListener( e -> {
-			if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && e.getFirstIndex()<gtm.getDatos().size()) {
-				gtm.datos.get(e.getFirstIndex());
-				idSeleccionado = tablaInsumos.getSelectedRow()+1;
-				//idSeleccionado = (Integer) tablaInsumos.getValueAt(tablaInsumos.getSelectedRow(), 0);
+			if(contador==1) {
+				if(tablaInsumos.getSelectedRow()>=0) idSeleccionado = (Integer)tablaInsumos.getValueAt(tablaInsumos.getSelectedRow(), 0);
 				if(idSeleccionado>0) {
 					btnEliminar.setEnabled(true);
 					btnEditar.setEnabled(true);
 				}
+				System.out.println(idSeleccionado);
+				contador = 0;
 			}
-        });
+			else contador++;
+		});
 		
 		rbtnDescendente.addActionListener( e -> {
 			rbtnAscendente.setSelected(false);

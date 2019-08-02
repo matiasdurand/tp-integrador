@@ -51,7 +51,7 @@ public class PanelCamion extends JPanel {
 	private JButton btnGuardar;
 	private JButton btnCancelar;
 	private Integer idSeleccionado;
-	
+	private int contador=0;
 	
 	public PanelCamion() {
 		super();
@@ -415,10 +415,8 @@ public class PanelCamion extends JPanel {
 		});
 		
 		this.tablaCamiones.getSelectionModel().addListSelectionListener(lse -> {
-			if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()< gtm.getDatos().size()) {
-	    		gtm.datos.get(lse.getFirstIndex());
-	    		//idSeleccionado = tablaCamiones.getSelectedRow()+1;
-	    		idSeleccionado = (Integer) tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
+			if(contador==1) {
+	    		if(tablaCamiones.getSelectedRow()>=0) idSeleccionado = (Integer) tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
 	    		if(idSeleccionado>0) {
 	    			Camion aux = controlador.obtenerCamion(idSeleccionado);
 	    			marca.setText(aux.getMarca());
@@ -431,7 +429,9 @@ public class PanelCamion extends JPanel {
 	    		}
 	    		btnEditar.setEnabled(true);
 	    		btnEliminar.setEnabled(true);
-    		}
+	    		contador=0;
+			}
+			else contador++;
         });
 		
 	}

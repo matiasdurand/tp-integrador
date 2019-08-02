@@ -66,37 +66,50 @@ public class ControladorInsumos {
 		this.pEInsumo = pEInsumo;
 	}
 	
-	public Insumo crearInsumo(String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
-		Insumo i;
-		if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad, true);
-		else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado, false);
-		i=dao.crear(i);
+	public void crearInsumo(String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
+		
 		Runnable r = () -> {
+			
+			Insumo i;
+			
+			if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad, true);
+			else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado, false);
+			
+			almacenar(dao.crear(i));
+			
 			List<Insumo> listaInsumos = dao.buscarTodos();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(listaInsumos);
 					JOptionPane.showMessageDialog((Component)pInsumo, "El insumo ha sido creado correctamente");
 					
 				});
-			} catch (InvocationTargetException | InterruptedException e) {
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
 		};
 		Thread hilo = new Thread(r);
 		hilo.start();
-		
-		return i;
+
 	}
 	
 	public void actualizarInsumo(Integer id, String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
+
 		Runnable r = () -> {
+			
 			Insumo i;
+			
 			if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad, true);
 			else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado, false);
+			
 			i.setId(id);
+			
 			dao.actualizar(i);
+			
 			List<Insumo> listaInsumos = dao.buscarTodos();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(listaInsumos);
@@ -108,6 +121,7 @@ public class ControladorInsumos {
 		};
 		Thread hilo = new Thread(r);
 		hilo.start();
+		
 	}
 	
 	public void borrarInsumo(Integer id) {

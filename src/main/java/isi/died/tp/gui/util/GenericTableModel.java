@@ -28,7 +28,7 @@ public class GenericTableModel<T> extends AbstractTableModel {
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		T fila = datos.get(rowIndex);
-		Class clase = fila.getClass();
+		Class<? extends Object> clase = fila.getClass();
 		String nombreMetodo = this.columnas.get(columnIndex).getNombreGetter();
 		Object resultado = null;
 		try {

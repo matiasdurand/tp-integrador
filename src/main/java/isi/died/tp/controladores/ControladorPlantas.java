@@ -162,7 +162,7 @@ public class ControladorPlantas {
 		Runnable r = () -> {
 			Planta p = new Planta(nombre);
 			p.setId(id);
-			daoPlanta.actualizar(p);
+			grafoPlantas.actualizarNodo(daoPlanta.actualizar(p));
 			List<Planta> lista = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
@@ -181,6 +181,7 @@ public class ControladorPlantas {
 	
 	public void borrarPlanta(Integer id) {
 		Runnable r = () -> {
+			grafoPlantas.eliminarNodo(daoPlanta.buscar(id));
 			daoPlanta.borrar(id);
 			List<Planta> lista = daoPlanta.buscarTodas();
 			try {
@@ -221,7 +222,7 @@ public class ControladorPlantas {
 		return daoPlanta.buscar(id);
 	}
 	
-	public Planta obtenerPlanta(String nombre) {
+	/*public Planta obtenerPlanta(String nombre) {
 		List<Planta> plantas = daoPlanta.buscarTodas();
 		for(Planta p: plantas) {
 			if(p.getNombre().equals(nombre)) {
@@ -229,7 +230,7 @@ public class ControladorPlantas {
 			}
 		}
 		return null;
-	}
+	}*/
 	
 	public List<Stock> buscarStock(Integer id){
 		Planta aux = daoPlanta.buscar(id);
@@ -262,8 +263,8 @@ public class ControladorPlantas {
 			
 			pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
 
-			grafoPlantas.actualizar(daoPlanta.buscar(id));
-			grafoPlantas.actualizar(daoPlanta.buscar(1));
+			grafoPlantas.actualizarNodo(daoPlanta.buscar(id));
+			grafoPlantas.actualizarNodo(daoPlanta.buscar(1));
 			
 			JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
 			

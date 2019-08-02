@@ -33,10 +33,10 @@ public class PlantaTest {
 	@Before
 	public void cargarDatos() {
 		
-		insumo1 = new Insumo("Descripcion1", UnidadDeMedida.Pieza, 500.00, 10, 5.00, false);
-		insumo2 = new Insumo("Descripcion3", UnidadDeMedida.Kilogramo, 100.00, 15, 1.00, false);
-		insumo3 = new Insumo("Descripcion6", UnidadDeMedida.Metro, 5.00, 1000, 0.10, false);
-		insumo4 = new Liquido("Descripcion10", 1000.00, 10, true, 13600.00);
+		insumo1 = new Insumo("Insumo1", "Descripcion1", UnidadDeMedida.Pieza, 500.00, 10, 5.00, false, false);
+		insumo2 = new Insumo("Insumo2", "Descripcion3", UnidadDeMedida.Kilogramo, 100.00, 15, 1.00, false, false);
+		insumo3 = new Insumo("Insumo3", "Descripcion6", UnidadDeMedida.Metro, 5.00, 1000, 0.10, false, false);
+		insumo4 = new Liquido("Insumo4", "Descripcion10", 1000.00, 10, true, 1000.00, true);
 		
 		stock1 = new Stock(10, 15, insumo1);
 		stock2 = new Stock(15, 8, insumo2);
@@ -46,7 +46,8 @@ public class PlantaTest {
 		listaStock = new ArrayList<Stock>();
 		listaStock.add(stock1); listaStock.add(stock2); listaStock.add(stock3); listaStock.add(stock4);
 		
-		plantaAcopio = new Planta("PlantaAcopio", listaStock);  
+		plantaAcopio = new Planta("PlantaAcopio");
+		plantaAcopio.setListaStock(listaStock);
 		
 	}
 	

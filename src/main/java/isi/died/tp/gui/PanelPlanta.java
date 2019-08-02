@@ -41,7 +41,7 @@ public class PanelPlanta extends JPanel {
 	private JTable tablaPlantas;
 	private JTable tablaStock;
 	private Integer idSeleccionado;
-	private Integer contador=0;
+	private int contador=0;
 	GenericTableModel<Planta> gtm;
 	GenericTableModel<Stock> gtmStock;
 	
@@ -315,7 +315,9 @@ public class PanelPlanta extends JPanel {
 			
 			if(opcion == JOptionPane.OK_OPTION) {
 				if(!distancia.getText().isEmpty() && !duracion.getText().isEmpty() && !pesoMax.getText().isEmpty()) {
-					Planta aux = controlador.obtenerPlanta(cmboxPlantas.getSelectedItem().toString());
+					//Planta aux = controlador.obtenerPlanta(cmboxPlantas.getSelectedItem().toString());
+					Planta aux = (Planta)cmboxPlantas.getSelectedItem();
+					System.out.println(aux);
 					if(aux != null) {
 						controlador.conectarPlantas(idSeleccionado, aux.getId(), Double.valueOf(distancia.getText()), Double.valueOf(duracion.getText()), Double.valueOf(pesoMax.getText()));
 						JOptionPane.showMessageDialog(null, "Las plantas se han conectado exitosamente");
@@ -360,34 +362,27 @@ public class PanelPlanta extends JPanel {
 		
 		tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
 				if(contador==1) {
-					if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()<gtm.getDatos().size()) {
-						gtm.datos.get(lse.getFirstIndex());
-						//idSeleccionado = tablaPlantas.getSelectedRow()+1;
-						idSeleccionado = (Integer) tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
-						if(idSeleccionado.equals(Integer.valueOf(1)) || idSeleccionado.equals(Integer.valueOf(2))) {
-							btnConectar.setEnabled(true);
-							btnEditar.setEnabled(false);
-							btnEliminar.setEnabled(false);
-							btnCargarStock.setEnabled(false);
-						}
-						else {
-							btnConectar.setEnabled(true);
-							btnEditar.setEnabled(true);
-							btnEliminar.setEnabled(true);
-							btnCargarStock.setEnabled(true);
-						}
-						if(idSeleccionado>0) {
-							nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
-							List<Stock> listaStock = controlador.buscarStock(idSeleccionado);
-							actualizarDatosTablaStock(listaStock);
-						}
-						contador=0;
-    	    			System.out.println(idSeleccionado);
+					if(tablaPlantas.getSelectedRow()>=0) idSeleccionado = (Integer) tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
+					if(idSeleccionado.equals(Integer.valueOf(1)) || idSeleccionado.equals(Integer.valueOf(2))) {
+						btnConectar.setEnabled(true);
+						btnEditar.setEnabled(false);
+						btnEliminar.setEnabled(false);
+						btnCargarStock.setEnabled(false);
 					}
+					else {
+						btnConectar.setEnabled(true);
+						btnEditar.setEnabled(true);
+						btnEliminar.setEnabled(true);
+						btnCargarStock.setEnabled(true);
+					}
+					if(idSeleccionado>0) {
+						nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
+						List<Stock> listaStock = controlador.buscarStock(idSeleccionado);
+						actualizarDatosTablaStock(listaStock);
+					}
+					contador=0;
 				}
-				else {
-					contador++;
-				}
+				else contador++;
         });
 		
 		

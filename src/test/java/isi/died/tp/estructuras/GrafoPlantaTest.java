@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import isi.died.tp.dominio.GrafoPlantas;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
@@ -37,10 +36,10 @@ public class GrafoPlantaTest {
 	@Before
 	public void cargarDatos() {
 		
-		insumo1 = new Insumo("Insumo1", "Descripcion1", UnidadDeMedida.Pieza, 500.00, 10, 5.00, false);
-		insumo2 = new Insumo("Descripcion3", UnidadDeMedida.Kilogramo, 100.00, 15, 1.00, false);
-		insumo3 = new Insumo("Descripcion6", UnidadDeMedida.Metro, 5.00, 1000, 0.10, false);
-		insumo4 = new Liquido("Descripcion10", 1000.00, 10, true, 13600.00);
+		insumo1 = new Insumo("Insumo1", "Descripcion1", UnidadDeMedida.Pieza, 500.00, 10, 5.00, false, false);
+		insumo2 = new Insumo("Insumo2", "Descripcion2", UnidadDeMedida.Kilogramo, 100.00, 15, 1.00, false, false);
+		insumo3 = new Insumo("Insumo3", "Descripcion3", UnidadDeMedida.Metro, 5.00, 1000, 0.10, false, false);
+		insumo4 = new Liquido("Insumo4", "Descripcion4", 1000.00, 10, true, 1000.00, true);
 		
 		listaStockPlantaAcopio = new ArrayList<Stock>();
 		listaStockPlantaAcopio.add(new Stock(10, 15, insumo1));
@@ -60,10 +59,15 @@ public class GrafoPlantaTest {
 		listaStockPlanta04.add(new Stock(20, 5, insumo2));
 		listaStockPlanta04.add(new Stock(5, 10, insumo3));
 		
-		plantaAcopio = new Planta("PlantaAcopio", listaStockPlantaAcopio);  
-		planta02 = new Planta("Planta02", listaStockPlanta02);
-		planta03 = new Planta("Planta03", listaStockPlanta03);
-		planta04 = new Planta("Planta04", listaStockPlanta04);
+		plantaAcopio = new Planta("PlantaAcopio");  
+		planta02 = new Planta("Planta02");
+		planta03 = new Planta("Planta03");
+		planta04 = new Planta("Planta04");
+		
+		plantaAcopio.setListaStock(listaStockPlantaAcopio);
+		planta02.setListaStock(listaStockPlanta02);
+		planta03.setListaStock(listaStockPlanta03);
+		planta04.setListaStock(listaStockPlanta04);
 		
 		grafoDePlantas = new GrafoPlantas();
 		grafoDePlantas.addNodo(plantaAcopio);
@@ -71,9 +75,9 @@ public class GrafoPlantaTest {
 		grafoDePlantas.addNodo(planta03);
 		grafoDePlantas.addNodo(planta04);
 		
-		grafoDePlantas.conectar(plantaAcopio, planta02);
-		grafoDePlantas.conectar(planta02, planta03);
-		grafoDePlantas.conectar(planta03, planta04);
+		grafoDePlantas.conectar(plantaAcopio, planta02, 0.0, 0.0, 0.0);
+		grafoDePlantas.conectar(planta02, planta03, 0.0, 0.0, 0.0);
+		grafoDePlantas.conectar(planta03, planta04, 0.0, 0.0, 0.0);
 	
 	}
 	

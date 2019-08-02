@@ -18,22 +18,19 @@ public class TestRangoABB {
 	@Before
 	public void preTest() {
 		
-		abbInsumos = new ArbolBinarioBusqueda<Insumo>(new Insumo("Descripcion1", UnidadDeMedida.Kilogramo, 50.00, 10, 5.00, false));
-		abbInsumos.agregar(new Insumo("Descripcion2", UnidadDeMedida.Pieza, 100.00, 5, 10.00, false));
-		abbInsumos.agregar(new Liquido("Descripcion3", 250.00, 15, false, 997.00));
+		abbInsumos = new ArbolBinarioBusqueda<Insumo>(new Insumo("Insumo1", "Descripcion1", UnidadDeMedida.Kilogramo, 50.00, 10, 5.00, false, false));
+		abbInsumos.agregar(new Insumo("Insumo2", "Descripcion2", UnidadDeMedida.Pieza, 100.00, 5, 10.00, false, false));
+		abbInsumos.agregar(new Liquido("Insumo3", "Descripcion3", 250.00, 15, false, 997.00, true));
 		
 	}
 	
 	@Test
 	public void testRango() {
-		ArrayList<Insumo> lista1 = abbInsumos.rango(20.00, 30.00);
+		ArrayList<Insumo> lista1 = abbInsumos.rango("", 1000.00, Double.MAX_VALUE, 0, Integer.MAX_VALUE);
 		assertEquals(0, lista1.size());
 		
-		ArrayList<Insumo> lista2 = abbInsumos.rango(10.00, 15.00);
-		assertEquals(2, lista2.size());
-		
-		ArrayList<Insumo> lista3 = abbInsumos.rango(0.00, 18.00);
-		assertEquals(3, lista3.size());
+		ArrayList<Insumo> lista2 = abbInsumos.rango("", 0.0, Double.MAX_VALUE, 0, Integer.MAX_VALUE);
+		assertEquals(3, lista2.size());
 	}
 
 }
