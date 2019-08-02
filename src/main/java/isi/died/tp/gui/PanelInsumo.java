@@ -317,7 +317,8 @@ public class PanelInsumo extends JPanel {
 		tablaInsumos.getSelectionModel().addListSelectionListener( e -> {
 			if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && e.getFirstIndex()<gtm.getDatos().size()) {
 				gtm.datos.get(e.getFirstIndex());
-				idSeleccionado = tablaInsumos.getSelectedRow()+1;
+				//idSeleccionado = tablaInsumos.getSelectedRow()+1;
+				idSeleccionado = (Integer) tablaInsumos.getValueAt(tablaInsumos.getSelectedRow(), 0);
 				if(idSeleccionado>0) {
 					btnEliminar.setEnabled(true);
 					btnEditar.setEnabled(true);

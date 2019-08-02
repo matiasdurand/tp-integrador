@@ -362,8 +362,13 @@ public class PanelCamion extends JPanel {
 		
 		this.btnGuardar.addActionListener( e -> {
 			if(validarDatos()) {
-				if(idSeleccionado<=0) controlador.crearCamion(marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
-				else controlador.actualizarCamion(idSeleccionado, marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
+				if(idSeleccionado<=0) {
+					controlador.crearCamion(marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
+				}
+				else {
+					controlador.actualizarCamion(idSeleccionado, marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
+				}
+				
 				btnGuardar.setEnabled(false);
 				btnCancelar.setEnabled(false);
 				btnRegistrar.setEnabled(true);
@@ -411,16 +416,20 @@ public class PanelCamion extends JPanel {
 		});
 		
 		this.tablaCamiones.getSelectionModel().addListSelectionListener(lse -> {
-    		if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()< gtm.getDatos().size()) {
-	    		Camion aux = gtm.datos.get(lse.getFirstIndex());
-	    		idSeleccionado = tablaCamiones.getSelectedRow()+1;
-	    		marca.setText(aux.getMarca());
-	    		modelo.setText(aux.getModelo());
-	    		año.setText(aux.getAño().toString());
-	    		dominio.setText(aux.getDominio());
-	    		capacidad.setText(aux.getCapacidad().toString());
-	    		costoPorKm.setText(aux.getCostoPorKm().toString());
-	    		aptoParaLiquidos.setSelected(aux.getAptoParaLiquidos());
+			if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()< gtm.getDatos().size()) {
+	    		gtm.datos.get(lse.getFirstIndex());
+	    		//idSeleccionado = tablaCamiones.getSelectedRow()+1;
+	    		idSeleccionado = (Integer) tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
+	    		if(idSeleccionado>0) {
+	    			Camion aux = controlador.obtenerCamion(idSeleccionado);
+	    			marca.setText(aux.getMarca());
+	    			modelo.setText(aux.getModelo());
+	    			año.setText(aux.getAño().toString());
+	    			dominio.setText(aux.getDominio());
+	    			capacidad.setText(aux.getCapacidad().toString());
+	    			costoPorKm.setText(aux.getCostoPorKm().toString());
+	    			aptoParaLiquidos.setSelected(aux.getAptoParaLiquidos());
+	    		}
 	    		btnEditar.setEnabled(true);
 	    		btnEliminar.setEnabled(true);
     		}

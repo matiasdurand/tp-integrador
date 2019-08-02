@@ -98,7 +98,8 @@ public class ControladorCamiones {
 		
 		Thread hilo = new Thread(r);
 		
-		hilo.start();	
+		hilo.start();
+			
 	}
 
 	public void cargarCamiones() {
@@ -109,5 +110,9 @@ public class ControladorCamiones {
 
 	public void setpMEnvio(PanelMejorEnvio pMEnvio) {
 		this.pMEnvio=pMEnvio;		
+	}
+
+	public Camion obtenerCamion(Integer id) {
+		return dao.buscar(id);
 	}
 }

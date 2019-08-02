@@ -362,7 +362,8 @@ public class PanelPlanta extends JPanel {
 				if(contador==1) {
 					if(gtm.getDatos()!=null && !gtm.getDatos().isEmpty() && lse.getFirstIndex()<gtm.getDatos().size()) {
 						gtm.datos.get(lse.getFirstIndex());
-						idSeleccionado = tablaPlantas.getSelectedRow()+1;
+						//idSeleccionado = tablaPlantas.getSelectedRow()+1;
+						idSeleccionado = (Integer) tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
 						if(idSeleccionado.equals(Integer.valueOf(1)) || idSeleccionado.equals(Integer.valueOf(2))) {
 							btnConectar.setEnabled(true);
 							btnEditar.setEnabled(false);
