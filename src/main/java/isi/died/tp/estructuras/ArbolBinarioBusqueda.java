@@ -1,6 +1,7 @@
 package isi.died.tp.estructuras;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import isi.died.tp.dominio.Insumo;
@@ -134,17 +135,19 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	}
 	
 	@Override
-	//Recorrido inorden, no necesariamente completo, del arbol (depende del rango). Agrego a la lista los stocks que caen dentro del rango.
-	public ArrayList<Insumo> rango(Double inicio, Double fin){
-		
+	public ArrayList<Insumo> rango(String nombre, Double costoMinimo, Double costoMaximo, Integer stockMinimo, Integer stockMaximo){
+	
 		ArrayList<Insumo> lista = new ArrayList<Insumo>();
-
-		if(((Insumo)valor).getStock()>inicio) lista.addAll(izquierdo.rango(inicio, fin));
 		
-		if(((Insumo)valor).getStock()>=inicio && ((Insumo)valor).getStock()<=fin) lista.add((Insumo)valor);
+		Insumo i = ((Insumo)valor);
+		
+		lista.addAll(izquierdo.rango(nombre, costoMinimo, costoMaximo, stockMinimo, stockMaximo));
+		
+		if(i.getNombre().toLowerCase().contains(nombre) && i.getCosto()>=costoMinimo && i.getCosto()<=costoMaximo && i.getStock()>=stockMinimo && i.getStock()<=stockMaximo) lista.add(i);
 
-		if(((Insumo)valor).getStock()<fin) lista.addAll(derecho.rango(inicio, fin));
+		lista.addAll(derecho.rango(nombre, costoMinimo, costoMaximo, stockMinimo, stockMaximo));
 		
 		return lista;
+		
 	}
 }

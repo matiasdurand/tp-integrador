@@ -38,6 +38,6 @@ public abstract class Arbol<E extends Comparable<E>> {
 
 	public abstract boolean esLleno();
 	
-	public abstract ArrayList<Insumo> rango(Double inicio, Double fin);
+	public abstract ArrayList<Insumo> rango(String nombre, Double costoMinimo, Double costoMaximo, Integer stockMinimo, Integer stockMaximo);
 	
 }

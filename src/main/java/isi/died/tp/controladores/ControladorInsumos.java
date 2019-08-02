@@ -2,7 +2,9 @@ package isi.died.tp.controladores;
 
 import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -16,6 +18,8 @@ import isi.died.tp.dao.InsumoDaoH2;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
+import isi.died.tp.estructuras.Arbol;
+import isi.died.tp.estructuras.ArbolBinarioBusqueda;
 import isi.died.tp.gui.PanelEditarInsumo;
 import isi.died.tp.gui.PanelInsumo;
 import isi.died.tp.gui.PanelRegistrarInsumo;
@@ -130,42 +134,67 @@ public class ControladorInsumos {
 	}
 	
 	public List<Insumo> filtrar(String nombre, String costoMinimo, String costoMaximo, String stockMinimo, String stockMaximo) {
+		
+		List<Insumo> insumos = dao.buscarTodos();
+		
+		if(insumos.isEmpty()) return insumos;
+		
 		Double costoMin, costoMax;
 		Integer stockMin, stockMax;
-		List<Insumo> filtrado = dao.buscarTodos();
-		if(!nombre.isEmpty() && !filtrado.isEmpty()) {
-			filtrado = filtrado.stream().filter( i -> (i.getNombre().toLowerCase()).contains((nombre.toLowerCase()))).collect(Collectors.toList());
-		}
-		if(!costoMinimo.isEmpty() && !filtrado.isEmpty()) {
-			costoMin = Double.parseDouble(costoMinimo);
-			filtrado = filtrado.stream().filter( i -> i.getCosto()>=costoMin).collect(Collectors.toList());
-		}
-		if(!costoMaximo.isEmpty() && !filtrado.isEmpty()) {
-			costoMax = Double.parseDouble(costoMaximo);
-			filtrado = filtrado.stream().filter( i -> i.getCosto()<=costoMax).collect(Collectors.toList());
-		}
-		if(!stockMinimo.isEmpty() && !filtrado.isEmpty()) {
-			stockMin = Integer.parseInt(stockMinimo);
-			filtrado = filtrado.stream().filter( i -> i.getStock()>=stockMin).collect(Collectors.toList());
-		}
-		if(!stockMaximo.isEmpty() && !filtrado.isEmpty()) {
-			stockMax = Integer.parseInt(stockMaximo);
-			filtrado = filtrado.stream().filter( i -> i.getStock()<=stockMax).collect(Collectors.toList());
-		}
+		
+		if(costoMinimo.isEmpty()) costoMin = 0.0;
+		else costoMin = Double.parseDouble(costoMinimo);
+		
+		if(costoMaximo.isEmpty()) costoMax = Double.MAX_VALUE;
+		else costoMax = Double.parseDouble(costoMaximo);
+		
+		if(stockMinimo.isEmpty()) stockMin = 0;
+		else stockMin = Integer.parseInt(stockMinimo);
+		
+		if(stockMaximo.isEmpty()) stockMax = Integer.MAX_VALUE;
+		else stockMax = Integer.parseInt(stockMaximo);
+		
+		Arbol<Insumo> abb = new ArbolBinarioBusqueda<Insumo>(insumos.get(0));
+		
+		insumos.remove(0);
+		
+		if(!insumos.isEmpty()) for(Insumo i: insumos) abb.agregar(i);
+		
+		List<Insumo> filtrado = abb.rango(nombre, costoMin, costoMax, stockMin, stockMax);
+		
 		return filtrado;
+		
 	}
 	
 	public List<Insumo> ordenarPor(List<Insumo> insumos, String criterio, Boolean descendente) {
 		
 		if(criterio.equals("Nombre")) {
 			if(!descendente) {
-				Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getNombre().compareTo(i2.getNombre()));
+				Collection<Insumo> arbol = new TreeSet<Insumo>(
+						new Comparator<Insumo>(){
+							@Override
+							public int compare(Insumo i1, Insumo i2) {
+								int comparacion = i1.getNombre().compareTo(i2.getNombre());
+								if(comparacion == 0) return 1;
+								else return comparacion;
+							}
+						}
+					);
 				arbol.addAll(insumos);
 				insumos.clear();
 				insumos.addAll(arbol);
 			}
 			else {
-				Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getNombre().compareTo(i1.getNombre()));
+				Collection<Insumo> arbol = new TreeSet<Insumo>(
+						new Comparator<Insumo>(){
+							@Override
+							public int compare(Insumo i1, Insumo i2) {
+								int comparacion = i2.getNombre().compareTo(i1.getNombre());
+								if(comparacion == 0) return 1;
+								else return comparacion;
+							}
+						}
+					);
 				arbol.addAll(insumos);
 				insumos.clear();
 				insumos.addAll(arbol);
@@ -174,13 +203,31 @@ public class ControladorInsumos {
 		else {
 			if(criterio.equals("Stock total")) {
 				if(!descendente) {
-					Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getStock().compareTo(i2.getStock()));
+					Collection<Insumo> arbol = new TreeSet<Insumo>(
+							new Comparator<Insumo>(){
+								@Override
+								public int compare(Insumo i1, Insumo i2) {
+									int comparacion = i1.getStock().compareTo(i2.getStock());
+									if(comparacion == 0) return 1;
+									else return comparacion;
+								}
+							}
+						);
 					arbol.addAll(insumos);
 					insumos.clear();
 					insumos.addAll(arbol);
 				}
 				else {
-					Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getStock().compareTo(i1.getStock()));
+					Collection<Insumo> arbol = new TreeSet<Insumo>(
+							new Comparator<Insumo>(){
+								@Override
+								public int compare(Insumo i1, Insumo i2) {
+									int comparacion = i2.getStock().compareTo(i1.getStock());
+									if(comparacion == 0) return 1;
+									else return comparacion;
+								}
+							}
+						);
 					arbol.addAll(insumos);
 					insumos.clear();
 					insumos.addAll(arbol);
@@ -189,13 +236,31 @@ public class ControladorInsumos {
 			else {
 				if(criterio.equals("Costo")) {
 					if(!descendente) {
-						Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i1.getCosto().compareTo(i2.getCosto()));
+						Collection<Insumo> arbol = new TreeSet<Insumo>(
+								new Comparator<Insumo>(){
+									@Override
+									public int compare(Insumo i1, Insumo i2) {
+										int comparacion = i1.getCosto().compareTo(i2.getCosto());
+										if(comparacion == 0) return 1;
+										else return comparacion;
+									}
+								}
+							);
 						arbol.addAll(insumos);
 						insumos.clear();
 						insumos.addAll(arbol);
 					}
 					else {
-						Collection<Insumo> arbol = new TreeSet<Insumo>((i1,i2) -> i2.getCosto().compareTo(i1.getCosto()));
+						Collection<Insumo> arbol = new TreeSet<Insumo>(
+								new Comparator<Insumo>(){
+									@Override
+									public int compare(Insumo i1, Insumo i2) {
+										int comparacion = i2.getCosto().compareTo(i1.getCosto());
+										if(comparacion == 0) return 1;
+										else return comparacion;
+									}
+								}
+							);
 						arbol.addAll(insumos);
 						insumos.clear();
 						insumos.addAll(arbol);

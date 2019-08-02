@@ -294,7 +294,7 @@ public class ControladorPlantas {
 		pMEnvio.actualizarDatosTablaPlantas(listaPlantas);
 	}
 
-public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado) {
+	public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado) {
 		
 		Camion camion = daoCamion.buscar(idCamionSeleccionado);
 		System.out.println("Camion: "+camion.getDominio());
@@ -302,10 +302,13 @@ public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionad
 		
 		int cantidadInsumos = stockFaltante.size();
 		System.out.println("Cantidad insumos a enviar: "+cantidadInsumos);
-		int[] pesos = new int[cantidadInsumos];
-		double[] valores = new double[cantidadInsumos];
+		int[] pesos = new int[cantidadInsumos+1];
+		double[] valores = new double[cantidadInsumos+1];
 		
-		int index=0;
+		pesos[0]=0;
+		valores[0]=0;
+		
+		int index=1;
 		for(Stock s: stockFaltante) {
 			Insumo i = s.getInsumo();
 			int cantidadAEnviar = s.getPuntoPedido()-s.getCantidad()+10;
@@ -314,25 +317,25 @@ public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionad
 			index++;
 		}
 		
-		for(int j=0; j<cantidadInsumos; j++) {
+		for(int j=0; j<cantidadInsumos+1; j++) {
 			System.out.println("Peso y valor de insumo "+j+" a transportar: "+pesos[j]+" "+valores[j]);
 		}
 		
-		Boolean[] seleccionados = resolver(pesos, valores, cantidadInsumos, camion.getCapacidad().intValue());
+		Boolean[] seleccionados = resolver(pesos, valores, cantidadInsumos+1, camion.getCapacidad().intValue());
 		
 		List<Insumo> insumosAEnviar = new ArrayList<Insumo>();
 		
 		for(int x=0; x<seleccionados.length; x++) {
-			if(seleccionados[x]) insumosAEnviar.add(stockFaltante.get(x).getInsumo());
+			if(seleccionados[x]) insumosAEnviar.add(stockFaltante.get(x-1).getInsumo());
 			System.out.println(seleccionados[x]);
 		}
-		System.out.println(insumosAEnviar);
-	    //pMEnvio.mostrarMejorSeleccionEnvio(insumosAEnviar.toString());
+		
+	    pMEnvio.mostrarMejorSeleccionEnvio("Enviar los siguientes insumos: "+insumosAEnviar.toString());
 	    
 	}
 
 	public Boolean[] resolver(int[] pesos, double[] valores, int cantidadInsumos, int pesoMaximo) {
-	    
+		System.out.println("peso maximo: "+pesoMaximo);
 	    int N = cantidadInsumos;
 	    int W = pesoMaximo;
 	    
@@ -348,7 +351,7 @@ public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionad
 	            sol[n][w] = (option2 > option1);
 	        }
 	    }
-
+	    
 	    Boolean[] esSolucion = new Boolean[N];
 	    for (int n = N-1, w = W-1; n >= 0; n--) {
 	        if (sol[n][w]) {
