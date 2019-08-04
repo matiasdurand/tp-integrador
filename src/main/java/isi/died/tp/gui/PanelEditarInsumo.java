@@ -52,7 +52,6 @@ public class PanelEditarInsumo extends JPanel {
 	public PanelEditarInsumo(Integer idInsumo) {
 		super();
 		controlador = ControladorInsumos.getInstance();
-		controlador.setpEInsumo(this);
 		idSeleccionado = idInsumo;
 		insumoLiquido = controlador.esLiquido(idInsumo);
 		armar();

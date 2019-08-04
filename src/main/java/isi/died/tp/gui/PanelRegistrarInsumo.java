@@ -49,7 +49,6 @@ public class PanelRegistrarInsumo extends JPanel {
 	public PanelRegistrarInsumo() {
 		super();
 		controlador = ControladorInsumos.getInstance();
-		controlador.setpRInsumo(this);
 		armar();
 		configurarEventos();
 	}

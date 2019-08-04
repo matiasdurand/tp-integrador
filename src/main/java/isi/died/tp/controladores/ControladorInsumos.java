@@ -2,19 +2,18 @@ package isi.died.tp.controladores;
 
 import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
-
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import isi.died.tp.dao.InsumoDao;
 import isi.died.tp.dao.InsumoDaoH2;
+import isi.died.tp.dao.StockDao;
+import isi.died.tp.dao.StockDaoH2;
 import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
@@ -28,13 +27,12 @@ public class ControladorInsumos {
 
 	private static ControladorInsumos _INSTANCIA = null;
 	private PanelInsumo pInsumo;
-	private PanelRegistrarInsumo pRInsumo;
-	private PanelEditarInsumo pEInsumo;
-	private InsumoDao dao;
+	private InsumoDao daoInsumo;
+	private StockDao daoStock;
 	
 	private ControladorInsumos() {
-		//EL CONTROLADOR NO PUEDE SER INSTANCIADO FUERA DE ESTE AMBITO
-		dao = new InsumoDaoH2();
+		daoInsumo = new InsumoDaoH2();
+		daoStock = new StockDaoH2();
 	}
 	
 	public static ControladorInsumos getInstance() {
@@ -50,22 +48,6 @@ public class ControladorInsumos {
 		this.pInsumo = pInsumo;
 	}
 	
-	public PanelRegistrarInsumo getpRInsumo() {
-		return pRInsumo;
-	}
-	
-	public void setpRInsumo(PanelRegistrarInsumo pRInsumo) {
-		this.pRInsumo = pRInsumo;
-	}
-	
-	public PanelEditarInsumo getpEInsumo() {
-		return pEInsumo;
-	}
-	
-	public void setpEInsumo(PanelEditarInsumo pEInsumo) {
-		this.pEInsumo = pEInsumo;
-	}
-	
 	public void crearInsumo(String nombre, String descripcion, UnidadDeMedida udm, Double costo, Integer stock, Double peso, Boolean esRefrigerado, Double densidad) {
 		
 		Runnable r = () -> {
@@ -75,14 +57,14 @@ public class ControladorInsumos {
 			if(densidad>0) i = new Liquido(nombre, descripcion, costo, stock, esRefrigerado, densidad, true);
 			else i = new Insumo(nombre, descripcion, udm, costo, stock, peso, esRefrigerado, false);
 			
-			almacenar(dao.crear(i));
+			almacenar(daoInsumo.crear(i));
 			
-			List<Insumo> listaInsumos = dao.buscarTodos();
+			List<Insumo> insumos = daoInsumo.buscarTodos();
 			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					pInsumo.actualizarTablaInsumos(listaInsumos);
-					JOptionPane.showMessageDialog((Component)pInsumo, "El insumo ha sido creado correctamente");
+					pInsumo.actualizarTablaInsumos(insumos);
+					JOptionPane.showMessageDialog(pInsumo, "El insumo ha sido creado correctamente");
 					
 				});
 			} 
@@ -106,14 +88,14 @@ public class ControladorInsumos {
 			
 			i.setId(id);
 			
-			dao.actualizar(i);
+			daoInsumo.actualizar(i);
 			
-			List<Insumo> listaInsumos = dao.buscarTodos();
+			List<Insumo> insumos = daoInsumo.buscarTodos();
 			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					pInsumo.actualizarTablaInsumos(listaInsumos);
-					JOptionPane.showMessageDialog((Component)pInsumo, "El insumo ha sido actualizado correctamente");
+					pInsumo.actualizarTablaInsumos(insumos);
+					JOptionPane.showMessageDialog(pInsumo, "El insumo ha sido actualizado correctamente");
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
@@ -126,12 +108,13 @@ public class ControladorInsumos {
 	
 	public void borrarInsumo(Integer id) {
 		Runnable r = () -> {
-			dao.borrar(id);
-			List<Insumo> listaInsumos = dao.buscarTodos();
+			daoStock.borrar(-1, id);
+			daoInsumo.borrar(id);
+			List<Insumo> insumos = daoInsumo.buscarTodos();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					pInsumo.actualizarTablaInsumos(listaInsumos);
-					JOptionPane.showMessageDialog((Component)pInsumo, "El insumo ha sido eliminado correctamente");
+					pInsumo.actualizarTablaInsumos(insumos);
+					JOptionPane.showMessageDialog(pInsumo, "El insumo ha sido eliminado correctamente");
 				});
 			} catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
@@ -149,7 +132,7 @@ public class ControladorInsumos {
 	
 	public List<Insumo> filtrar(String nombre, String costoMinimo, String costoMaximo, String stockMinimo, String stockMaximo) {
 		
-		List<Insumo> insumos = dao.buscarTodos();
+		List<Insumo> insumos = daoInsumo.buscarTodos();
 		
 		if(insumos.isEmpty()) return insumos;
 		
@@ -303,17 +286,17 @@ public class ControladorInsumos {
 	}
 	
 	public Boolean esLiquido(Integer idInsumo) {
-		Insumo i = dao.buscar(idInsumo);
+		Insumo i = daoInsumo.buscar(idInsumo);
 		if(i.getClass().getSimpleName().equals("Liquido")) return true;
 		else return false;
 	}
 	
 	public Insumo buscarInsumo(Integer id){
-		return dao.buscar(id);
+		return daoInsumo.buscar(id);
 	}
 
 	public List<Insumo> buscarTodos() {
-		return dao.buscarTodos();
+		return daoInsumo.buscarTodos();
 	}
 
 	public void almacenar(Insumo i) {
@@ -324,8 +307,8 @@ public class ControladorInsumos {
 		Runnable r = () -> {
 			try {
 				i.setStock(i.getStock()+cantidad);
-				dao.actualizar(i);
-				List<Insumo> insumos = dao.buscarTodos();
+				daoInsumo.actualizar(i);
+				List<Insumo> insumos = daoInsumo.buscarTodos();
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(insumos);
 				});
@@ -342,8 +325,8 @@ public class ControladorInsumos {
 		Runnable r = () -> {
 			try {
 				i.setStock(i.getStock()-cantidad);
-				dao.actualizar(i);
-				List<Insumo> insumos = dao.buscarTodos();
+				daoInsumo.actualizar(i);
+				List<Insumo> insumos = daoInsumo.buscarTodos();
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(insumos);
 				});

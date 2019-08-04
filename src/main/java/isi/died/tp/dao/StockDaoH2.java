@@ -24,7 +24,7 @@ public class StockDaoH2 implements StockDao{
 	private static final String SQL_SELECT =
 			"SELECT ID, CANTIDAD, PUNTO_PEDIDO, ID_INSUMO FROM Stock";
 		
-	private static final String SQL_DELETE = "DELETE FROM Stock WHERE ID_PLANTA =?";
+	private static final String SQL_DELETE = "DELETE FROM Stock";
 	
 	private InsumoDao daoInsumo;
 	
@@ -121,10 +121,20 @@ public class StockDaoH2 implements StockDao{
 	}
 	
 	@Override
-	public void borrar(Integer id) {
+	public void borrar(Integer idPlanta, Integer idInsumo) {
 		try(Connection conn = DBConnection.get()){
-			try(PreparedStatement pst = conn.prepareStatement(SQL_DELETE)){
-				pst.setInt(1, id);
+			String sqlById;
+			Integer idAuxiliar;
+			if(idPlanta.equals(-1)) {
+				sqlById = SQL_DELETE + " WHERE ID_INSUMO = ?";
+				idAuxiliar = idInsumo;
+			}
+			else {
+				sqlById = SQL_DELETE + " WHERE ID_PLANTA = ?";
+				idAuxiliar = idPlanta;
+			}
+			try(PreparedStatement pst = conn.prepareStatement(sqlById)){
+				pst.setInt(1, idAuxiliar);
 				pst.executeUpdate();
 			}
 		} catch (SQLException e1) {

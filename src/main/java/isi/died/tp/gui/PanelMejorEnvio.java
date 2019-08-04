@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -225,37 +226,32 @@ public class PanelMejorEnvio extends JPanel {
 		
 		tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
 			if(contador==1) {
-				if(gtmPlantas.getDatos()!=null && !gtmPlantas.getDatos().isEmpty() && lse.getFirstIndex()<gtmPlantas.getDatos().size()) {
-					gtmPlantas.datos.get(lse.getFirstIndex());
-					idPlantaSeleccionada = (Integer) tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
-					System.out.println(idPlantaSeleccionada);
-					if(idPlantaSeleccionada>0) actualizarDatosTablaStock(controladorPlantas.buscarStockFaltante(idPlantaSeleccionada));
-					if(idCamionSeleccionado>0) {
-						btnGenerarSolucion.setEnabled(true);
-					}
-					contador=0;
-				}
+				if(tablaPlantas.getSelectedRow()>=0) idPlantaSeleccionada = (Integer)tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
+				System.out.println(idPlantaSeleccionada);
+				if(idPlantaSeleccionada>0) actualizarDatosTablaStock(controladorPlantas.buscarStockFaltante(idPlantaSeleccionada));
+				if(idCamionSeleccionado>0 && tablaStock.getRowCount()==0) btnGenerarSolucion.setEnabled(true);
+				contador=0;
 			}
 			else contador++;
 		});
 		
 		tablaCamiones.getSelectionModel().addListSelectionListener(lse -> {
 			if(contador==1) {
-				if(gtmCamiones.getDatos()!=null && !gtmCamiones.getDatos().isEmpty() && lse.getFirstIndex()<gtmCamiones.getDatos().size()) {
-					gtmCamiones.datos.get(lse.getFirstIndex());
-					idCamionSeleccionado = (Integer) tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
-					if(idPlantaSeleccionada>0) {
-						btnGenerarSolucion.setEnabled(true);
-					}
-					System.out.println(idCamionSeleccionado);
-					contador=0;
-				}
+				if(tablaCamiones.getSelectedRow()>=0) idCamionSeleccionado = (Integer)tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
+				System.out.println(idCamionSeleccionado);
+				if(idPlantaSeleccionada>0 && tablaStock.getRowCount()==0) btnGenerarSolucion.setEnabled(true);
+				contador=0;
 			}
 			else contador++;
 		});
 		
 		btnGenerarSolucion.addActionListener( e -> {
-			controladorPlantas.mejorEnvio(idPlantaSeleccionada, idCamionSeleccionado);
+			Boolean camionAptoParaLiquidos = (Boolean)tablaCamiones.getValueAt(tablaPlantas.getSelectedRow(), 7);
+			if(!camionAptoParaLiquidos) {
+				int confirmar = JOptionPane.showConfirmDialog(this, "El camión seleccionado no es apto para líquidos.\nSi continúa no se tendrán en cuenta los insumos de este tipo. ", "Advertencia", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				if(confirmar==0) controladorPlantas.mejorEnvio(idPlantaSeleccionada, idCamionSeleccionado, camionAptoParaLiquidos);
+			}
+			else controladorPlantas.mejorEnvio(idPlantaSeleccionada, idCamionSeleccionado, camionAptoParaLiquidos);
 		});
 		
 		btnCancelar.addActionListener(e -> {

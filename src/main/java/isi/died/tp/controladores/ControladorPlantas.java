@@ -161,9 +161,10 @@ public class ControladorPlantas {
 	public void borrarPlanta(Integer id) {
 		Runnable r = () -> {
 			Planta plantaAEliminar = daoPlanta.buscar(id);
-			grafoPlantas.eliminarNodo(plantaAEliminar);
+			daoStock.borrar(id, -1);
 			List<Stock> stockAEliminar = plantaAEliminar.getListaStock();
 			for(Stock s: stockAEliminar) controladorInsumos.disminuirStockInsumo(s.getInsumo(), s.getCantidad());
+			grafoPlantas.eliminarNodo(plantaAEliminar);
 			daoPlanta.borrar(id);
 			List<Planta> plantas = daoPlanta.buscarTodas();
 			try {
@@ -265,11 +266,13 @@ public class ControladorPlantas {
 		pMEnvio.actualizarDatosTablaPlantas(daoPlanta.buscarTodas());
 	}
 
-	public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado) {
+	public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado, Boolean camionAptoParaLiquidos) {
 		
 		Camion camion = daoCamion.buscar(idCamionSeleccionado);
 		System.out.println("Camion: "+camion.getDominio());
 		List<Stock> stockFaltante = buscarStockFaltante(idPlantaSeleccionada);
+		
+		if(!camionAptoParaLiquidos) stockFaltante.stream().filter(s->!s.getInsumo().getEsLiquido()).collect(Collectors.toList());
 		
 		int cantidadInsumos = stockFaltante.size();
 		System.out.println("Cantidad insumos a enviar: "+cantidadInsumos);

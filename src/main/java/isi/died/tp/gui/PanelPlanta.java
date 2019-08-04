@@ -340,7 +340,7 @@ public class PanelPlanta extends JPanel {
 		});
 		tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
 				if(contador==1) {
-					if(tablaPlantas.getSelectedRow()>=0) idSeleccionado = (Integer) tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
+					if(tablaPlantas.getSelectedRow()>=0) idSeleccionado = (Integer)tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
 					if(idSeleccionado.equals(1)) {
 						btnConectar.setEnabled(true);
 						btnEditar.setEnabled(true);
