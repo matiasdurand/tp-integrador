@@ -83,7 +83,7 @@ public class PanelMejorEnvio extends JPanel {
     	col=0;
     	fila++;
     	
-    	lblTablaPlantas = new JLabel("Tabla de plantas");
+    	lblTablaPlantas = new JLabel("Plantas registradas");
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=1;
@@ -95,7 +95,7 @@ public class PanelMejorEnvio extends JPanel {
     	c.insets = new Insets(10, 10, 10, 10);
     	add(lblTablaPlantas,c);
     	
-    	lblTablaStock = new JLabel("Tabla de stock");
+    	lblTablaStock = new JLabel("Stock faltantes");
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=1;
@@ -146,7 +146,7 @@ public class PanelMejorEnvio extends JPanel {
     	col=0;
     	fila++;
     	
-    	lblTablaCamiones = new JLabel("Tabla de Camiones");
+    	lblTablaCamiones = new JLabel("Camiones disponibles");
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=2;
@@ -227,7 +227,6 @@ public class PanelMejorEnvio extends JPanel {
 			if(contador==1) {
 				if(gtmPlantas.getDatos()!=null && !gtmPlantas.getDatos().isEmpty() && lse.getFirstIndex()<gtmPlantas.getDatos().size()) {
 					gtmPlantas.datos.get(lse.getFirstIndex());
-					//idPlantaSeleccionada = tablaPlantas.getSelectedRow()+1;
 					idPlantaSeleccionada = (Integer) tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
 					System.out.println(idPlantaSeleccionada);
 					if(idPlantaSeleccionada>0) actualizarDatosTablaStock(controladorPlantas.buscarStockFaltante(idPlantaSeleccionada));
@@ -244,7 +243,6 @@ public class PanelMejorEnvio extends JPanel {
 			if(contador==1) {
 				if(gtmCamiones.getDatos()!=null && !gtmCamiones.getDatos().isEmpty() && lse.getFirstIndex()<gtmCamiones.getDatos().size()) {
 					gtmCamiones.datos.get(lse.getFirstIndex());
-					//idCamionSeleccionado = tablaCamiones.getSelectedRow()+1;
 					idCamionSeleccionado = (Integer) tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
 					if(idPlantaSeleccionada>0) {
 						btnGenerarSolucion.setEnabled(true);

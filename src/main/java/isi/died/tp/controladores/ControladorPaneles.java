@@ -32,7 +32,7 @@ public class ControladorPaneles {
 			panelPlanta = new PanelPlanta();
 			panelPlanta.crearAcopios();
 		}
-		else panelPlanta.actualizarTablaStock();
+		panelPlanta.actualizarTablaStock();
 		return panelPlanta;
 	}
 	

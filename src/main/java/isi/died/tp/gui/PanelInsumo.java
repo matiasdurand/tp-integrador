@@ -306,7 +306,7 @@ public class PanelInsumo extends JPanel {
 		});
 		
 		btnEliminar.addActionListener( e -> {
-			int confirmar = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el insumo seleccionado?", "Eliminar insumo", JOptionPane.YES_NO_OPTION);
+			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar el insumo seleccionado?", "Eliminar insumo", JOptionPane.YES_NO_OPTION);
 			if(confirmar==0) {
 				controlador.borrarInsumo(idSeleccionado);
 				btnEliminar.setEnabled(false);

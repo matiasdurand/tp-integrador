@@ -320,7 +320,7 @@ public class ControladorInsumos {
 		ControladorPlantas.getInstance().almacenar(i);
 	}
 
-	public void actualizarStockInsumo(Insumo i, Integer cantidad) {
+	public void aumentarStockInsumo(Insumo i, Integer cantidad) {
 		Runnable r = () -> {
 			try {
 				i.setStock(i.getStock()+cantidad);
@@ -336,6 +336,25 @@ public class ControladorInsumos {
 		};
 		Thread hilo = new Thread(r);
 		hilo.start();
+	}
+
+	public void disminuirStockInsumo(Insumo i, Integer cantidad) {
+		Runnable r = () -> {
+			try {
+				i.setStock(i.getStock()-cantidad);
+				dao.actualizar(i);
+				List<Insumo> insumos = dao.buscarTodos();
+				SwingUtilities.invokeAndWait(() -> {
+					pInsumo.actualizarTablaInsumos(insumos);
+				});
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
+				e.printStackTrace();
+			}
+		};
+		Thread hilo = new Thread(r);
+		hilo.start();
+		
 	}
 
 

@@ -26,7 +26,6 @@ import isi.died.tp.gui.util.GenericTableModel;
 
 public class PanelCamion extends JPanel {
 
-	//Componentes de la interfaz
 	private ControladorCamiones controlador;
 	private JLabel lblPanelTitulo;
 	private JLabel lblMarca;
@@ -62,7 +61,6 @@ public class PanelCamion extends JPanel {
 	}
 	
 	private void armar() {
-		//Configuracion apariencia del panel
 		setLayout(new GridBagLayout());
 		int fila = 0;
     	int col = 0;
@@ -308,8 +306,6 @@ public class PanelCamion extends JPanel {
     }
 	
 	private void configurarEventos() {
-		//Configuracion de eventos de los botones
-		//idSeleccionado -> Registrar=-1; Editar=0;
 		this.btnRegistrar.addActionListener( e -> {
 			btnRegistrar.setEnabled(false);
     		btnEditar.setEnabled(false);
@@ -351,7 +347,7 @@ public class PanelCamion extends JPanel {
 		});
 		
 		this.btnEliminar.addActionListener( e -> {
-			int confirmar = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar el camión seleccionado?", "Eliminar camión", JOptionPane.YES_NO_OPTION);
+			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar el camión seleccionado?", "Eliminar camión", JOptionPane.YES_NO_OPTION);
 			if(confirmar==0) {
 				controlador.borrarCamion(idSeleccionado);
 				btnEliminar.setEnabled(false);
@@ -444,7 +440,7 @@ public class PanelCamion extends JPanel {
 		}
 		else {
 			resultado=false;
-			JOptionPane.showMessageDialog(null, "Se han ingresado datos con un formato no válido");
+			JOptionPane.showMessageDialog(this, "Se han ingresado datos con un formato no válido");
 		}
 		return resultado;
 	}

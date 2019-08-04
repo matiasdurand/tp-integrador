@@ -160,7 +160,10 @@ public class ControladorPlantas {
 	
 	public void borrarPlanta(Integer id) {
 		Runnable r = () -> {
-			grafoPlantas.eliminarNodo(daoPlanta.buscar(id));
+			Planta plantaAEliminar = daoPlanta.buscar(id);
+			grafoPlantas.eliminarNodo(plantaAEliminar);
+			List<Stock> stockAEliminar = plantaAEliminar.getListaStock();
+			for(Stock s: stockAEliminar) controladorInsumos.disminuirStockInsumo(s.getInsumo(), s.getCantidad());
 			daoPlanta.borrar(id);
 			List<Planta> plantas = daoPlanta.buscarTodas();
 			try {
@@ -215,7 +218,7 @@ public class ControladorPlantas {
 			daoStock.actualizar(1, new Stock(acopioInicial.disponible(i)+cantidad, 0, i));
 			pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
 			JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
-			controladorInsumos.actualizarStockInsumo(i, cantidad);
+			controladorInsumos.aumentarStockInsumo(i, cantidad);
 		}
 		else {
 			if(acopioInicial.validarCantidad(i, cantidad)) {
@@ -228,7 +231,6 @@ public class ControladorPlantas {
 				pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
 				JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
 				grafoPlantas.actualizarNodo(daoPlanta.buscar(id));
-				
 			}
 			else JOptionPane.showMessageDialog(pPlanta, "No hay stock disponible en el Acopio Inicial");
 		}

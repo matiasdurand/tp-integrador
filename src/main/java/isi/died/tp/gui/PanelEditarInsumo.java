@@ -211,7 +211,7 @@ public class PanelEditarInsumo extends JPanel {
     	c.weightx=0.5;
     	this.add(costo,c);
     	
-    	this.lblStock = new JLabel("Stock:");
+    	this.lblStock = new JLabel("Stock total:");
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=1;

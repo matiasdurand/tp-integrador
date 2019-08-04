@@ -29,7 +29,7 @@ public class PanelRegistrarInsumo extends JPanel {
 	private JLabel lblNombre;
 	private JLabel lblDescripcion;
 	private JLabel lblCosto;
-	private JLabel lblStock;
+	private JLabel lblStockInicial;
 	private JLabel lblPeso;
 	private JLabel lblDensidad;
 	private JLabel lblUnidadDeMedida;
@@ -171,7 +171,7 @@ public class PanelRegistrarInsumo extends JPanel {
     	c.weightx=0.5;
     	this.add(costo,c);
     	
-    	this.lblStock = new JLabel("Stock:");
+    	this.lblStockInicial = new JLabel("Stock inicial:");
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=1;
@@ -180,7 +180,7 @@ public class PanelRegistrarInsumo extends JPanel {
     	c.anchor = GridBagConstraints.CENTER;
     	c.fill=GridBagConstraints.NONE;
     	c.insets = new Insets(10, 10, 10, 10);
-    	this.add(lblStock,c);
+    	this.add(lblStockInicial,c);
     	
     	this.stock = new JTextField(30);
     	c.gridx=col++;

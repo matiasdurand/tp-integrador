@@ -386,6 +386,6 @@ public class PanelPlanta extends JPanel {
     }
 
 	public void actualizarTablaStock() {
-		if(idSeleccionado!=null) controlador.mostrarStock(idSeleccionado);
+		if(idSeleccionado!=null && !idSeleccionado.equals(-1)) controlador.mostrarStock(idSeleccionado);
 	}
 }
