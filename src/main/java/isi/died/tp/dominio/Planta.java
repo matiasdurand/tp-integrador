@@ -80,9 +80,7 @@ public class Planta {
 			else return false;
 		}
 		
-		public Stock actualizarStock(Insumo i, Integer cantidad) {
-			Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
-			stock.setCantidad(stock.getCantidad()-cantidad);
-			return stock;
+		public Integer disponible(Insumo i) {
+			return listaStock.stream().filter(s->s.getInsumo().equals(i)).map(Stock::getCantidad).collect(Collectors.toList()).get(0);
 		}
 }

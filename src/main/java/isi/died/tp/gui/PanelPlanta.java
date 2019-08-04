@@ -27,7 +27,6 @@ import isi.died.tp.gui.util.GenericTableModel;
 public class PanelPlanta extends JPanel {
 	
 	private ControladorPlantas controlador;
-	
 	private JLabel lblPanelTitulo;
 	private JLabel lblNombre;
 	private JTextField nombre;
@@ -42,10 +41,9 @@ public class PanelPlanta extends JPanel {
 	private JTable tablaStock;
 	private Integer idSeleccionado;
 	private int contador=0;
-	GenericTableModel<Planta> gtm;
+	GenericTableModel<Planta> gtmPlantas;
 	GenericTableModel<Stock> gtmStock;
 	
-	//agregrar como atributos todos los componentes de la interfaz
 	
 	public PanelPlanta() {
 		super();
@@ -56,7 +54,6 @@ public class PanelPlanta extends JPanel {
 	}
 	
 	private void armar() {
-		//Configuracion apariencia del panel
 			setLayout(new GridBagLayout());
 			int fila = 0;
 	    	int col = 0;
@@ -127,8 +124,8 @@ public class PanelPlanta extends JPanel {
 	    	c.weighty=1.0;
 	    	c.weightx=1.0;
 	    	
-	    	this.gtm = crearModeloTablaPlanta();
-	    	this.tablaPlantas = new JTable(this.gtm);
+	    	this.gtmPlantas = crearModeloTablaPlanta();
+	    	this.tablaPlantas = new JTable(this.gtmPlantas);
 	    	this.tablaPlantas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	    	JScrollPane scrollPane= new  JScrollPane(this.tablaPlantas);
 	    	this.add(scrollPane,c);
@@ -184,12 +181,12 @@ public class PanelPlanta extends JPanel {
     }
 	
 	private GenericTableModel<Planta> crearModeloTablaPlanta(){
-    	this.gtm = new GenericTableModel<Planta>();
+    	this.gtmPlantas = new GenericTableModel<Planta>();
     	List<GenericTableColumn> lista = new ArrayList<GenericTableColumn>();
     	lista.add(new GenericTableColumn("Id" , "getId"));
     	lista.add(new GenericTableColumn("Nombre" , "getNombre"));
-    	gtm.setColumnas(lista);
-    	return gtm;
+    	gtmPlantas.setColumnas(lista);
+    	return gtmPlantas;
     }
 	
 	private GenericTableModel<Stock> crearModeloTablaStock(){
@@ -204,8 +201,7 @@ public class PanelPlanta extends JPanel {
     }
 	
 	private void configurarEventos() {
-		
-		this.btnRegistrar.addActionListener(e -> {
+		btnRegistrar.addActionListener(e -> {
 			nombre.setEnabled(true);
 			nombre.setText("");
 			btnRegistrar.setEnabled(false);
@@ -219,7 +215,6 @@ public class PanelPlanta extends JPanel {
 			tablaStock.setEnabled(false);
 			idSeleccionado=-1;
 		});
-		
 		btnEditar.addActionListener(e -> {
 			nombre.setEnabled(true);
 			btnRegistrar.setEnabled(false);
@@ -232,9 +227,8 @@ public class PanelPlanta extends JPanel {
 			btnCargarStock.setEnabled(false);
 			tablaStock.setEnabled(false);
 		});
-		
 		btnEliminar.addActionListener(e ->{
-			int confirmar = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar la planta seleccionada?", "Eliminar planta", JOptionPane.YES_NO_OPTION);
+			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar la planta seleccionada?", "Eliminar planta", JOptionPane.YES_NO_OPTION);
 			if(confirmar==0) {
 				controlador.borrarPlanta(idSeleccionado);
 				nombre.setEnabled(false);
@@ -249,10 +243,9 @@ public class PanelPlanta extends JPanel {
 				btnCargarStock.setEnabled(false);
 				tablaStock.setEnabled(true);
 				idSeleccionado=-1;
-				
 			}
+			actualizarDatosTablaStock(new ArrayList<Stock>());
 		});
-		
 		btnCancelar.addActionListener(e -> {
 			nombre.setEnabled(false);
 			nombre.setText("");
@@ -267,19 +260,12 @@ public class PanelPlanta extends JPanel {
 			tablaStock.setEnabled(true);
 			idSeleccionado=-1;
 		});
-		
 		btnGuardar.addActionListener(e -> {
 			if(!nombre.getText().isEmpty()) {
-				if(idSeleccionado<0) {
-					controlador.crearPlanta(nombre.getText());
-				}
-				else {
-					controlador.actualizarPlanta(idSeleccionado, nombre.getText());
-				}
+				if(idSeleccionado<0) controlador.crearPlanta(nombre.getText());
+				else controlador.actualizarPlanta(idSeleccionado, nombre.getText());
 			}
-			else {
-				JOptionPane.showMessageDialog(null, "Debe ingresar un nombre");
-			}
+			else JOptionPane.showMessageDialog(this, "Debe ingresar un nombre");
 			nombre.setEnabled(false);
 			nombre.setText("");
 			btnRegistrar.setEnabled(true);
@@ -293,99 +279,96 @@ public class PanelPlanta extends JPanel {
 			tablaStock.setEnabled(true);
 			idSeleccionado=-1;
 		});
-		
-		this.btnConectar.addActionListener(e -> {
+		btnConectar.addActionListener(e -> {
 			JComboBox<Planta> cmboxPlantas = new JComboBox<Planta>();
 			controlador.cargarComboPlantasExceptoSeleccionada(cmboxPlantas, idSeleccionado);
 			JTextField distancia = new JTextField();
-			distancia.setText("");
 			JTextField duracion = new JTextField();
-			duracion.setText("");
 			JTextField pesoMax = new JTextField();
+			distancia.setText("");
+			duracion.setText("");
 			pesoMax.setText("");
-			
 			Object[] inputFields = {
 				"Conectar con:", cmboxPlantas,
 				"Distancia:", distancia,
 				"Duración:", duracion,
 				"Peso máximo", pesoMax
 			};
-			
-			int opcion = JOptionPane.showConfirmDialog(null, inputFields, "Conectar plantas", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
-			
+			int opcion = JOptionPane.showConfirmDialog(this, inputFields, "Conectar plantas", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 			if(opcion == JOptionPane.OK_OPTION) {
 				if(!distancia.getText().isEmpty() && !duracion.getText().isEmpty() && !pesoMax.getText().isEmpty()) {
-					//Planta aux = controlador.obtenerPlanta(cmboxPlantas.getSelectedItem().toString());
-					Planta aux = (Planta)cmboxPlantas.getSelectedItem();
-					System.out.println(aux);
-					if(aux != null) {
-						controlador.conectarPlantas(idSeleccionado, aux.getId(), Double.valueOf(distancia.getText()), Double.valueOf(duracion.getText()), Double.valueOf(pesoMax.getText()));
-						JOptionPane.showMessageDialog(null, "Las plantas se han conectado exitosamente");
-					}
-					else {
-						JOptionPane.showMessageDialog(null, "Se produjo un error. Vuelva a intentarlo");
-					}
+					controlador.conectarPlantas(idSeleccionado, (Planta)cmboxPlantas.getSelectedItem(), Double.valueOf(distancia.getText()), Double.valueOf(duracion.getText()), Double.valueOf(pesoMax.getText()));
+					JOptionPane.showMessageDialog(this, "Las plantas se han conectado exitosamente");
 				}
-				else {
-					JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
-				}
+				else JOptionPane.showMessageDialog(this, "Debes completar todos los campos");
 			}
 		});
-		
-		this.btnCargarStock.addActionListener(e -> {
+		btnCargarStock.addActionListener(e -> {
 			JComboBox<Insumo> cmboxInsumos = new JComboBox<Insumo>();
 			controlador.cargarComboInsumos(cmboxInsumos);
-			JTextField cantidad = new JTextField();
-			cantidad.setText("");
-			JTextField puntoPedido = new JTextField();
-			puntoPedido.setText("");
-			
-			Object[] inputFields = {
-				"Seleccione un insumo:", cmboxInsumos,
-				"Cantidad a cargar:", cantidad,
-				"Punto de pedido:", puntoPedido
-			};
-			
-			int opcion = JOptionPane.showConfirmDialog(null, inputFields, "Cargar stock en planta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
-			
-			if(opcion == JOptionPane.OK_OPTION) {
-				if(!cantidad.getText().isEmpty() && !puntoPedido.getText().isEmpty()) {
-						controlador.cargarStock(idSeleccionado,(Insumo)cmboxInsumos.getSelectedItem(),Integer.valueOf(cantidad.getText()), Integer.valueOf(puntoPedido.getText()));
+			if(cmboxInsumos.getItemCount()==0) JOptionPane.showMessageDialog(this, "Primero debes registrar insumos");
+			else {
+				JTextField cantidad = new JTextField();
+				JTextField puntoPedido = new JTextField();
+				cantidad.setText("");
+				puntoPedido.setText("");
+				if(idSeleccionado.equals(1)) {
+					Object[] inputFields = {
+							"Seleccione un insumo:", cmboxInsumos,
+							"Cantidad a cargar:", cantidad,
+					};
+					int opcion = JOptionPane.showConfirmDialog(this, inputFields, "Cargar stock en Acopio Inicial", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					if(opcion == JOptionPane.OK_OPTION) {
+						if(!cantidad.getText().isEmpty()) controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), 0);
+						else JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
+					}
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "Debe completar todos los campos");
+					Object[] inputFields = {
+							"Seleccione un insumo:", cmboxInsumos,
+							"Cantidad a cargar:", cantidad,
+							"Punto de pedido:", puntoPedido
+					};
+					int opcion = JOptionPane.showConfirmDialog(this, inputFields, "Cargar stock en planta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					if(opcion == JOptionPane.OK_OPTION) {
+						if(!cantidad.getText().isEmpty() && !puntoPedido.getText().isEmpty()) controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), Integer.valueOf(puntoPedido.getText()));
+						else JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
+					}
 				}
 			}
 			
-			
 		});
-		
 		tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
 				if(contador==1) {
 					if(tablaPlantas.getSelectedRow()>=0) idSeleccionado = (Integer) tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
-					if(idSeleccionado.equals(Integer.valueOf(1)) || idSeleccionado.equals(Integer.valueOf(2))) {
-						btnConectar.setEnabled(true);
-						btnEditar.setEnabled(false);
-						btnEliminar.setEnabled(false);
-						btnCargarStock.setEnabled(false);
-					}
-					else {
+					if(idSeleccionado.equals(1)) {
 						btnConectar.setEnabled(true);
 						btnEditar.setEnabled(true);
-						btnEliminar.setEnabled(true);
+						btnEliminar.setEnabled(false);
 						btnCargarStock.setEnabled(true);
+					}
+					else {
+						if(idSeleccionado.equals(2)) {
+							btnConectar.setEnabled(true);
+							btnEditar.setEnabled(true);
+							btnEliminar.setEnabled(false);
+							btnCargarStock.setEnabled(false);
+						}
+						else {
+							btnConectar.setEnabled(true);
+							btnEditar.setEnabled(true);
+							btnEliminar.setEnabled(true);
+							btnCargarStock.setEnabled(true);
+						}
 					}
 					if(idSeleccionado>0) {
 						nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
-						List<Stock> listaStock = controlador.buscarStock(idSeleccionado);
-						actualizarDatosTablaStock(listaStock);
+						controlador.mostrarStock(idSeleccionado);
 					}
 					contador=0;
 				}
 				else contador++;
         });
-		
-		
 	}
 	
 	public void actualizarDatosTablaStock(List<Stock> lista) {
@@ -393,13 +376,16 @@ public class PanelPlanta extends JPanel {
     	this.gtmStock.fireTableDataChanged();
 	}
 	
-    public void actualizarDatosTabla(List<Planta> lista) {
-    	this.gtm.setDatos(lista);
-    	this.gtm.fireTableDataChanged();
+    public void actualizarDatosTablaPlantas(List<Planta> lista) {
+    	this.gtmPlantas.setDatos(lista);
+    	this.gtmPlantas.fireTableDataChanged();
     }
     
     public void crearAcopios() {
     	controlador.crearAcopios("Acopio Inicial", "Acopio Final");
     }
-	
+
+	public void actualizarTablaStock() {
+		if(idSeleccionado!=null) controlador.mostrarStock(idSeleccionado);
+	}
 }

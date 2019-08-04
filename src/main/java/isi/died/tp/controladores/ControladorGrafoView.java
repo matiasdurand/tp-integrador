@@ -23,14 +23,16 @@ import isi.died.tp.gui.VerticeView;
 public class ControladorGrafoView {
 
 	private static ControladorGrafoView _INSTANCIA = null;
-	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
-	public static final Color COLOR_TITULO = new Color(5,85,244);
+
 	private PanelGrafoView pGrafo;
 	private ControladorPlantas controladorPlantas;
 	private ControladorInsumos controladorInsumos;
 	
+	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
+	public static final Color COLOR_TITULO = new Color(5,85,244);
+	
+	
 	private ControladorGrafoView() {
-		//NO SE PUEDE INSTANCIAR FUERA DE ESTE AMBITO.
 		controladorPlantas = ControladorPlantas.getInstance();
 		controladorInsumos = ControladorInsumos.getInstance();
 	}
@@ -49,14 +51,14 @@ public class ControladorGrafoView {
 	}
 	
 	public void inicializarGrafoView() {
-			List<Planta> plantas = controladorPlantas.buscarPlantas();
+			List<Planta> plantas = controladorPlantas.buscarTodas();
 			List<VerticeView> vertices = new ArrayList<VerticeView>();
-			int y = 250, x = 50, i = 0;
+			int y=250, x=50, i=0;
 			for(Planta p: plantas){
 				i++;
-				x += 30; 
-				if(i%2 == 0) y = 100;
-				else y = 200;
+				x+=30; 
+				if(i%2==0) y=100;
+				else y=200;
 				VerticeView v = new VerticeView(x,y,Color.YELLOW);
 				v.setId(p.getId());
 				v.setNombre(p.getNombre());
@@ -65,10 +67,10 @@ public class ControladorGrafoView {
 			}
 			List<Arista<Planta>> aristas = controladorPlantas.getAristasGrafoPlantas();
 			VerticeView v1, v2;
-			for(Arista<Planta> arista: aristas) {
-				v1 = vertices.stream().filter(v->v.getId().equals(arista.getInicio().getValor().getId())).collect(Collectors.toList()).get(0);
-				v2 = vertices.stream().filter(v->v.getId().equals(arista.getFin().getValor().getId())).collect(Collectors.toList()).get(0);
-				pGrafo.agregar(new AristaView(v1, v2, arista.getDistancia().toString(), arista.getTiempo().toString(), arista.getPesoMax().toString()));
+			for(Arista<Planta> a: aristas) {
+				v1 = vertices.stream().filter(v->v.getId().equals(a.getInicio().getValor().getId())).collect(Collectors.toList()).get(0);
+				v2 = vertices.stream().filter(v->v.getId().equals(a.getFin().getValor().getId())).collect(Collectors.toList()).get(0);
+				pGrafo.agregar(new AristaView(v1, v2, a.getDistancia().toString(), a.getTiempo().toString(), a.getPesoMax().toString()));
 			}
 	}
 	
@@ -77,11 +79,10 @@ public class ControladorGrafoView {
 				List<Insumo> insumos = controladorInsumos.buscarTodos();
 				try {
 					SwingUtilities.invokeAndWait(() -> {
-						for(Insumo i: insumos){
-							combo.addItem(i);
-						}
+						for(Insumo i: insumos) combo.addItem(i);
 					});
-				} catch (InvocationTargetException | InterruptedException e) {
+				} 
+				catch (InvocationTargetException | InterruptedException e) {
 					e.printStackTrace();
 				}
 			};
@@ -90,33 +91,31 @@ public class ControladorGrafoView {
 		}
 	
 	public void buscarMejorCamino(Insumo insumo, Boolean priorizarDistancia) {
-
-		List<List<Planta>> mejorCamino = controladorPlantas.buscarMejorCamino(insumo, priorizarDistancia);
-		
-		int contador = 1;
-		String informacion = new String();
-		
-		if(!mejorCamino.isEmpty()) {
-			for(List<Planta> plantas: mejorCamino) {
-				informacion = contador+": "+plantas.get(0).getNombre();
-				for(int i=1; i<plantas.size(); i++) informacion = informacion.concat(" -> "+plantas.get(i).getNombre());
-				pGrafo.mostrarInfo(informacion+" .\n");
-				informacion = "";
-				contador++;
+		List<Planta> plantas = controladorPlantas.necesitanInsumo(insumo);
+		if(plantas.isEmpty()) pGrafo.mostrarInfo("No existe una planta que necesite el insumo seleccionado.");
+		else {
+			List<List<Planta>> mejorCamino = controladorPlantas.buscarMejorCamino(plantas, priorizarDistancia);
+			if(mejorCamino.isEmpty()) pGrafo.mostrarInfo("No existe un camino que conecte las plantas que necesitan el insumo.");
+			else {
+				int contador = 1;
+				String informacion = new String();
+				for(List<Planta> camino: mejorCamino) {
+					informacion = contador+": "+camino.get(0).getNombre();
+					for(int i=1; i<camino.size(); i++) informacion = informacion.concat(" -> "+camino.get(i).getNombre());
+					pGrafo.mostrarInfo(informacion+" .\n");
+					informacion = "";
+					contador++;
+				}
 			}
-			
 		}
-		else pGrafo.mostrarInfo("No existe un camino que conecte las plantas que necesitan el insumo.. ");
 	}
 	
 	public void buscarCaminos(Integer idOrigen, Integer idDestino) {
-		
 		HashMap<List<Planta>, Double[]> caminos = controladorPlantas.buscarCaminos(idOrigen, idDestino);
-		
-		int contador = 1;
-		String informacion = new String();
-		
-		if(!caminos.isEmpty()) {
+		if(caminos.isEmpty()) pGrafo.mostrarInfo("No existe un camino entre los nodos seleccionados.");
+		else {
+			int contador = 1;
+			String informacion = new String();
 			for(Entry<List<Planta>, Double[]> camino: caminos.entrySet()) {
 				List<Planta> plantas = camino.getKey();
 				informacion = "CAMINO "+contador+": "+plantas.get(0).getNombre();
@@ -129,12 +128,11 @@ public class ControladorGrafoView {
 				contador++;
 			}
 		}
-		else pGrafo.mostrarInfo("No existe un camino entre los nodos seleccionados..");
-		
 	}
 
-	public List<Integer> verticesAPintar(Insumo i) {
-		return controladorPlantas.necesitanInsumo(i).stream().map(p->p.getId()).collect(Collectors.toList());
+	public void buscarVertices(Insumo i) {
+		List<Integer> idVertices = controladorPlantas.necesitanInsumo(i).stream().map(p->p.getId()).collect(Collectors.toList());
+		pGrafo.pintarVertices(idVertices, Color.RED);
 	}
 	
 }

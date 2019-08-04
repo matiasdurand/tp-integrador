@@ -32,14 +32,16 @@ import isi.died.tp.gui.PanelPrincipal;
 public class ControladorPlantas {
 
 	private static ControladorPlantas _INSTANCIA = null;
+	
 	private PanelPlanta pPlanta;
-	private GrafoPlantas grafoPlantas;
+	private PanelPrincipal pPrincipal;
+	private PanelMejorEnvio pMEnvio;
 	private ControladorInsumos controladorInsumos;
 	private PlantaDao daoPlanta;
 	private StockDao daoStock;
 	private CamionDao daoCamion;
-	private PanelPrincipal pPrincipal;
-	private PanelMejorEnvio pMEnvio;
+	private GrafoPlantas grafoPlantas;
+	
 	public static final Font FUENTE_TITULO_PRINCIPAL = new Font("Calibri",Font.BOLD,24);
 	public static final Font FUENTE_TITULO = new Font("Calibri",Font.BOLD,18);
 	public static final Color COLOR_TITULO = new Color(5,85,244);
@@ -74,7 +76,7 @@ public class ControladorPlantas {
 		this.pPrincipal = pPrincipal;
 	}
 	
-	public List<Planta> buscarPlantas(){
+	public List<Planta> buscarTodas(){
 		return daoPlanta.buscarTodas();
 	}
 	
@@ -83,55 +85,30 @@ public class ControladorPlantas {
 	}
 	
 	public List<Planta> necesitanInsumo(Insumo i){
-		List<Planta> plantas = buscarPlantas();
-		return plantas.stream().filter(p->p.necesitaInsumo(i)).collect(Collectors.toList());
-		
+		return buscarTodas().stream().filter(p->p.necesitaInsumo(i)).collect(Collectors.toList());
 	}
 
 	public List<Arista<Planta>> getAristasGrafoPlantas() {
 		return grafoPlantas.getAristas();
 	}
 
-	public List<List<Planta>> buscarMejorCamino(Insumo i, Boolean priorizarDistancia) {
-		List<Planta> plantas = necesitanInsumo(i);
-		return grafoPlantas.buscarMejoresCaminos(plantas, priorizarDistancia);
-		
-	}
-
-	public HashMap<List<Planta>, Double[]> buscarCaminos(Integer idOrigen, Integer idDestino) {
-		Planta origen = daoPlanta.buscar(idOrigen);
-		Planta destino = daoPlanta.buscar(idDestino);
-		return grafoPlantas.buscarCaminos(origen, destino);
-	}
-	
 	public void cargarComboInsumos(JComboBox<Insumo> combo){
-		Runnable r = () -> {
-				List<Insumo> insumos = controladorInsumos.buscarTodos();
-				try {
-					SwingUtilities.invokeAndWait(() -> {
-						for(Insumo i: insumos){
-							combo.addItem(i);
-						}
-					});
-				} catch (InvocationTargetException | InterruptedException e) {
-					e.printStackTrace();
-				}
-			};
-			Thread hilo = new Thread(r);
-			hilo.start();	
-		}
+		List<Insumo> insumos = controladorInsumos.buscarTodos();
+		for(Insumo i: insumos) combo.addItem(i);					
+	}
 	
 	public void crearPlanta(String nombre) {
 		Runnable r = () -> {
 			Planta p = new Planta(nombre);
 			grafoPlantas.addNodo(daoPlanta.crear(p));
-			List<Planta> lista = daoPlanta.buscarTodas();
+			List<Planta> plantas = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					pPlanta.actualizarDatosTabla(lista);
-					JOptionPane.showMessageDialog((Component) pPlanta, "La planta ha sido creada correctamente");
+					pPlanta.actualizarDatosTablaPlantas(plantas);
+					JOptionPane.showMessageDialog(pPlanta, "La planta ha sido creada correctamente");
 				});
-			} catch (InvocationTargetException | InterruptedException e) {
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
 		};
@@ -145,12 +122,13 @@ public class ControladorPlantas {
 			Planta acopioFinal = new Planta(nombre2);
 			grafoPlantas.addNodo(daoPlanta.crear(acopioInicial));
 			grafoPlantas.addNodo(daoPlanta.crear(acopioFinal));
-			List<Planta> lista = daoPlanta.buscarTodas();
+			List<Planta> plantas = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					pPlanta.actualizarDatosTabla(lista);
+					pPlanta.actualizarDatosTablaPlantas(plantas);
 				});
-			} catch (InvocationTargetException | InterruptedException e) {
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
 		};
@@ -163,13 +141,14 @@ public class ControladorPlantas {
 			Planta p = new Planta(nombre);
 			p.setId(id);
 			grafoPlantas.actualizarNodo(daoPlanta.actualizar(p));
-			List<Planta> lista = daoPlanta.buscarTodas();
+			List<Planta> plantas = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					pPlanta.actualizarDatosTabla(lista);
-					JOptionPane.showMessageDialog((Component) pPlanta, "La planta ha sido actualizada correctamente");
+					pPlanta.actualizarDatosTablaPlantas(plantas);
+					JOptionPane.showMessageDialog(pPlanta, "La planta ha sido actualizada correctamente");
 				});
-			} catch (InvocationTargetException | InterruptedException e) {
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
 		};
@@ -183,19 +162,18 @@ public class ControladorPlantas {
 		Runnable r = () -> {
 			grafoPlantas.eliminarNodo(daoPlanta.buscar(id));
 			daoPlanta.borrar(id);
-			List<Planta> lista = daoPlanta.buscarTodas();
+			List<Planta> plantas = daoPlanta.buscarTodas();
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					pPlanta.actualizarDatosTabla(lista);
-					JOptionPane.showMessageDialog((Component) pPlanta, "La planta ha sido eliminada correctamente");
+					pPlanta.actualizarDatosTablaPlantas(plantas);
+					JOptionPane.showMessageDialog(pPlanta, "La planta ha sido eliminada correctamente");
 				});
-			} catch (InvocationTargetException | InterruptedException e) {
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
 		};
-		
 		Thread hilo = new Thread(r);
-		
 		hilo.start();
 	}
 
@@ -210,7 +188,8 @@ public class ControladorPlantas {
 						}
 					}
 				});
-			} catch (InvocationTargetException | InterruptedException e) {
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
 		};
@@ -221,56 +200,47 @@ public class ControladorPlantas {
 	public Planta obtenerPlanta(Integer id) {
 		return daoPlanta.buscar(id);
 	}
-	
-	/*public Planta obtenerPlanta(String nombre) {
-		List<Planta> plantas = daoPlanta.buscarTodas();
-		for(Planta p: plantas) {
-			if(p.getNombre().equals(nombre)) {
-				return p;
-			}
-		}
-		return null;
-	}*/
-	
-	public List<Stock> buscarStock(Integer id){
-		Planta aux = daoPlanta.buscar(id);
-		return aux.getListaStock();
+
+	public void mostrarStock(Integer idPlantaSeleccionada){
+		pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(idPlantaSeleccionada).getListaStock());
 	}
 
-	public void conectarPlantas(Integer idPlanta1, Integer idPlanta2, Double distancia, Double duracion, Double pesoMax) {
-		Planta p1 = daoPlanta.buscar(idPlanta1);
-		Planta p2 = daoPlanta.buscar(idPlanta2);
-		grafoPlantas.conectar(p1, p2, distancia, duracion, pesoMax);
+	public void conectarPlantas(Integer idPlantaOrigen, Planta destino, Double distancia, Double duracion, Double pesoMax) {
+		grafoPlantas.conectar(daoPlanta.buscar(idPlantaOrigen), destino, distancia, duracion, pesoMax);
 	}
 	
 	public void cargarStock(Integer id, Insumo i, Integer cantidad, Integer puntoPedido) {
-
-
 		Planta acopioInicial = daoPlanta.buscar(1);
-		
-		if(acopioInicial.validarCantidad(i, cantidad)) {
-			
-			Stock s = new Stock(cantidad, puntoPedido, i);
-			
-			Planta p = daoPlanta.buscar(id);
-			
-			Boolean existe = p.existeStock(s);
-			
-			if(existe) daoStock.actualizar(id,s);
-			else daoStock.crear(id,s);
-			
-			daoStock.actualizar(1, acopioInicial.actualizarStock(i, cantidad));
-			
+		if(id.equals(1)) {
+			daoStock.actualizar(1, new Stock(acopioInicial.disponible(i)+cantidad, 0, i));
 			pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
-
-			grafoPlantas.actualizarNodo(daoPlanta.buscar(id));
-			grafoPlantas.actualizarNodo(daoPlanta.buscar(1));
-			
-			JOptionPane.showMessageDialog((Component) pPlanta, "El stock ha sido cargado correctamente");
-			
-
+			JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
+			controladorInsumos.actualizarStockInsumo(i, cantidad);
 		}
-		
+		else {
+			if(acopioInicial.validarCantidad(i, cantidad)) {
+				Stock s = new Stock(cantidad, puntoPedido, i);
+				Planta p = daoPlanta.buscar(id);
+				Boolean existe = p.existeStock(s);
+				if(existe) daoStock.actualizar(id,s);
+				else daoStock.crear(id,s);
+				daoStock.actualizar(1, new Stock(acopioInicial.disponible(i)-cantidad, 0, i));
+				pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
+				JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
+				grafoPlantas.actualizarNodo(daoPlanta.buscar(id));
+				
+			}
+			else JOptionPane.showMessageDialog(pPlanta, "No hay stock disponible en el Acopio Inicial");
+		}
+		grafoPlantas.actualizarNodo(daoPlanta.buscar(1));
+	}
+	
+	public List<List<Planta>> buscarMejorCamino(List<Planta> plantas, Boolean priorizarDistancia) {
+		return grafoPlantas.buscarMejorCamino(plantas, priorizarDistancia);
+	}
+
+	public HashMap<List<Planta>, Double[]> buscarCaminos(Integer idOrigen, Integer idDestino) {
+		return grafoPlantas.buscarCaminos(daoPlanta.buscar(idOrigen), daoPlanta.buscar(idDestino));
 	}
 	
 	public List<Planta> pageRank(){
@@ -286,13 +256,11 @@ public class ControladorPlantas {
 	}
 
 	public List<Stock> buscarStockFaltante(Integer idPlantaSeleccionada) {
-		List<Stock> stock = buscarStock(idPlantaSeleccionada);
-		return stock.stream().filter(s -> s.getCantidad()<=s.getPuntoPedido()).collect(Collectors.toList());
+		return daoPlanta.buscar(idPlantaSeleccionada).getListaStock().stream().filter(s -> s.getCantidad()<=s.getPuntoPedido()).collect(Collectors.toList());
 	}
 
 	public void cargarPlantas() {
-		List<Planta> listaPlantas = daoPlanta.buscarTodas();
-		pMEnvio.actualizarDatosTablaPlantas(listaPlantas);
+		pMEnvio.actualizarDatosTablaPlantas(daoPlanta.buscarTodas());
 	}
 
 	public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado) {

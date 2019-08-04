@@ -81,7 +81,7 @@ public class GrafoPlantas extends Grafo<Planta> {
 		
   	}
 	
-	public List<List<Planta>> buscarMejoresCaminos(List<Planta> plantas, Boolean priorizarDistancia) {
+	public List<List<Planta>> buscarMejorCamino(List<Planta> plantas, Boolean priorizarDistancia) {
 		List<Vertice<Planta>> verticesAIncluir = new ArrayList<Vertice<Planta>>();
 		for(Planta p: plantas) verticesAIncluir.add(new Vertice<Planta>(p));
 		return mejoresCaminos(getAcopioInicial(), getAcopioFinal(), verticesAIncluir, priorizarDistancia);
@@ -276,7 +276,11 @@ public class GrafoPlantas extends Grafo<Planta> {
 		
 		vertices.remove(nodoAEliminar);
 		
-		for(Arista<Planta> a: aristas) if(a.getInicio().equals(nodoAEliminar) || a.getFin().equals(nodoAEliminar)) aristas.remove(a);
+		List<Arista<Planta>> auxiliar = new ArrayList<Arista<Planta>>();
+		
+		for(Arista<Planta> a: aristas) if(a.getInicio().equals(nodoAEliminar) || a.getFin().equals(nodoAEliminar)) auxiliar.add(a);
+		
+		aristas.removeAll(auxiliar);
 	
 	}
 	

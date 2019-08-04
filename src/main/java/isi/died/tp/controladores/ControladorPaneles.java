@@ -1,7 +1,5 @@
 package isi.died.tp.controladores;
 
-import java.awt.Component;
-
 import isi.died.tp.gui.PanelCamion;
 import isi.died.tp.gui.PanelEditarInsumo;
 import isi.died.tp.gui.PanelGrafoView;
@@ -21,9 +19,8 @@ public class ControladorPaneles {
 	private PanelGrafoView panelGrafoView = null;
 	private PanelPrincipal panelPrincipal = null;
 	
-	private ControladorPaneles() {
-		
-	}
+	
+	private ControladorPaneles() {}
 	
 	public static ControladorPaneles getInstance() {
 		if(_INSTANCIA == null) _INSTANCIA = new ControladorPaneles();
@@ -31,7 +28,11 @@ public class ControladorPaneles {
 	}
 
 	public PanelPlanta getPanelPlanta() {
-		if(panelPlanta == null) panelPlanta = new PanelPlanta();
+		if(panelPlanta == null) {
+			panelPlanta = new PanelPlanta();
+			panelPlanta.crearAcopios();
+		}
+		else panelPlanta.actualizarTablaStock();
 		return panelPlanta;
 	}
 	
@@ -52,6 +53,12 @@ public class ControladorPaneles {
 		return panelGrafoView;
 	}	
 	
+	public PanelPrincipal getPanelPrincipal() {
+		if(panelPrincipal == null) panelPrincipal = new PanelPrincipal();
+		panelPrincipal.pageRank();
+		return panelPrincipal;
+	}
+	
 	public PanelRegistrarInsumo getPanelRegistrarInsumo() {
 		return new PanelRegistrarInsumo();
 	}
@@ -59,15 +66,8 @@ public class ControladorPaneles {
 	public PanelEditarInsumo getPanelEditarInsumo(Integer idInsumo) {
 		return new PanelEditarInsumo(idInsumo);
 	}
-	
-	public PanelPrincipal getPanelPrincipal() {
-		if(panelPrincipal == null) panelPrincipal = new PanelPrincipal();
-		panelPrincipal.pageRank();
-		return panelPrincipal;
-	}
 
 	public PanelMejorEnvio getPanelMejorEnvio() {
 		return new PanelMejorEnvio();
 	}
-	
 }

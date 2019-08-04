@@ -14,9 +14,6 @@ import java.awt.event.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -48,6 +45,7 @@ public class PanelGrafoView extends JPanel {
 	private JLabel lblInsumo;
 	private JLabel lblPriorizar;
 	
+	
 	public PanelGrafoView() {
 		super();
 		controlador = ControladorGrafoView.getInstance();
@@ -62,12 +60,6 @@ public class PanelGrafoView extends JPanel {
 	public Dimension getPreferredSize() {
         return new Dimension(1000,750);
     }
-	
-	public void inicializarGrafoView() {
-		vertices.clear();
-		aristas.clear();
-		controlador.inicializarGrafoView();
-	}
 	
 	private void armar() {
 		
@@ -265,7 +257,6 @@ public class PanelGrafoView extends JPanel {
 				else btnMostrarCaminos.setEnabled(false);
 			}
         });
-		
         addMouseMotionListener(new MouseAdapter() {
             public void mouseDragged(MouseEvent event) {
                 if(verticeSeleccionado!=null) {
@@ -276,23 +267,27 @@ public class PanelGrafoView extends JPanel {
             }
         });
         btnMostrarInfo.addActionListener( e -> {
-        		textArea.setText("");
-        		contador=0;
-        		idNodoInicio=-1;
-        		idNodoFin=-1;
-        		btnMostrarCaminos.setEnabled(false);
-        		pintarVertices(Color.YELLOW);
-        		pintarVertices(controlador.verticesAPintar((Insumo)cmboxInsumo.getSelectedItem()), Color.RED);
-        		repaint();
-        		controlador.buscarMejorCamino((Insumo)cmboxInsumo.getSelectedItem(), rbtnDistancia.isSelected());
-        });
-        
+        	textArea.setText("");
+        	contador=0;
+        	idNodoInicio=-1;
+        	idNodoFin=-1;
+        	btnMostrarCaminos.setEnabled(false);
+        	pintarVertices(Color.YELLOW);
+        	controlador.buscarVertices((Insumo)cmboxInsumo.getSelectedItem());
+        	controlador.buscarMejorCamino((Insumo)cmboxInsumo.getSelectedItem(), rbtnDistancia.isSelected());
+        	repaint();
+        }); 
         btnMostrarCaminos.addActionListener( e -> {
         	textArea.setText("");
         	controlador.buscarCaminos(idNodoInicio, idNodoFin);
         });
 	}
 	
+	public void inicializarGrafoView() {
+		vertices.clear();
+		aristas.clear();
+		controlador.inicializarGrafoView();
+	}
 	
 	public void cargarComboInsumos() {
 		cmboxInsumo.removeAllItems();
@@ -350,18 +345,16 @@ public class PanelGrafoView extends JPanel {
     	a.update();
     }
     
-    private void pintarVertices(List<Integer> idVertices, Color color) {
-    	for(VerticeView v: vertices) if(idVertices.contains(v.getId())) v.setColor(color);
-    }
-    
 	private void pintarVertices(Color color) {
 		for(VerticeView v: vertices) v.setColor(color);
 	}
-
+    
+    public void pintarVertices(List<Integer> idVertices, Color color) {
+    	for(VerticeView v: vertices) if(idVertices.contains(v.getId())) v.setColor(color);
+    }
+    
 	public void mostrarInfo(String camino) {
 		if(textArea.getText().isEmpty()) textArea.setText(camino);
 		else textArea.append(camino);
 	}
-
-
 }

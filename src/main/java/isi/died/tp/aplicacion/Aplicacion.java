@@ -26,7 +26,7 @@ public class Aplicacion {
 	
 	private static void createAndShowGUI() {
 		
-		ControladorPaneles.getInstance().getPanelPlanta().crearAcopios();
+		ControladorPaneles.getInstance().getPanelPlanta();
 		ControladorPaneles.getInstance().getPanelInsumo();
 		ControladorPaneles.getInstance().getPanelCamion();
 		ControladorPaneles.getInstance().getPanelGrafoView();
