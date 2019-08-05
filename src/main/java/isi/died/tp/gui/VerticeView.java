@@ -11,15 +11,14 @@ public class VerticeView {
 	
     private Paint color;
     private Color colorBase;
-
     private Integer coordenadaX;
     private Integer coordenadaY;
     public final Integer RADIO = 50;
     private Shape nodo;
-
     private String nombre;
     private Integer id;
 
+    
     public VerticeView() {
     	
     }
@@ -44,7 +43,6 @@ public class VerticeView {
         this.color = color;
     }
 
-    
     public Integer getCoordenadaX() {
         return coordenadaX;
     }
@@ -105,4 +103,5 @@ public class VerticeView {
     public void update() {
     	this.nodo = new Ellipse2D.Double(coordenadaX,coordenadaY,RADIO,RADIO);
     }
+    
 }

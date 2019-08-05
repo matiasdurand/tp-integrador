@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import isi.died.tp.dominio.Insumo;
-import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
 
 public class InsumoDaoH2 implements InsumoDao{

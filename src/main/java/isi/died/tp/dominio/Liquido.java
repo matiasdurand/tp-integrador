@@ -1,10 +1,9 @@
 package isi.died.tp.dominio;
 
-import isi.died.tp.dominio.Insumo.UnidadDeMedida;
-
 public class Liquido extends Insumo {
 	
 	private Double densidad;
+	
 	
 	public Liquido() {
 		

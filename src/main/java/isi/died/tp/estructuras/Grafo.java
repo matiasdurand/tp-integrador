@@ -74,10 +74,6 @@ public class Grafo<T> {
 		}
 		return salida;
 	}
-	
-	/*public void imprimirAristas(){
-		System.out.println(this.aristas.toString());
-	}*/
 
 	public Integer gradoEntrada(Vertice<T> vertice){
 		Integer res=0;

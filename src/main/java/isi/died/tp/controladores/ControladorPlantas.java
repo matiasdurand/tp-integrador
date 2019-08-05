@@ -12,8 +12,6 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import isi.died.tp.dao.CamionDao;
-import isi.died.tp.dao.CamionDaoH2;
 import isi.died.tp.dao.PlantaDao;
 import isi.died.tp.dao.PlantaDaoH2;
 import isi.died.tp.dao.StockDao;
@@ -36,9 +34,9 @@ public class ControladorPlantas {
 	private PanelPrincipal pPrincipal;
 	private PanelMejorEnvio pMEnvio;
 	private ControladorInsumos controladorInsumos;
+	private ControladorCamiones controladorCamiones;
 	private PlantaDao daoPlanta;
 	private StockDao daoStock;
-	private CamionDao daoCamion;
 	private GrafoPlantas grafoPlantas;
 	
 	public static final Font FUENTE_TITULO_PRINCIPAL = new Font("Calibri",Font.BOLD,24);
@@ -48,9 +46,9 @@ public class ControladorPlantas {
 	
 	private ControladorPlantas() {
 		controladorInsumos = ControladorInsumos.getInstance();
+		controladorCamiones = ControladorCamiones.getInstance();
 		daoPlanta = new PlantaDaoH2();
 		daoStock = new StockDaoH2();
-		daoCamion = new CamionDaoH2();
 		grafoPlantas = GrafoPlantas.getInstance();
 	}
 	
@@ -75,12 +73,12 @@ public class ControladorPlantas {
 		this.pPrincipal = pPrincipal;
 	}
 	
-	public List<Planta> buscarTodas(){
-		return daoPlanta.buscarTodas();
-	}
-	
 	public void setpMEnvio(PanelMejorEnvio pMEnvio) {
 		this.pMEnvio = pMEnvio;
+	}
+	
+	public List<Planta> buscarTodas(){
+		return daoPlanta.buscarTodas();
 	}
 	
 	public List<Planta> necesitanInsumo(Insumo i){
@@ -97,10 +95,15 @@ public class ControladorPlantas {
 	}
 	
 	public void crearPlanta(String nombre) {
+		
 		Runnable r = () -> {
+			
 			Planta p = new Planta(nombre);
+			
 			grafoPlantas.addNodo(daoPlanta.crear(p));
+			
 			List<Planta> plantas = daoPlanta.buscarTodas();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pPlanta.actualizarDatosTablaPlantas(plantas);
@@ -110,18 +113,26 @@ public class ControladorPlantas {
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
+		
 		Thread hilo = new Thread(r);
 		hilo.start();
+		
 	}
 	
 	public void crearAcopios(String nombre1, String nombre2) {
+		
 		Runnable r = () -> {
+			
 			Planta acopioInicial = new Planta(nombre1);
 			Planta acopioFinal = new Planta(nombre2);
+			
 			grafoPlantas.addNodo(daoPlanta.crear(acopioInicial));
 			grafoPlantas.addNodo(daoPlanta.crear(acopioFinal));
+			
 			List<Planta> plantas = daoPlanta.buscarTodas();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pPlanta.actualizarDatosTablaPlantas(plantas);
@@ -130,17 +141,25 @@ public class ControladorPlantas {
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
+		
 		Thread hilo = new Thread(r);
 		hilo.start();
 	}
 	
 	public void actualizarPlanta(Integer id, String nombre) {
+		
 		Runnable r = () -> {
+			
 			Planta p = new Planta(nombre);
+			
 			p.setId(id);
+			
 			grafoPlantas.actualizarNodo(daoPlanta.actualizar(p));
+			
 			List<Planta> plantas = daoPlanta.buscarTodas();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pPlanta.actualizarDatosTablaPlantas(plantas);
@@ -150,22 +169,31 @@ public class ControladorPlantas {
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
 		
 		Thread hilo = new Thread(r);
-		
 		hilo.start();	
+		
 	}
 	
 	public void borrarPlanta(Integer id) {
+		
 		Runnable r = () -> {
+			
 			Planta plantaAEliminar = daoPlanta.buscar(id);
+			
 			daoStock.borrar(id, -1);
+			
 			List<Stock> stockAEliminar = plantaAEliminar.getListaStock();
 			for(Stock s: stockAEliminar) controladorInsumos.disminuirStockInsumo(s.getInsumo(), s.getCantidad());
+			
 			grafoPlantas.eliminarNodo(plantaAEliminar);
+			
 			daoPlanta.borrar(id);
+			
 			List<Planta> plantas = daoPlanta.buscarTodas();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pPlanta.actualizarDatosTablaPlantas(plantas);
@@ -175,37 +203,42 @@ public class ControladorPlantas {
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
+		
 		Thread hilo = new Thread(r);
 		hilo.start();
+		
 	}
 
 	public void cargarComboPlantasExceptoSeleccionada(JComboBox<Planta> combo, Integer id) {
+		
 		Runnable r = () -> {
+			
 			List<Planta> plantas = daoPlanta.buscarTodas();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
-					for(Planta p: plantas){
-						if(p.getId()!=id) {
-							combo.addItem(p);
-						}
-					}
+					for(Planta p: plantas) if(p.getId()!=id) combo.addItem(p);
 				});
 			} 
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
+		
 		Thread hilo = new Thread(r);
 		hilo.start();
+		
 	}
 	
-	public Planta obtenerPlanta(Integer id) {
+	public Planta buscarPlanta(Integer id) {
 		return daoPlanta.buscar(id);
 	}
 
-	public void mostrarStock(Integer idPlantaSeleccionada){
-		pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(idPlantaSeleccionada).getListaStock());
+	public void mostrarStock(Integer id){
+		pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
 	}
 
 	public void conectarPlantas(Integer idPlantaOrigen, Planta destino, Double distancia, Double duracion, Double pesoMax) {
@@ -213,28 +246,45 @@ public class ControladorPlantas {
 	}
 	
 	public void cargarStock(Integer id, Insumo i, Integer cantidad, Integer puntoPedido) {
+		
 		Planta acopioInicial = daoPlanta.buscar(1);
+		
 		if(id.equals(1)) {
+			
 			daoStock.actualizar(1, new Stock(acopioInicial.disponible(i)+cantidad, 0, i));
+			
 			pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
+			
 			JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
+			
 			controladorInsumos.aumentarStockInsumo(i, cantidad);
+			
 		}
 		else {
 			if(acopioInicial.validarCantidad(i, cantidad)) {
+			
 				Stock s = new Stock(cantidad, puntoPedido, i);
+				
 				Planta p = daoPlanta.buscar(id);
+				
 				Boolean existe = p.existeStock(s);
+				
 				if(existe) daoStock.actualizar(id,s);
 				else daoStock.crear(id,s);
+				
 				daoStock.actualizar(1, new Stock(acopioInicial.disponible(i)-cantidad, 0, i));
+				
 				pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
+				
 				JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
+				
 				grafoPlantas.actualizarNodo(daoPlanta.buscar(id));
 			}
 			else JOptionPane.showMessageDialog(pPlanta, "No hay stock disponible en el Acopio Inicial");
 		}
+		
 		grafoPlantas.actualizarNodo(daoPlanta.buscar(1));
+		
 	}
 	
 	public List<List<Planta>> buscarMejorCamino(List<Planta> plantas, Boolean priorizarDistancia) {
@@ -267,7 +317,7 @@ public class ControladorPlantas {
 
 	public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado, Boolean camionAptoParaLiquidos) {
 		
-		Camion camion = daoCamion.buscar(idCamionSeleccionado);
+		Camion camion = controladorCamiones.buscarCamion(idCamionSeleccionado);
 		
 		List<Stock> stockFaltante = buscarStockFaltante(idPlantaSeleccionada);
 		
@@ -287,15 +337,22 @@ public class ControladorPlantas {
 			int pesoTotalAEnviar=0;
 			
 			for(Stock s: stockFaltante) {
+				
 				Insumo i = s.getInsumo();
+				
 				int cantidadAEnviar = 2*s.getPuntoPedido()-s.getCantidad();
+				
 				double pesoInsumo = i.getPeso().doubleValue();
 				int pesoAEnviar;
+				
 				if(pesoInsumo%1==0) pesoAEnviar = (int)pesoInsumo*cantidadAEnviar;
 				else pesoAEnviar = (int)((pesoInsumo*cantidadAEnviar)+1);
+				
 				pesos[index] = pesoAEnviar;
 				valores[index] = i.getCosto().doubleValue();
+				
 				pesoTotalAEnviar += pesoAEnviar;
+				
 				index++;
 			}
 			
@@ -306,15 +363,17 @@ public class ControladorPlantas {
 			if(pesoTotalAEnviar<=pesoMaximo) insumosAEnviar = stockFaltante.stream().map(Stock::getInsumo).collect(Collectors.toList());
 			else {
 				if(!(cantidadInsumos==1)) {
+					
 					Boolean[] seleccionados = resolver(pesos, valores, cantidadInsumos, pesoMaximo);
+					
 					for(int x=1; x<seleccionados.length; x++) if(seleccionados[x]) insumosAEnviar.add(stockFaltante.get(x-1).getInsumo());
+					
 				}
-				
 			}
 			
 			pMEnvio.mostrarMejorSeleccionEnvio("Enviar los siguientes insumos: "+insumosAEnviar.toString());
+			
 		}
-		
 		
 	}
 
@@ -349,5 +408,4 @@ public class ControladorPlantas {
 	    
 	}
 
-	
 }

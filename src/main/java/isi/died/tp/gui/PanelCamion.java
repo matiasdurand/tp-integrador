@@ -338,7 +338,7 @@ public class PanelCamion extends JPanel {
     		aptoParaLiquidos.setEnabled(true);
     		tablaCamiones.setEnabled(false);
     		
-			Camion aux = controlador.obtenerCamion(idSeleccionado);
+			Camion aux = controlador.buscarCamion(idSeleccionado);
 			marca.setText(aux.getMarca());
 			modelo.setText(aux.getModelo());
 			año.setText(aux.getAño().toString());
@@ -415,7 +415,6 @@ public class PanelCamion extends JPanel {
 		tablaCamiones.getSelectionModel().addListSelectionListener(lse -> {
 			if(contador==1) {
 	    		if(tablaCamiones.getSelectedRow()>=0) idSeleccionado = (Integer)tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
-	    		System.out.println(idSeleccionado);
 	    		if(idSeleccionado>0) {
 		    		btnEditar.setEnabled(true);
 		    		btnEliminar.setEnabled(true);

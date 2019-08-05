@@ -20,6 +20,7 @@ public class AristaView {
     private String tiempo;
     private String peso;
 
+    
     public AristaView(VerticeView origen, VerticeView destino, String distancia, String tiempo, String peso) {
     	this.origen = origen;
     	this.destino = destino;
@@ -84,9 +85,9 @@ public class AristaView {
     	linea = new Line2D.Double(origen.getCoordenadaX()+25, origen.getCoordenadaY()+25, destino.getCoordenadaX()+25, destino.getCoordenadaY()+25);  
     }
     
-    
     @Override
     public String toString() {
         return "Arista{" + "origen=" + origen + ", destino=" + destino + ", linea=" + linea + ", formatoLinea=" + formatoLinea + ", gradiente=" + color + '}';
     }
+    
 }

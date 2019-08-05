@@ -13,8 +13,9 @@ public class ValueComparator implements Comparator<Vertice<Planta>> {
 		this.base = base;
 	}
 
-	public int compare(Vertice<Planta> a, Vertice<Planta> b) {
-		if (base.get(a) >= base.get(b)) return -1;
+	public int compare(Vertice<Planta> v1, Vertice<Planta> v2) {
+		if (base.get(v1) >= base.get(v2)) return -1;
 	    else return 1;
 	}
+	
 }

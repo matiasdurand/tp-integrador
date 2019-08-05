@@ -1,7 +1,6 @@
 package isi.died.tp.controladores;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -48,11 +47,16 @@ public class ControladorCamiones {
 		this.pMEnvio=pMEnvio;		
 	}
 	
-	public void crearCamion(String marca, String modelo, Integer año, String dominio, Integer capacidad, Double costoPorKm, boolean aptoParaLiquidos) {
+	public void crearCamion(String marca, String modelo, Integer año, String dominio, Integer capacidad, Double costoPorKm, Boolean aptoParaLiquidos) {
+		
 		Runnable r = () -> {
+			
 			Camion c = new Camion(marca, modelo, año, dominio, capacidad, costoPorKm, aptoParaLiquidos);
+			
 			daoCamion.crear(c);
+			
 			List<Camion> camiones = daoCamion.buscarTodos();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pCamion.actualizarDatosTabla(camiones);
@@ -62,17 +66,22 @@ public class ControladorCamiones {
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
 		
 		Thread hilo = new Thread(r);
-		
 		hilo.start();
+		
 	}
 	
 	public void borrarCamion(Integer id) {
+		
 		Runnable r = () -> {
+			
 			daoCamion.borrar(id);
+			
 			List<Camion> camiones = daoCamion.buscarTodos();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pCamion.actualizarDatosTabla(camiones);
@@ -82,18 +91,24 @@ public class ControladorCamiones {
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
 		
 		Thread hilo = new Thread(r);
-		
 		hilo.start();
+		
 	}
 	
-	public void actualizarCamion(Integer id, String marca, String modelo, Integer año, String dominio, Integer capacidad, Double costoPorKm, boolean aptoParaLiquidos) {
+	public void actualizarCamion(Integer id, String marca, String modelo, Integer año, String dominio, Integer capacidad, Double costoPorKm, Boolean aptoParaLiquidos) {
+		
 		Runnable r = () -> {
+		
 			Camion c = new Camion(id, marca, modelo, año, dominio, capacidad, costoPorKm, aptoParaLiquidos);
+			
 			daoCamion.actualizar(c);
+			
 			List<Camion> camiones = daoCamion.buscarTodos();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pCamion.actualizarDatosTabla(camiones);
@@ -103,10 +118,10 @@ public class ControladorCamiones {
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
 		
 		Thread hilo = new Thread(r);
-		
 		hilo.start();
 			
 	}
@@ -115,11 +130,12 @@ public class ControladorCamiones {
 		pMEnvio.actualizarDatosTablaCamiones(daoCamion.buscarTodos());
 	}
 
-	public Camion obtenerCamion(Integer id) {
+	public Camion buscarCamion(Integer id) {
 		return daoCamion.buscar(id);
 	}
 	
 	public Boolean aptoParaLiquidos(Integer id) {
 		return daoCamion.buscar(id).getAptoParaLiquidos();
 	}
+	
 }

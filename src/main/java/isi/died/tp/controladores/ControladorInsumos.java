@@ -1,6 +1,5 @@
 package isi.died.tp.controladores;
 
-import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Comparator;
@@ -19,13 +18,12 @@ import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 import isi.died.tp.dominio.Liquido;
 import isi.died.tp.estructuras.Arbol;
 import isi.died.tp.estructuras.ArbolBinarioBusqueda;
-import isi.died.tp.gui.PanelEditarInsumo;
 import isi.died.tp.gui.PanelInsumo;
-import isi.died.tp.gui.PanelRegistrarInsumo;
 
 public class ControladorInsumos {
 
 	private static ControladorInsumos _INSTANCIA = null;
+	
 	private PanelInsumo pInsumo;
 	private InsumoDao daoInsumo;
 	private StockDao daoStock;
@@ -72,6 +70,7 @@ public class ControladorInsumos {
 				e.printStackTrace();
 			}
 		};
+		
 		Thread hilo = new Thread(r);
 		hilo.start();
 
@@ -97,37 +96,50 @@ public class ControladorInsumos {
 					pInsumo.actualizarTablaInsumos(insumos);
 					JOptionPane.showMessageDialog(pInsumo, "El insumo ha sido actualizado correctamente");
 				});
-			} catch (InvocationTargetException | InterruptedException e) {
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
+		
 		Thread hilo = new Thread(r);
 		hilo.start();
 		
 	}
 	
 	public void borrarInsumo(Integer id) {
+		
 		Runnable r = () -> {
+			
 			daoStock.borrar(-1, id);
+			
 			daoInsumo.borrar(id);
+			
 			List<Insumo> insumos = daoInsumo.buscarTodos();
+			
 			try {
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(insumos);
 					JOptionPane.showMessageDialog(pInsumo, "El insumo ha sido eliminado correctamente");
 				});
-			} catch (InvocationTargetException | InterruptedException e) {
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
+		
 		Thread hilo = new Thread(r);
 		hilo.start();	
 	}
 	
 	public Boolean validarDatos(Boolean esLiquido, String nombre, String descripcion, String costo, String stock, String peso, String densidad) {
+		
 		if(esLiquido && !nombre.isEmpty() && !descripcion.isEmpty() && !costo.isEmpty() && !stock.isEmpty() && !densidad.isEmpty()) return true;
 		if(!esLiquido && !nombre.isEmpty() && !descripcion.isEmpty() && !costo.isEmpty() && !stock.isEmpty() && !peso.isEmpty()) return true;
 		return false;
+		
 	}
 	
 	public List<Insumo> filtrar(String nombre, String costoMinimo, String costoMaximo, String stockMinimo, String stockMaximo) {
@@ -278,8 +290,7 @@ public class ControladorInsumos {
 	}
 	
 	public Boolean esLiquido(Integer idInsumo) {
-		Insumo i = daoInsumo.buscar(idInsumo);
-		if(i.getClass().getSimpleName().equals("Liquido")) return true;
+		if(daoInsumo.buscar(idInsumo).getClass().getSimpleName().equals("Liquido")) return true;
 		else return false;
 	}
 	
@@ -296,11 +307,16 @@ public class ControladorInsumos {
 	}
 
 	public void aumentarStockInsumo(Insumo i, Integer cantidad) {
+		
 		Runnable r = () -> {
+			
+			i.setStock(i.getStock()+cantidad);
+			
+			daoInsumo.actualizar(i);
+			
+			List<Insumo> insumos = daoInsumo.buscarTodos();
+			
 			try {
-				i.setStock(i.getStock()+cantidad);
-				daoInsumo.actualizar(i);
-				List<Insumo> insumos = daoInsumo.buscarTodos();
 				SwingUtilities.invokeAndWait(() -> {
 					pInsumo.actualizarTablaInsumos(insumos);
 				});
@@ -308,29 +324,38 @@ public class ControladorInsumos {
 			catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
+			
 		};
-		Thread hilo = new Thread(r);
-		hilo.start();
-	}
-
-	public void disminuirStockInsumo(Insumo i, Integer cantidad) {
-		Runnable r = () -> {
-			try {
-				i.setStock(i.getStock()-cantidad);
-				daoInsumo.actualizar(i);
-				List<Insumo> insumos = daoInsumo.buscarTodos();
-				SwingUtilities.invokeAndWait(() -> {
-					pInsumo.actualizarTablaInsumos(insumos);
-				});
-			} 
-			catch (InvocationTargetException | InterruptedException e) {
-				e.printStackTrace();
-			}
-		};
+		
 		Thread hilo = new Thread(r);
 		hilo.start();
 		
 	}
 
+	public void disminuirStockInsumo(Insumo i, Integer cantidad) {
+		
+		Runnable r = () -> {
+			
+			i.setStock(i.getStock()-cantidad);
+			
+			daoInsumo.actualizar(i);
+			
+			List<Insumo> insumos = daoInsumo.buscarTodos();
+			
+			try {
+				SwingUtilities.invokeAndWait(() -> {
+					pInsumo.actualizarTablaInsumos(insumos);
+				});
+			} 
+			catch (InvocationTargetException | InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+		};
+		
+		Thread hilo = new Thread(r);
+		hilo.start();
+		
+	}
 
 }

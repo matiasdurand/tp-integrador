@@ -19,7 +19,6 @@ import javax.swing.SwingUtilities;
 import isi.died.tp.controladores.ControladorCamiones;
 import isi.died.tp.controladores.ControladorInsumos;
 import isi.died.tp.controladores.ControladorPaneles;
-import isi.died.tp.dominio.Insumo;
 import isi.died.tp.dominio.Insumo.UnidadDeMedida;
 
 public class PanelRegistrarInsumo extends JPanel {

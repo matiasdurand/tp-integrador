@@ -4,7 +4,10 @@ public class Vertice<T> {
 
 	private T valor;
 	
-	public Vertice(){	}
+	
+	public Vertice(){	
+		
+	}
 	 
 	public Vertice(T v){
 		this.valor = v;

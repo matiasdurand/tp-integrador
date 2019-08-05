@@ -7,8 +7,8 @@ import isi.died.tp.dominio.Insumo;
 
 public abstract class Arbol<E extends Comparable<E>> {
 
-
 	protected E valor;
+	
 
 	public abstract List<E> preOrden();
 

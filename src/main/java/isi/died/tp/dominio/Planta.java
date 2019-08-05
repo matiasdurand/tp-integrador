@@ -65,22 +65,30 @@ public class Planta {
 		}
 
 		public Boolean existeStock(Stock s) {
+			
 			if(!listaStock.contains(s)) return false;
 			else {
 				Stock aux = listaStock.stream().filter( st -> st.equals(s)).collect(Collectors.toList()).get(0);
+				
 				s.aumentarStock(aux.getCantidad());
+				
 				s.setId(aux.getId());
+				
 				return true;
 			}
 		}
 
 		public boolean validarCantidad(Insumo i, Integer cantidad) {
+			
 			Stock stock = listaStock.stream().filter( s -> s.getInsumo().equals(i)).collect(Collectors.toList()).get(0);
+			
 			if(stock.getCantidad()>=cantidad) return true;
 			else return false;
+			
 		}
 		
 		public Integer disponible(Insumo i) {
 			return listaStock.stream().filter(s->s.getInsumo().equals(i)).map(Stock::getCantidad).collect(Collectors.toList()).get(0);
 		}
+		
 }

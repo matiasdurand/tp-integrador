@@ -70,4 +70,5 @@ public class ControladorPaneles {
 	public PanelMejorEnvio getPanelMejorEnvio() {
 		return new PanelMejorEnvio();
 	}
+	
 }

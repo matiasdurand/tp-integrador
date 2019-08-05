@@ -1,6 +1,7 @@
 package isi.died.tp.estructuras;
 
 public class Arista<T> {
+	
 	private Vertice<T> inicio;
 	private Vertice<T> fin;
 	private double distancia;
@@ -27,21 +28,10 @@ public class Arista<T> {
 		return capResidualDestino;
 	}
 
-
 	public void setCapacidades(double capResidualOrigen, double capResidualDestino) {
 		this.capResidualOrigen = capResidualOrigen;
 		this.capResidualDestino = capResidualDestino;
 	}
-	/*public Arista(Vertice<T> ini, Vertice<T> fin){
-		this();
-		this.inicio = ini;
-		this.fin = fin;
-	}*/
-
-	/*public Arista(Vertice<T> ini,Vertice<T> fin,Number val){
-		this(ini,fin);
-		this.valor= val;
-	}*/
 	
 	public Vertice<T> getInicio() {
 		return inicio;
@@ -82,11 +72,6 @@ public class Arista<T> {
 	public void setPesoMax(Double pesoMax) {
 		this.pesoMax = pesoMax;
 	}
-
-	/*@Override
-	public boolean equals(Object obj) {
-		return (obj instanceof Arista<?>) && ((Arista<?>)obj).getValor().equals(this.valor); 
-	}*/
 
 	@Override
 	public String toString() {

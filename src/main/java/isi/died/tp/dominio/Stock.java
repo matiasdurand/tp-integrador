@@ -7,6 +7,7 @@ public class Stock {
 	private Integer puntoPedido;
 	private Insumo insumo;
 	
+	
 	public Stock() {
 		
 	}

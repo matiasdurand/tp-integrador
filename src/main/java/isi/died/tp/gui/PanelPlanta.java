@@ -225,7 +225,7 @@ public class PanelPlanta extends JPanel {
 			btnCancelar.setEnabled(true);
 			tablaPlantas.setEnabled(false);
 			tablaStock.setEnabled(false);
-			nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
+			nombre.setText(controlador.buscarPlanta(idSeleccionado).getNombre());
 		});
 		btnEliminar.addActionListener(e ->{
 			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar la planta seleccionada?", "Eliminar planta", JOptionPane.YES_NO_OPTION);

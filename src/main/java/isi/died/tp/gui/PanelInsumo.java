@@ -29,7 +29,6 @@ import isi.died.tp.gui.util.GenericTableModel;
 
 public class PanelInsumo extends JPanel {
 	
-	private static final long serialVersionUID = 1L;
 	private JLabel lblPanelTitulo;
 	private JLabel lblNombre;
 	private JLabel lblCostoMinimo;
@@ -313,7 +312,6 @@ public class PanelInsumo extends JPanel {
 					btnEliminar.setEnabled(true);
 					btnEditar.setEnabled(true);
 				}
-				System.out.println(idSeleccionado);
 				contador = 0;
 			}
 			else contador++;

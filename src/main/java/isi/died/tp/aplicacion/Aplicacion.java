@@ -12,16 +12,16 @@ import isi.died.tp.controladores.ControladorPaneles;
 
 public class Aplicacion {
 	
-	public static void main( String[] args )
-    {
-    	SwingUtilities.invokeLater(
+	public static void main(String[] args ) {
+    	
+		SwingUtilities.invokeLater(
     		new Runnable() {
     			public void run() 
     			{ 
     				createAndShowGUI(); 
     			} 
-    		} 
-    	);
+    		});
+		
     }
 	
 	private static void createAndShowGUI() {
@@ -34,6 +34,7 @@ public class Aplicacion {
 		JFrame f = new JFrame("Sistema de Gestión Logística");
 		
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         f.setMinimumSize(new Dimension(1000, 750));
         
         JMenuBar menuBar = new JMenuBar();
@@ -54,7 +55,8 @@ public class Aplicacion {
       	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelPlanta());
       	  f.pack();
       	  f.revalidate();
-      	  f.repaint();} );
+      	  f.repaint();
+      	  });
         menu2.add(menuItem1);
         
         menuItem2 = new JMenuItem("Insumos");
@@ -63,7 +65,8 @@ public class Aplicacion {
       	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
       	  f.pack();
       	  f.revalidate();
-    	  f.repaint();} );
+    	  f.repaint();
+    	  });
         menu2.add(menuItem2);
         
         menuItem3 = new JMenuItem("Camiones");
@@ -72,7 +75,8 @@ public class Aplicacion {
       	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelCamion());
       	  f.pack();
       	  f.revalidate();
-    	  f.repaint();} );
+    	  f.repaint();
+    	  });
         menu2.add(menuItem3);  
         
         menuItem4 = new JMenuItem("Vista Principal");
@@ -81,7 +85,8 @@ public class Aplicacion {
       	  f.getContentPane().add(ControladorPaneles.getInstance().getPanelPrincipal());
       	  f.pack();
       	  f.revalidate();
-    	  f.repaint();} );
+    	  f.repaint();
+    	  });
         menu1.add(menuItem4);
 
         menuItem5 = new JMenuItem("Grafo");
