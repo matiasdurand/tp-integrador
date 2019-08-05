@@ -276,16 +276,12 @@ public class PanelInsumo extends JPanel {
 	private void configurarEventos() {
 		
 		btnBuscar.addActionListener( e -> {
-    		btnEliminar.setEnabled(false);
-    		btnEditar.setEnabled(false);
     		insumosFiltrados = controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText());
     		actualizarTablaInsumos(insumosFiltrados);
     		idSeleccionado=-1;
 		});
 		
 		btnRegistrar.addActionListener( e -> {
-    		btnEliminar.setEnabled(false);
-    		btnEditar.setEnabled(false);
     		JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
 			frame.getContentPane().removeAll();
 			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelRegistrarInsumo());
@@ -295,8 +291,6 @@ public class PanelInsumo extends JPanel {
     	});
 		
 		btnEditar.addActionListener( e -> {
-    		btnEliminar.setEnabled(false);
-    		btnEditar.setEnabled(false);
     		JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
 			frame.getContentPane().removeAll();
 			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelEditarInsumo(idSeleccionado));
@@ -309,8 +303,6 @@ public class PanelInsumo extends JPanel {
 			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar el insumo seleccionado?", "Eliminar insumo", JOptionPane.YES_NO_OPTION);
 			if(confirmar==0) {
 				controlador.borrarInsumo(idSeleccionado);
-				btnEliminar.setEnabled(false);
-				btnEditar.setEnabled(false);
 			}
 		});
 		
@@ -363,5 +355,7 @@ public class PanelInsumo extends JPanel {
 	public void actualizarTablaInsumos(List<Insumo> lista) {
 		this.gtm.setDatos(lista);
     	this.gtm.fireTableDataChanged();
+		btnEliminar.setEnabled(false);
+		btnEditar.setEnabled(false);
 	}
 }

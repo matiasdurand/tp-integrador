@@ -276,7 +276,7 @@ public class ControladorPlantas {
 		if(stockFaltante.isEmpty()) JOptionPane.showMessageDialog(pMEnvio, "El stock faltante es de insumos líquidos.\nPor favor seleccione un camión apto para este tipo de insumos.");
 		else {
 			int cantidadInsumos = stockFaltante.size();
-			
+
 			int[] pesos = new int[cantidadInsumos+1];
 			double[] valores = new double[cantidadInsumos+1];
 			
@@ -289,7 +289,10 @@ public class ControladorPlantas {
 			for(Stock s: stockFaltante) {
 				Insumo i = s.getInsumo();
 				int cantidadAEnviar = 2*s.getPuntoPedido()-s.getCantidad();
-				int pesoAEnviar = (int)((i.getPeso().doubleValue()*cantidadAEnviar)+1);
+				double pesoInsumo = i.getPeso().doubleValue();
+				int pesoAEnviar;
+				if(pesoInsumo%1==0) pesoAEnviar = (int)pesoInsumo*cantidadAEnviar;
+				else pesoAEnviar = (int)((pesoInsumo*cantidadAEnviar)+1);
 				pesos[index] = pesoAEnviar;
 				valores[index] = i.getCosto().doubleValue();
 				pesoTotalAEnviar += pesoAEnviar;
@@ -303,8 +306,8 @@ public class ControladorPlantas {
 			if(pesoTotalAEnviar<=pesoMaximo) insumosAEnviar = stockFaltante.stream().map(Stock::getInsumo).collect(Collectors.toList());
 			else {
 				if(!(cantidadInsumos==1)) {
-					Boolean[] seleccionados = resolver(pesos, valores, cantidadInsumos+1, pesoMaximo);
-					for(int x=0; x<seleccionados.length; x++) if(seleccionados[x]) insumosAEnviar.add(stockFaltante.get(x-1).getInsumo());
+					Boolean[] seleccionados = resolver(pesos, valores, cantidadInsumos, pesoMaximo);
+					for(int x=1; x<seleccionados.length; x++) if(seleccionados[x]) insumosAEnviar.add(stockFaltante.get(x-1).getInsumo());
 				}
 				
 			}
@@ -317,17 +320,17 @@ public class ControladorPlantas {
 
 	public Boolean[] resolver(int[] pesos, double[] valores, int cantidadInsumos, int pesoMaximo) {
 		
-	    int N = cantidadInsumos;
-	    int W = pesoMaximo;
+	    int N = cantidadInsumos+1;
+	    int W = pesoMaximo+1;
 	    
 	    double[][] opt = new double[N][W];
 	    boolean[][] sol = new boolean[N][W];
 	    
-	    for (int n = 1; n < N; n++) {
+	    for (int n = 0; n < N; n++) {
 	        for (int w = 0; w < W; w++) {
 	            double option1 = n < 1 ? 0 : opt[n - 1][w];
 	            double option2 = Double.MIN_VALUE;
-	            if (pesos[n]<=w) option2 = valores[n] + opt[n-1][w-pesos[n]];
+	            if (n!=0 && pesos[n]<=w) option2 = valores[n] + opt[n-1][w-pesos[n]];
 	            opt[n][w] = Math.max(option1, option2);
 	            sol[n][w] = (option2 > option1);
 	        }

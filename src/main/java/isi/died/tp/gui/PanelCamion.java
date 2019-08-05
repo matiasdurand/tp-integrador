@@ -306,34 +306,27 @@ public class PanelCamion extends JPanel {
     }
 	
 	private void configurarEventos() {
-		this.btnRegistrar.addActionListener( e -> {
+		btnRegistrar.addActionListener( e -> {
 			btnRegistrar.setEnabled(false);
-    		btnEditar.setEnabled(false);
-    		btnEliminar.setEnabled(false);
+	    	btnEditar.setEnabled(false);
+			btnEliminar.setEnabled(false);
     		btnGuardar.setEnabled(true);
     		btnCancelar.setEnabled(true);
     		marca.setEnabled(true);
-    		marca.setText("");
     		modelo.setEnabled(true);
-    		modelo.setText("");
     		año.setEnabled(true);
-    		año.setText("");
     		dominio.setEnabled(true);
-    		dominio.setText("");
     		capacidad.setEnabled(true);
-    		capacidad.setText("");
     		costoPorKm.setEnabled(true);
-    		costoPorKm.setText("");
     		aptoParaLiquidos.setEnabled(true);
-    		aptoParaLiquidos.setSelected(false);
     		tablaCamiones.setEnabled(false);
     		idSeleccionado=-1;
 		});
 		
-		this.btnEditar.addActionListener( e -> {
+		btnEditar.addActionListener( e -> {
 			btnRegistrar.setEnabled(false);
-    		btnEditar.setEnabled(false);
-    		btnEliminar.setEnabled(false);
+			btnEliminar.setEnabled(false);
+	    	btnEditar.setEnabled(false);
     		btnGuardar.setEnabled(true);
     		btnCancelar.setEnabled(true);
     		marca.setEnabled(true);
@@ -344,18 +337,27 @@ public class PanelCamion extends JPanel {
     		costoPorKm.setEnabled(true);
     		aptoParaLiquidos.setEnabled(true);
     		tablaCamiones.setEnabled(false);
+    		
+			Camion aux = controlador.obtenerCamion(idSeleccionado);
+			marca.setText(aux.getMarca());
+			modelo.setText(aux.getModelo());
+			año.setText(aux.getAño().toString());
+			dominio.setText(aux.getDominio());
+			capacidad.setText(aux.getCapacidad().toString());
+			costoPorKm.setText(aux.getCostoPorKm().toString());
+			aptoParaLiquidos.setSelected(aux.getAptoParaLiquidos());
+			
 		});
 		
-		this.btnEliminar.addActionListener( e -> {
+		btnEliminar.addActionListener( e -> {
 			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar el camión seleccionado?", "Eliminar camión", JOptionPane.YES_NO_OPTION);
 			if(confirmar==0) {
 				controlador.borrarCamion(idSeleccionado);
-				btnEliminar.setEnabled(false);
-				btnEditar.setEnabled(false);
+				idSeleccionado=-1;
 			}
 		});
 		
-		this.btnGuardar.addActionListener( e -> {
+		btnGuardar.addActionListener( e -> {
 			if(validarDatos()) {
 				if(idSeleccionado<=0) {
 					controlador.crearCamion(marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
@@ -367,64 +369,57 @@ public class PanelCamion extends JPanel {
 				btnGuardar.setEnabled(false);
 				btnCancelar.setEnabled(false);
 				btnRegistrar.setEnabled(true);
-				btnEditar.setEnabled(false);
-				btnEliminar.setEnabled(false);
 				marca.setEnabled(false);
-				marca.setText("");
 				modelo.setEnabled(false);
-				modelo.setText("");
 				año.setEnabled(false);
-				año.setText("");
 				dominio.setEnabled(false);
-				dominio.setText("");
 				capacidad.setEnabled(false);
-				capacidad.setText("");
 				costoPorKm.setEnabled(false);
-				costoPorKm.setText("");
 				aptoParaLiquidos.setEnabled(false);
-				aptoParaLiquidos.setSelected(false);
 				tablaCamiones.setEnabled(true);
+				marca.setText("");
+				modelo.setText("");
+				año.setText("");
+				dominio.setText("");
+				capacidad.setText("");
+				costoPorKm.setText("");
+				aptoParaLiquidos.setSelected(false);
 			}
     	});
 		
-		this.btnCancelar.addActionListener(e -> {
+		btnCancelar.addActionListener(e -> {
 			btnGuardar.setEnabled(false);
     		btnCancelar.setEnabled(false);
     		btnRegistrar.setEnabled(true);
-    		btnEditar.setEnabled(false);
-    		btnEliminar.setEnabled(false);
+    		if(idSeleccionado>0) {
+    			btnEliminar.setEnabled(true);
+    	    	btnEditar.setEnabled(true);
+    		}
     		marca.setEnabled(false);
-    		marca.setText("");
     		modelo.setEnabled(false);
-    		modelo.setText("");
     		año.setEnabled(false);
-    		año.setText("");
     		dominio.setEnabled(false);
-    		dominio.setText("");
     		capacidad.setEnabled(false);
-    		capacidad.setText("");
     		costoPorKm.setEnabled(false);
-    		costoPorKm.setText("");
     		aptoParaLiquidos.setEnabled(false);
-    		aptoParaLiquidos.setSelected(false);
     		tablaCamiones.setEnabled(true);
+    		marca.setText("");
+        	modelo.setText("");
+        	año.setText("");
+        	dominio.setText("");
+        	capacidad.setText("");
+        	costoPorKm.setText("");
+        	aptoParaLiquidos.setSelected(false);
 		});
 		
-		this.tablaCamiones.getSelectionModel().addListSelectionListener(lse -> {
+		tablaCamiones.getSelectionModel().addListSelectionListener(lse -> {
 			if(contador==1) {
-	    		if(tablaCamiones.getSelectedRow()>=0) idSeleccionado = (Integer) tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
+	    		if(tablaCamiones.getSelectedRow()>=0) idSeleccionado = (Integer)tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
+	    		System.out.println(idSeleccionado);
 	    		if(idSeleccionado>0) {
-	    			Camion aux = controlador.obtenerCamion(idSeleccionado);
-	    			marca.setText(aux.getMarca());
-	    			modelo.setText(aux.getModelo());
-	    			año.setText(aux.getAño().toString());
-	    			dominio.setText(aux.getDominio());
-	    			capacidad.setText(aux.getCapacidad().toString());
-	    			costoPorKm.setText(aux.getCostoPorKm().toString());
-	    			aptoParaLiquidos.setSelected(aux.getAptoParaLiquidos());
+		    		btnEditar.setEnabled(true);
+		    		btnEliminar.setEnabled(true);
 	    		}
-	    		btnEditar.setEnabled(true);
-	    		btnEliminar.setEnabled(true);
 	    		contador=0;
 			}
 			else contador++;
@@ -463,5 +458,7 @@ public class PanelCamion extends JPanel {
     public void actualizarDatosTabla(List<Camion> lista) {
     	this.gtm.setDatos(lista);
     	this.gtm.fireTableDataChanged();
+    	btnEditar.setEnabled(false);
+		btnEliminar.setEnabled(false);
     }
 }

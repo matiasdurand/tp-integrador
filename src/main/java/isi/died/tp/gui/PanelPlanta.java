@@ -203,29 +203,29 @@ public class PanelPlanta extends JPanel {
 	private void configurarEventos() {
 		btnRegistrar.addActionListener(e -> {
 			nombre.setEnabled(true);
-			nombre.setText("");
 			btnRegistrar.setEnabled(false);
+			btnEditar.setEnabled(false);
+			btnEliminar.setEnabled(false);
+			btnConectar.setEnabled(false);
+			btnCargarStock.setEnabled(false);
 			btnGuardar.setEnabled(true);
 			btnCancelar.setEnabled(true);
 			tablaPlantas.setEnabled(false);
-			btnEditar.setEnabled(false);
-			btnConectar.setEnabled(false);
-			btnEliminar.setEnabled(false);
-			btnCargarStock.setEnabled(false);
 			tablaStock.setEnabled(false);
 			idSeleccionado=-1;
 		});
 		btnEditar.addActionListener(e -> {
 			nombre.setEnabled(true);
 			btnRegistrar.setEnabled(false);
+			btnEditar.setEnabled(false);
+			btnEliminar.setEnabled(false);
+			btnConectar.setEnabled(false);
+			btnCargarStock.setEnabled(false);
 			btnGuardar.setEnabled(true);
 			btnCancelar.setEnabled(true);
 			tablaPlantas.setEnabled(false);
-			btnEditar.setEnabled(false);
-			btnConectar.setEnabled(false);
-			btnEliminar.setEnabled(false);
-			btnCargarStock.setEnabled(false);
 			tablaStock.setEnabled(false);
+			nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
 		});
 		btnEliminar.addActionListener(e ->{
 			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar la planta seleccionada?", "Eliminar planta", JOptionPane.YES_NO_OPTION);
@@ -237,10 +237,6 @@ public class PanelPlanta extends JPanel {
 				btnGuardar.setEnabled(false);
 				btnCancelar.setEnabled(false);
 				tablaPlantas.setEnabled(true);
-				btnEditar.setEnabled(false);
-				btnConectar.setEnabled(false);
-				btnEliminar.setEnabled(false);
-				btnCargarStock.setEnabled(false);
 				tablaStock.setEnabled(true);
 				idSeleccionado=-1;
 			}
@@ -250,15 +246,17 @@ public class PanelPlanta extends JPanel {
 			nombre.setEnabled(false);
 			nombre.setText("");
 			btnRegistrar.setEnabled(true);
+			if(idSeleccionado>0) {
+				btnEditar.setEnabled(true);
+				btnConectar.setEnabled(true);
+				if(idSeleccionado.equals(1) || idSeleccionado.equals(2)) btnEliminar.setEnabled(false);
+				else btnEliminar.setEnabled(true);
+				if(!idSeleccionado.equals(2)) btnCargarStock.setEnabled(true);
+			}
 			btnGuardar.setEnabled(false);
 			btnCancelar.setEnabled(false);
 			tablaPlantas.setEnabled(true);
-			btnEditar.setEnabled(false);
-			btnConectar.setEnabled(false);
-			btnEliminar.setEnabled(false);
-			btnCargarStock.setEnabled(false);
 			tablaStock.setEnabled(true);
-			idSeleccionado=-1;
 		});
 		btnGuardar.addActionListener(e -> {
 			if(!nombre.getText().isEmpty()) {
@@ -272,10 +270,6 @@ public class PanelPlanta extends JPanel {
 			btnGuardar.setEnabled(false);
 			btnCancelar.setEnabled(false);
 			tablaPlantas.setEnabled(true);
-			btnEditar.setEnabled(false);
-			btnConectar.setEnabled(false);
-			btnEliminar.setEnabled(false);
-			btnCargarStock.setEnabled(false);
 			tablaStock.setEnabled(true);
 			idSeleccionado=-1;
 		});
@@ -361,10 +355,7 @@ public class PanelPlanta extends JPanel {
 							btnCargarStock.setEnabled(true);
 						}
 					}
-					if(idSeleccionado>0) {
-						nombre.setText(controlador.obtenerPlanta(idSeleccionado).getNombre());
-						controlador.mostrarStock(idSeleccionado);
-					}
+					if(idSeleccionado>0) controlador.mostrarStock(idSeleccionado);
 					contador=0;
 				}
 				else contador++;
@@ -379,6 +370,10 @@ public class PanelPlanta extends JPanel {
     public void actualizarDatosTablaPlantas(List<Planta> lista) {
     	this.gtmPlantas.setDatos(lista);
     	this.gtmPlantas.fireTableDataChanged();
+		btnEditar.setEnabled(false);
+		btnEliminar.setEnabled(false);
+		btnConectar.setEnabled(false);
+		btnCargarStock.setEnabled(false);
     }
     
     public void crearAcopios() {

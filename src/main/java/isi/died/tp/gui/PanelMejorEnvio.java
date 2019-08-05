@@ -230,6 +230,7 @@ public class PanelMejorEnvio extends JPanel {
 				System.out.println(idPlantaSeleccionada);
 				if(idPlantaSeleccionada>0) actualizarDatosTablaStock(controladorPlantas.buscarStockFaltante(idPlantaSeleccionada));
 				if(idCamionSeleccionado>0 && tablaStock.getRowCount()!=0) btnGenerarSolucion.setEnabled(true);
+				else btnGenerarSolucion.setEnabled(false);
 				contador=0;
 			}
 			else contador++;
@@ -240,6 +241,7 @@ public class PanelMejorEnvio extends JPanel {
 				if(tablaCamiones.getSelectedRow()>=0) idCamionSeleccionado = (Integer)tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
 				System.out.println(idCamionSeleccionado);
 				if(idPlantaSeleccionada>0 && tablaStock.getRowCount()!=0) btnGenerarSolucion.setEnabled(true);
+				else btnGenerarSolucion.setEnabled(false);
 				contador=0;
 			}
 			else contador++;
