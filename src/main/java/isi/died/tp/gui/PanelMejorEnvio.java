@@ -229,7 +229,7 @@ public class PanelMejorEnvio extends JPanel {
 				if(tablaPlantas.getSelectedRow()>=0) idPlantaSeleccionada = (Integer)tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);
 				System.out.println(idPlantaSeleccionada);
 				if(idPlantaSeleccionada>0) actualizarDatosTablaStock(controladorPlantas.buscarStockFaltante(idPlantaSeleccionada));
-				if(idCamionSeleccionado>0 && tablaStock.getRowCount()==0) btnGenerarSolucion.setEnabled(true);
+				if(idCamionSeleccionado>0 && tablaStock.getRowCount()!=0) btnGenerarSolucion.setEnabled(true);
 				contador=0;
 			}
 			else contador++;
@@ -239,19 +239,20 @@ public class PanelMejorEnvio extends JPanel {
 			if(contador==1) {
 				if(tablaCamiones.getSelectedRow()>=0) idCamionSeleccionado = (Integer)tablaCamiones.getValueAt(tablaCamiones.getSelectedRow(), 0);
 				System.out.println(idCamionSeleccionado);
-				if(idPlantaSeleccionada>0 && tablaStock.getRowCount()==0) btnGenerarSolucion.setEnabled(true);
+				if(idPlantaSeleccionada>0 && tablaStock.getRowCount()!=0) btnGenerarSolucion.setEnabled(true);
 				contador=0;
 			}
 			else contador++;
 		});
 		
 		btnGenerarSolucion.addActionListener( e -> {
-			Boolean camionAptoParaLiquidos = (Boolean)tablaCamiones.getValueAt(tablaPlantas.getSelectedRow(), 7);
+			Boolean camionAptoParaLiquidos = controladorCamiones.aptoParaLiquidos(idCamionSeleccionado);
 			if(!camionAptoParaLiquidos) {
 				int confirmar = JOptionPane.showConfirmDialog(this, "El camión seleccionado no es apto para líquidos.\nSi continúa no se tendrán en cuenta los insumos de este tipo. ", "Advertencia", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 				if(confirmar==0) controladorPlantas.mejorEnvio(idPlantaSeleccionada, idCamionSeleccionado, camionAptoParaLiquidos);
 			}
 			else controladorPlantas.mejorEnvio(idPlantaSeleccionada, idCamionSeleccionado, camionAptoParaLiquidos);
+			btnGenerarSolucion.setEnabled(false);
 		});
 		
 		btnCancelar.addActionListener(e -> {

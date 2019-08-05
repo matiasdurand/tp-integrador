@@ -163,7 +163,9 @@ public class ControladorInsumos {
 		
 	}
 	
-	public List<Insumo> ordenarPor(List<Insumo> insumos, String criterio, Boolean descendente) {
+	public void ordenarPor(List<Insumo> insumos, String criterio, Boolean descendente) {
+		
+		if(insumos==null) insumos = daoInsumo.buscarTodos();
 		
 		if(criterio.equals("Nombre")) {
 			if(!descendente) {
@@ -265,24 +267,14 @@ public class ControladorInsumos {
 				}
 			}
 		}
-		return insumos;
+		
+		pInsumo.actualizarTablaInsumos(insumos);
+		
 	}
 	
 	public void cargarComboOrdenarPor(JComboBox<String> combo){
-		Runnable r = () -> {
-				String[] criterios = {"Nombre", "Stock total", "Costo"};
-				try {
-					SwingUtilities.invokeAndWait(() -> {
-						for(String criterio: criterios){
-							combo.addItem(criterio);
-						}
-					});
-				} catch (InvocationTargetException | InterruptedException e) {
-					e.printStackTrace();
-				}
-			};
-			Thread hilo = new Thread(r);
-			hilo.start();	
+		String[] criterios = {"Nombre", "Stock total", "Costo"};
+		for(String criterio: criterios) combo.addItem(criterio);	
 	}
 	
 	public Boolean esLiquido(Integer idInsumo) {

@@ -53,6 +53,7 @@ public class PanelInsumo extends JPanel {
 	private JButton btnEliminar;
 	private ControladorInsumos controlador;
 	private Integer idSeleccionado;
+	private List<Insumo> insumosFiltrados;
 	private int contador=0;
 	
 	public PanelInsumo() {
@@ -277,9 +278,8 @@ public class PanelInsumo extends JPanel {
 		btnBuscar.addActionListener( e -> {
     		btnEliminar.setEnabled(false);
     		btnEditar.setEnabled(false);
-    		List<Insumo> filtrada = controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText());
-    		if(filtrada.size()==0 || filtrada.size()==1) actualizarTablaInsumos(filtrada);
-    		else actualizarTablaInsumos(controlador.ordenarPor(filtrada, (String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected()));
+    		insumosFiltrados = controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText());
+    		actualizarTablaInsumos(insumosFiltrados);
     		idSeleccionado=-1;
 		});
 		
@@ -327,12 +327,18 @@ public class PanelInsumo extends JPanel {
 			else contador++;
 		});
 		
+		cmboxOrdenarPor.addActionListener( e -> {
+			controlador.ordenarPor(insumosFiltrados, (String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected());
+		});
+		
 		rbtnDescendente.addActionListener( e -> {
 			rbtnAscendente.setSelected(false);
+			controlador.ordenarPor(insumosFiltrados, (String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected());
 		});
 		
 		rbtnAscendente.addActionListener( e -> {
 			rbtnDescendente.setSelected(false);
+			controlador.ordenarPor(insumosFiltrados, (String)cmboxOrdenarPor.getSelectedItem(), rbtnDescendente.isSelected());
 		});
 		
 	}

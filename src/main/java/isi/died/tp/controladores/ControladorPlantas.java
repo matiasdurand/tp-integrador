@@ -1,7 +1,6 @@
 package isi.died.tp.controladores;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -269,47 +268,55 @@ public class ControladorPlantas {
 	public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado, Boolean camionAptoParaLiquidos) {
 		
 		Camion camion = daoCamion.buscar(idCamionSeleccionado);
-		System.out.println("Camion: "+camion.getDominio());
+		
 		List<Stock> stockFaltante = buscarStockFaltante(idPlantaSeleccionada);
 		
-		if(!camionAptoParaLiquidos) stockFaltante.stream().filter(s->!s.getInsumo().getEsLiquido()).collect(Collectors.toList());
+		if(!camionAptoParaLiquidos) stockFaltante = stockFaltante.stream().filter(s->!s.getInsumo().getEsLiquido()).collect(Collectors.toList());
 		
-		int cantidadInsumos = stockFaltante.size();
-		System.out.println("Cantidad insumos a enviar: "+cantidadInsumos);
-		int[] pesos = new int[cantidadInsumos+1];
-		double[] valores = new double[cantidadInsumos+1];
-		
-		pesos[0]=0;
-		valores[0]=0;
-		
-		int index=1;
-		for(Stock s: stockFaltante) {
-			Insumo i = s.getInsumo();
-			int cantidadAEnviar = s.getPuntoPedido()-s.getCantidad()+10;
-			pesos[index] = (int)((i.getPeso().doubleValue()*cantidadAEnviar)+1);
-			valores[index] = i.getCosto().doubleValue();
-			index++;
+		if(stockFaltante.isEmpty()) JOptionPane.showMessageDialog(pMEnvio, "El stock faltante es de insumos líquidos.\nPor favor seleccione un camión apto para este tipo de insumos.");
+		else {
+			int cantidadInsumos = stockFaltante.size();
+			
+			int[] pesos = new int[cantidadInsumos+1];
+			double[] valores = new double[cantidadInsumos+1];
+			
+			pesos[0]=0;
+			valores[0]=0;
+			
+			int index=1;
+			int pesoTotalAEnviar=0;
+			
+			for(Stock s: stockFaltante) {
+				Insumo i = s.getInsumo();
+				int cantidadAEnviar = 2*s.getPuntoPedido()-s.getCantidad();
+				int pesoAEnviar = (int)((i.getPeso().doubleValue()*cantidadAEnviar)+1);
+				pesos[index] = pesoAEnviar;
+				valores[index] = i.getCosto().doubleValue();
+				pesoTotalAEnviar += pesoAEnviar;
+				index++;
+			}
+			
+			int pesoMaximo = camion.getCapacidad().intValue();
+			
+			List<Insumo> insumosAEnviar = new ArrayList<Insumo>();
+			
+			if(pesoTotalAEnviar<=pesoMaximo) insumosAEnviar = stockFaltante.stream().map(Stock::getInsumo).collect(Collectors.toList());
+			else {
+				if(!(cantidadInsumos==1)) {
+					Boolean[] seleccionados = resolver(pesos, valores, cantidadInsumos+1, pesoMaximo);
+					for(int x=0; x<seleccionados.length; x++) if(seleccionados[x]) insumosAEnviar.add(stockFaltante.get(x-1).getInsumo());
+				}
+				
+			}
+			
+			pMEnvio.mostrarMejorSeleccionEnvio("Enviar los siguientes insumos: "+insumosAEnviar.toString());
 		}
 		
-		for(int j=0; j<cantidadInsumos+1; j++) {
-			System.out.println("Peso y valor de insumo "+j+" a transportar: "+pesos[j]+" "+valores[j]);
-		}
 		
-		Boolean[] seleccionados = resolver(pesos, valores, cantidadInsumos+1, camion.getCapacidad().intValue());
-		
-		List<Insumo> insumosAEnviar = new ArrayList<Insumo>();
-		
-		for(int x=0; x<seleccionados.length; x++) {
-			if(seleccionados[x]) insumosAEnviar.add(stockFaltante.get(x-1).getInsumo());
-			System.out.println(seleccionados[x]);
-		}
-		
-	    pMEnvio.mostrarMejorSeleccionEnvio("Enviar los siguientes insumos: "+insumosAEnviar.toString());
-	    
 	}
 
 	public Boolean[] resolver(int[] pesos, double[] valores, int cantidadInsumos, int pesoMaximo) {
-		System.out.println("peso maximo: "+pesoMaximo);
+		
 	    int N = cantidadInsumos;
 	    int W = pesoMaximo;
 	    
