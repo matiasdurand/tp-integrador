@@ -198,6 +198,7 @@ public class PanelGrafoView extends JPanel {
 	}
 	
 	private void configurarEventos() {
+		
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent event) {
 				verticeSeleccionado = clicEnUnNodo(event.getPoint());
@@ -257,6 +258,7 @@ public class PanelGrafoView extends JPanel {
 				else btnMostrarCaminos.setEnabled(false);
 			}
         });
+		
         addMouseMotionListener(new MouseAdapter() {
             public void mouseDragged(MouseEvent event) {
                 if(verticeSeleccionado!=null) {
@@ -266,6 +268,7 @@ public class PanelGrafoView extends JPanel {
                 }
             }
         });
+        
         btnMostrarInfo.addActionListener( e -> {
         	textArea.setText("");
         	contador=0;
@@ -277,10 +280,12 @@ public class PanelGrafoView extends JPanel {
         	controlador.buscarMejorCamino((Insumo)cmboxInsumo.getSelectedItem(), rbtnDistancia.isSelected());
         	repaint();
         }); 
+        
         btnMostrarCaminos.addActionListener( e -> {
         	textArea.setText("");
         	controlador.buscarCaminos(idNodoInicio, idNodoFin);
         });
+        
 	}
 	
 	public void inicializarGrafoView() {

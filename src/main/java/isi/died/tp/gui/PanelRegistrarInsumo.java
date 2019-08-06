@@ -45,6 +45,7 @@ public class PanelRegistrarInsumo extends JPanel {
 	private JButton btnCancelar;
 	private ControladorInsumos controlador;
 	
+	
 	public PanelRegistrarInsumo() {
 		super();
 		controlador = ControladorInsumos.getInstance();
@@ -335,14 +336,12 @@ public class PanelRegistrarInsumo extends JPanel {
 		});
 		
 		btnCancelar.addActionListener( e -> {
-			
 			JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
 			frame.getContentPane().removeAll();
 			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());
 			frame.pack();
 			frame.revalidate();
 			frame.repaint();
-			
 		});
 		
 	}

@@ -48,6 +48,7 @@ public class PanelMejorEnvio extends JPanel {
 	private int contador = 0;
 	private JLabel lblPanelTitulo;
 	
+	
 	public PanelMejorEnvio() {
 		super();
 		controladorPlantas = ControladorPlantas.getInstance();

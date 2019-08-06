@@ -49,6 +49,7 @@ public class PanelEditarInsumo extends JPanel {
 	private Integer idSeleccionado;
 	private Boolean insumoLiquido;
 	
+	
 	public PanelEditarInsumo(Integer idInsumo) {
 		super();
 		controlador = ControladorInsumos.getInstance();
@@ -64,8 +65,10 @@ public class PanelEditarInsumo extends JPanel {
     }
 	
 	private void cargarInterfaz(Integer idInsumo) {
+		
+		Insumo aux = controlador.buscarInsumo(idInsumo);
+		
 		if(insumoLiquido) {
-			Liquido aux = (Liquido) controlador.buscarInsumo(idInsumo);
 			nombre.setText(aux.getNombre());
 			costo.setText(aux.getCosto().toString());
 			stock.setText(aux.getStock().toString());
@@ -80,7 +83,6 @@ public class PanelEditarInsumo extends JPanel {
 			peso.setEnabled(false);
 		}
 		else {
-			Insumo aux= controlador.buscarInsumo(idInsumo);
 			nombre.setText(aux.getNombre());
 			costo.setText(aux.getCosto().toString());
 			stock.setText(aux.getStock().toString());
@@ -92,13 +94,13 @@ public class PanelEditarInsumo extends JPanel {
 			checkBoxRefrigerado.setSelected(aux.getEsRefrigerado());
 			checkBoxLiquido.setEnabled(false);
 		}
+		
 		stock.setEnabled(false);
 		
 	}
 	
 	private void armar() {
 		setLayout(new GridBagLayout());
-		//
 		
 		int fila = 0;
     	int col = 0;
@@ -152,8 +154,7 @@ public class PanelEditarInsumo extends JPanel {
     	
     	this.cmboxUDM = new JComboBox<UnidadDeMedida>();
     	cmboxUDM.setModel(new DefaultComboBoxModel<>(UnidadDeMedida.values()));
-    	if(!insumoLiquido)
-    		cmboxUDM.removeItem(UnidadDeMedida.Litro);
+    	if(!insumoLiquido) cmboxUDM.removeItem(UnidadDeMedida.Litro);
     	c.gridx=col++;
     	c.gridy=fila;
     	c.anchor = GridBagConstraints.CENTER;
@@ -343,6 +344,7 @@ public class PanelEditarInsumo extends JPanel {
 				if(insumoLiquido) controlador.actualizarInsumo(idSeleccionado, nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), -1.00, checkBoxRefrigerado.isSelected(), Double.parseDouble(densidad.getText()));
 				else controlador.actualizarInsumo(idSeleccionado, nombre.getText(), descripcion.getText(), (UnidadDeMedida)cmboxUDM.getSelectedItem(), Double.parseDouble(costo.getText()), Integer.parseInt(stock.getText()), Double.parseDouble(peso.getText()), checkBoxRefrigerado.isSelected(), -1.00);
 			}
+			
 			JFrame frame = ((JFrame)SwingUtilities.getWindowAncestor(this));
 			frame.getContentPane().removeAll();
 			frame.getContentPane().add(ControladorPaneles.getInstance().getPanelInsumo());

@@ -55,6 +55,7 @@ public class PanelInsumo extends JPanel {
 	private List<Insumo> insumosFiltrados;
 	private int contador=0;
 	
+	
 	public PanelInsumo() {
 		super();
 		controlador = ControladorInsumos.getInstance();
@@ -275,9 +276,11 @@ public class PanelInsumo extends JPanel {
 	private void configurarEventos() {
 		
 		btnBuscar.addActionListener( e -> {
+			
     		insumosFiltrados = controlador.filtrar(nombre.getText(), costoMinimo.getText(), costoMaximo.getText(), stockMinimo.getText(), stockMaximo.getText());
     		actualizarTablaInsumos(insumosFiltrados);
     		idSeleccionado=-1;
+    		
 		});
 		
 		btnRegistrar.addActionListener( e -> {
@@ -300,9 +303,7 @@ public class PanelInsumo extends JPanel {
 		
 		btnEliminar.addActionListener( e -> {
 			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar el insumo seleccionado?", "Eliminar insumo", JOptionPane.YES_NO_OPTION);
-			if(confirmar==0) {
-				controlador.borrarInsumo(idSeleccionado);
-			}
+			if(confirmar==0) controlador.borrarInsumo(idSeleccionado);
 		});
 		
 		tablaInsumos.getSelectionModel().addListSelectionListener( e -> {

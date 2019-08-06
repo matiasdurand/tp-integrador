@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import isi.died.tp.aplicacion.Aplicacion;
 import isi.died.tp.controladores.ControladorPaneles;
 import isi.died.tp.controladores.ControladorPlantas;
 import isi.died.tp.dominio.Planta;
@@ -31,7 +30,6 @@ public class PanelPrincipal extends JPanel {
 	private JButton btnMejorSeleccionEnvio;
 	GenericTableModel<Planta> gtm ;
 	private JTable tablaPlantas;
-	
 	private ControladorPlantas controlador;
 	private JLabel lblPanelTitulo;
 	private JLabel lblListaPlantas;
@@ -170,6 +168,6 @@ public class PanelPrincipal extends JPanel {
 	}
 
 	public void mostrarFlujoMaximo(Double flujoMaximo) {
-		this.flujoMaximo.setText(flujoMaximo.toString()+" KG");
+		this.flujoMaximo.setText("El flujo máximo posible es de "+flujoMaximo.toString()+" KG");
 	}
 }

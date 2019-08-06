@@ -53,6 +53,10 @@ public class PanelPlanta extends JPanel {
 		configurarEventos();
 	}
 	
+	public Dimension getPreferredSize() {
+        return new Dimension(1000,750);
+    }
+	
 	private void armar() {
 			setLayout(new GridBagLayout());
 			int fila = 0;
@@ -176,10 +180,6 @@ public class PanelPlanta extends JPanel {
 	    	this.add(panelBotones,c);
 	}
 	
-	public Dimension getPreferredSize() {
-        return new Dimension(1000,750);
-    }
-	
 	private GenericTableModel<Planta> crearModeloTablaPlanta(){
     	this.gtmPlantas = new GenericTableModel<Planta>();
     	List<GenericTableColumn> lista = new ArrayList<GenericTableColumn>();
@@ -201,6 +201,7 @@ public class PanelPlanta extends JPanel {
     }
 	
 	private void configurarEventos() {
+		
 		btnRegistrar.addActionListener(e -> {
 			nombre.setEnabled(true);
 			btnRegistrar.setEnabled(false);
@@ -214,6 +215,7 @@ public class PanelPlanta extends JPanel {
 			tablaStock.setEnabled(false);
 			idSeleccionado=-1;
 		});
+		
 		btnEditar.addActionListener(e -> {
 			nombre.setEnabled(true);
 			btnRegistrar.setEnabled(false);
@@ -227,6 +229,7 @@ public class PanelPlanta extends JPanel {
 			tablaStock.setEnabled(false);
 			nombre.setText(controlador.buscarPlanta(idSeleccionado).getNombre());
 		});
+		
 		btnEliminar.addActionListener(e ->{
 			int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar la planta seleccionada?", "Eliminar planta", JOptionPane.YES_NO_OPTION);
 			if(confirmar==0) {
@@ -242,6 +245,7 @@ public class PanelPlanta extends JPanel {
 			}
 			actualizarDatosTablaStock(new ArrayList<Stock>());
 		});
+		
 		btnCancelar.addActionListener(e -> {
 			nombre.setEnabled(false);
 			nombre.setText("");
@@ -258,6 +262,7 @@ public class PanelPlanta extends JPanel {
 			tablaPlantas.setEnabled(true);
 			tablaStock.setEnabled(true);
 		});
+		
 		btnGuardar.addActionListener(e -> {
 			if(!nombre.getText().isEmpty()) {
 				if(idSeleccionado<0) controlador.crearPlanta(nombre.getText());
@@ -273,22 +278,30 @@ public class PanelPlanta extends JPanel {
 			tablaStock.setEnabled(true);
 			idSeleccionado=-1;
 		});
+		
 		btnConectar.addActionListener(e -> {
+			
 			JComboBox<Planta> cmboxPlantas = new JComboBox<Planta>();
+			
 			controlador.cargarComboPlantasExceptoSeleccionada(cmboxPlantas, idSeleccionado);
+			
 			JTextField distancia = new JTextField();
 			JTextField duracion = new JTextField();
 			JTextField pesoMax = new JTextField();
+			
 			distancia.setText("");
 			duracion.setText("");
 			pesoMax.setText("");
+			
 			Object[] inputFields = {
 				"Conectar con:", cmboxPlantas,
 				"Distancia:", distancia,
 				"Duración:", duracion,
 				"Peso máximo", pesoMax
 			};
+			
 			int opcion = JOptionPane.showConfirmDialog(this, inputFields, "Conectar plantas", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+			
 			if(opcion == JOptionPane.OK_OPTION) {
 				if(!distancia.getText().isEmpty() && !duracion.getText().isEmpty() && !pesoMax.getText().isEmpty()) {
 					controlador.conectarPlantas(idSeleccionado, (Planta)cmboxPlantas.getSelectedItem(), Double.valueOf(distancia.getText()), Double.valueOf(duracion.getText()), Double.valueOf(pesoMax.getText()));
@@ -296,42 +309,56 @@ public class PanelPlanta extends JPanel {
 				}
 				else JOptionPane.showMessageDialog(this, "Debes completar todos los campos");
 			}
+			
 		});
+		
 		btnCargarStock.addActionListener(e -> {
+			
 			JComboBox<Insumo> cmboxInsumos = new JComboBox<Insumo>();
+			
 			controlador.cargarComboInsumos(cmboxInsumos);
+			
 			if(cmboxInsumos.getItemCount()==0) JOptionPane.showMessageDialog(this, "Primero debes registrar insumos");
 			else {
 				JTextField cantidad = new JTextField();
 				JTextField puntoPedido = new JTextField();
+				
 				cantidad.setText("");
 				puntoPedido.setText("");
+				
 				if(idSeleccionado.equals(1)) {
+					
 					Object[] inputFields = {
 							"Seleccione un insumo:", cmboxInsumos,
 							"Cantidad a cargar:", cantidad,
 					};
+					
 					int opcion = JOptionPane.showConfirmDialog(this, inputFields, "Cargar stock en Acopio Inicial", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					if(opcion == JOptionPane.OK_OPTION) {
 						if(!cantidad.getText().isEmpty()) controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), 0);
 						else JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
 					}
+					
 				}
 				else {
+					
 					Object[] inputFields = {
 							"Seleccione un insumo:", cmboxInsumos,
 							"Cantidad a cargar:", cantidad,
 							"Punto de pedido:", puntoPedido
 					};
+					
 					int opcion = JOptionPane.showConfirmDialog(this, inputFields, "Cargar stock en planta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					if(opcion == JOptionPane.OK_OPTION) {
 						if(!cantidad.getText().isEmpty() && !puntoPedido.getText().isEmpty()) controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), Integer.valueOf(puntoPedido.getText()));
 						else JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
 					}
+					
 				}
 			}
 			
 		});
+		
 		tablaPlantas.getSelectionModel().addListSelectionListener(lse -> {
 				if(contador==1) {
 					if(tablaPlantas.getSelectedRow()>=0) idSeleccionado = (Integer)tablaPlantas.getValueAt(tablaPlantas.getSelectedRow(), 0);

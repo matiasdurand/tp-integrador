@@ -52,6 +52,7 @@ public class PanelCamion extends JPanel {
 	private Integer idSeleccionado;
 	private int contador=0;
 	
+	
 	public PanelCamion() {
 		super();
 		controlador = ControladorCamiones.getInstance();
@@ -59,6 +60,10 @@ public class PanelCamion extends JPanel {
 		armar();
 		configurarEventos();
 	}
+	
+	public Dimension getPreferredSize() {
+        return new Dimension(1000,750);
+    }
 	
 	private void armar() {
 		setLayout(new GridBagLayout());
@@ -299,13 +304,11 @@ public class PanelCamion extends JPanel {
     	c.weighty=0.0;
     	c.weightx=0.0;
     	this.add(panelBotones,c);
+    	
 	}
 	
-	public Dimension getPreferredSize() {
-        return new Dimension(1000,750);
-    }
-	
 	private void configurarEventos() {
+		
 		btnRegistrar.addActionListener( e -> {
 			btnRegistrar.setEnabled(false);
 	    	btnEditar.setEnabled(false);
@@ -345,8 +348,7 @@ public class PanelCamion extends JPanel {
 			dominio.setText(aux.getDominio());
 			capacidad.setText(aux.getCapacidad().toString());
 			costoPorKm.setText(aux.getCostoPorKm().toString());
-			aptoParaLiquidos.setSelected(aux.getAptoParaLiquidos());
-			
+			aptoParaLiquidos.setSelected(aux.getAptoParaLiquidos());	
 		});
 		
 		btnEliminar.addActionListener( e -> {
@@ -359,12 +361,9 @@ public class PanelCamion extends JPanel {
 		
 		btnGuardar.addActionListener( e -> {
 			if(validarDatos()) {
-				if(idSeleccionado<=0) {
-					controlador.crearCamion(marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
-				}
-				else {
-					controlador.actualizarCamion(idSeleccionado, marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
-				}
+				
+				if(idSeleccionado<=0) controlador.crearCamion(marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
+				else controlador.actualizarCamion(idSeleccionado, marca.getText(), modelo.getText(), Integer.valueOf(año.getText()), dominio.getText(), Integer.valueOf(capacidad.getText()), Double.valueOf(costoPorKm.getText()), aptoParaLiquidos.isSelected());
 				
 				btnGuardar.setEnabled(false);
 				btnCancelar.setEnabled(false);
@@ -384,6 +383,7 @@ public class PanelCamion extends JPanel {
 				capacidad.setText("");
 				costoPorKm.setText("");
 				aptoParaLiquidos.setSelected(false);
+				
 			}
     	});
 		
@@ -391,10 +391,12 @@ public class PanelCamion extends JPanel {
 			btnGuardar.setEnabled(false);
     		btnCancelar.setEnabled(false);
     		btnRegistrar.setEnabled(true);
+    		
     		if(idSeleccionado>0) {
     			btnEliminar.setEnabled(true);
     	    	btnEditar.setEnabled(true);
     		}
+    		
     		marca.setEnabled(false);
     		modelo.setEnabled(false);
     		año.setEnabled(false);
@@ -429,9 +431,7 @@ public class PanelCamion extends JPanel {
 	private Boolean validarDatos() {
 		Boolean resultado;
 		Calendar cal = Calendar.getInstance();
-		if(!marca.getText().isEmpty() & !modelo.getText().isEmpty() & Integer.valueOf(año.getText())>1900 & Integer.valueOf(año.getText()) <= cal.get(Calendar.YEAR) && !dominio.getText().isEmpty() & Integer.valueOf(capacidad.getText())>0 & Double.valueOf(costoPorKm.getText())>0) {
-			resultado = true;
-		}
+		if(!marca.getText().isEmpty() & !modelo.getText().isEmpty() & Integer.valueOf(año.getText())>1900 & Integer.valueOf(año.getText()) <= cal.get(Calendar.YEAR) && !dominio.getText().isEmpty() & Integer.valueOf(capacidad.getText())>0 & Double.valueOf(costoPorKm.getText())>0) resultado = true;
 		else {
 			resultado=false;
 			JOptionPane.showMessageDialog(this, "Se han ingresado datos con un formato no válido");
