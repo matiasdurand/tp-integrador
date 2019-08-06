@@ -41,7 +41,7 @@ public class Planta {
 			this.listaStock = listaStock;
 		}
 		
-		public Double costoTotal() {
+		public Double getCostoTotal() {
 			 return listaStock.stream().mapToDouble((s) -> s.getCantidad()*s.getInsumo().getCosto()).sum();
 		}
 

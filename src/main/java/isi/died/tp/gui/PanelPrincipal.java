@@ -69,7 +69,7 @@ public class PanelPrincipal extends JPanel {
     	col=0;
     	fila++;
     	
-    	this.lblListaPlantas = new JLabel("Plantas principales");
+    	this.lblListaPlantas = new JLabel("Plantas principales ordenas según PageRank");
     	c.gridx=col++;
     	c.gridy=fila;
     	c.weightx=0.0;
@@ -125,7 +125,7 @@ public class PanelPrincipal extends JPanel {
     	c.insets = new Insets(10, 10, 10, 10);
     	panelFila3.add(btnFlujoMaximo, c);
     	
-    	flujoMaximo = new JTextField(10);
+    	flujoMaximo = new JTextField(24);
     	flujoMaximo.setEditable(false);
     	panelFila3.add(flujoMaximo, c);
     	
@@ -155,10 +155,11 @@ public class PanelPrincipal extends JPanel {
 
 	private GenericTableModel<Planta> crearModeloTabla(){
     	gtm = new GenericTableModel<Planta>();
-    	List<GenericTableColumn> lista = new ArrayList<GenericTableColumn>();
-    	lista.add(new GenericTableColumn("Id" , "getId"));
-    	lista.add(new GenericTableColumn("Nombre" , "getNombre"));
-    	gtm.setColumnas(lista);
+    	List<GenericTableColumn> columnas = new ArrayList<GenericTableColumn>();
+    	columnas.add(new GenericTableColumn("Id" , "getId"));
+    	columnas.add(new GenericTableColumn("Nombre" , "getNombre"));
+    	columnas.add(new GenericTableColumn("Costo total en stok" , "getCostoTotal"));
+    	gtm.setColumnas(columnas);
     	return gtm;
     }
 	

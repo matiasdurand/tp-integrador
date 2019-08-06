@@ -54,7 +54,7 @@ public class PlantaTest {
 	@Test
 	public void costoTotal() {
 		Double resultadoEsperado = 21500.00;
-		Double costoTotal = plantaAcopio.costoTotal();
+		Double costoTotal = plantaAcopio.getCostoTotal();
 		assertEquals(resultadoEsperado, costoTotal);
 	}
 	

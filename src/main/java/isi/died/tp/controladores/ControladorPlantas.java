@@ -94,6 +94,10 @@ public class ControladorPlantas {
 		for(Insumo i: insumos) combo.addItem(i);					
 	}
 	
+	public void actualizarDatosTablaPlantas() {
+		pPlanta.actualizarDatosTablaPlantas(daoPlanta.buscarTodas());
+	}
+	
 	public void crearPlanta(String nombre) {
 		
 		Runnable r = () -> {
@@ -305,6 +309,7 @@ public class ControladorPlantas {
 
 	public void almacenar(Insumo i) {
 		daoStock.crear(1, new Stock(i.getStock(), 0, i));
+		grafoPlantas.actualizarNodo(daoPlanta.buscar(1));
 	}
 
 	public List<Stock> buscarStockFaltante(Integer idPlantaSeleccionada) {
@@ -406,6 +411,15 @@ public class ControladorPlantas {
 	    
 	    return esSolucion;
 	    
+	}
+
+	public void borrarStocksEnGrafoPlantas(Insumo i) {
+		grafoPlantas.borrarStocks(i);
+	}
+
+	public void actualizarStocksEnGrafoPlantas(Insumo i) {
+		grafoPlantas.actualizarStocks(i);
+		
 	}
 
 }

@@ -253,7 +253,6 @@ public class PanelMejorEnvio extends JPanel {
 				if(confirmar==0) controladorPlantas.mejorEnvio(idPlantaSeleccionada, idCamionSeleccionado, camionAptoParaLiquidos);
 			}
 			else controladorPlantas.mejorEnvio(idPlantaSeleccionada, idCamionSeleccionado, camionAptoParaLiquidos);
-			btnGenerarSolucion.setEnabled(false);
 		});
 		
 		btnCancelar.addActionListener(e -> {

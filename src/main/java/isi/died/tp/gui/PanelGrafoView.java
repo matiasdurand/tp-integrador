@@ -300,6 +300,10 @@ public class PanelGrafoView extends JPanel {
 	public void inicializarGrafoView() {
 		vertices.clear();
 		aristas.clear();
+		contador=0;
+    	idNodoInicio=-1;
+    	idNodoFin=-1;
+    	btnMostrarCaminos.setEnabled(false);
 		controlador.inicializarGrafoView();
 	}
 	

@@ -182,21 +182,22 @@ public class PanelPlanta extends JPanel {
 	
 	private GenericTableModel<Planta> crearModeloTablaPlanta(){
     	this.gtmPlantas = new GenericTableModel<Planta>();
-    	List<GenericTableColumn> lista = new ArrayList<GenericTableColumn>();
-    	lista.add(new GenericTableColumn("Id" , "getId"));
-    	lista.add(new GenericTableColumn("Nombre" , "getNombre"));
-    	gtmPlantas.setColumnas(lista);
+    	List<GenericTableColumn> columnas = new ArrayList<GenericTableColumn>();
+    	columnas.add(new GenericTableColumn("Id" , "getId"));
+    	columnas.add(new GenericTableColumn("Nombre" , "getNombre"));
+    	columnas.add(new GenericTableColumn("Costo total en stock" , "getCostoTotal"));
+    	gtmPlantas.setColumnas(columnas);
     	return gtmPlantas;
     }
 	
 	private GenericTableModel<Stock> crearModeloTablaStock(){
     	this.gtmStock = new GenericTableModel<Stock>();
-    	List<GenericTableColumn> lista = new ArrayList<GenericTableColumn>();
-    	lista.add(new GenericTableColumn("Id" , "getId"));
-    	lista.add(new GenericTableColumn("Cantidad" , "getCantidad"));
-    	lista.add(new GenericTableColumn("Punto de pedido", "getPuntoPedido"));
-    	lista.add(new GenericTableColumn("Insumo", "getInsumo"));
-    	gtmStock.setColumnas(lista);
+    	List<GenericTableColumn> columnas = new ArrayList<GenericTableColumn>();
+    	columnas.add(new GenericTableColumn("Id" , "getId"));
+    	columnas.add(new GenericTableColumn("Cantidad" , "getCantidad"));
+    	columnas.add(new GenericTableColumn("Punto de pedido", "getPuntoPedido"));
+    	columnas.add(new GenericTableColumn("Insumo", "getInsumo"));
+    	gtmStock.setColumnas(columnas);
     	return gtmStock;
     }
 	
@@ -242,8 +243,9 @@ public class PanelPlanta extends JPanel {
 				tablaPlantas.setEnabled(true);
 				tablaStock.setEnabled(true);
 				idSeleccionado=-1;
+				actualizarDatosTablaStock(new ArrayList<Stock>());
 			}
-			actualizarDatosTablaStock(new ArrayList<Stock>());
+			
 		});
 		
 		btnCancelar.addActionListener(e -> {
@@ -277,6 +279,7 @@ public class PanelPlanta extends JPanel {
 			tablaPlantas.setEnabled(true);
 			tablaStock.setEnabled(true);
 			idSeleccionado=-1;
+			actualizarDatosTablaStock(new ArrayList<Stock>());
 		});
 		
 		btnConectar.addActionListener(e -> {
@@ -337,6 +340,7 @@ public class PanelPlanta extends JPanel {
 					if(opcion == JOptionPane.OK_OPTION) {
 						if(!cantidad.getText().isEmpty()) controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), 0);
 						else JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
+						actualizarTablaPlantas();
 					}
 					
 				}
@@ -352,6 +356,7 @@ public class PanelPlanta extends JPanel {
 					if(opcion == JOptionPane.OK_OPTION) {
 						if(!cantidad.getText().isEmpty() && !puntoPedido.getText().isEmpty()) controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), Integer.valueOf(puntoPedido.getText()));
 						else JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
+						actualizarTablaPlantas();
 					}
 					
 				}
@@ -407,7 +412,8 @@ public class PanelPlanta extends JPanel {
     	controlador.crearAcopios("Acopio Inicial", "Acopio Final");
     }
 
-	public void actualizarTablaStock() {
-		if(idSeleccionado!=null && !idSeleccionado.equals(-1)) controlador.mostrarStock(idSeleccionado);
+	public void actualizarTablaPlantas() {
+		controlador.actualizarDatosTablaPlantas();
+		actualizarDatosTablaStock(new ArrayList<Stock>());
 	}
 }

@@ -122,8 +122,9 @@ public class ControladorGrafoView {
 			else {
 				int contador = 1;
 				String informacion = new String();
+				pGrafo.mostrarInfo("Mejor camino encontrado:\n");
 				for(List<Planta> camino: mejorCamino) {
-					informacion = contador+": "+camino.get(0).getNombre();
+					informacion = contador+":  "+camino.get(0).getNombre();
 					for(int i=1; i<camino.size(); i++) informacion = informacion.concat(" -> "+camino.get(i).getNombre());
 					pGrafo.mostrarInfo(informacion+" .\n");
 					informacion = "";
@@ -144,12 +145,12 @@ public class ControladorGrafoView {
 			String informacion = new String();
 			for(Entry<List<Planta>, Double[]> camino: caminos.entrySet()) {
 				List<Planta> plantas = camino.getKey();
-				informacion = "CAMINO "+contador+": "+plantas.get(0).getNombre();
+				informacion = "CAMINO "+contador+":  "+plantas.get(0).getNombre();
 				for(int i=1; i<plantas.size(); i++) informacion = informacion.concat(" -> "+plantas.get(i).getNombre());
 				Double[] info = camino.getValue();
 				informacion = informacion.concat(".\n");
-				informacion = informacion.concat("Distancia total: "+info[0]+". Tiempo total: "+info[1]+". Peso maximo total: "+info[2]+".");
-				pGrafo.mostrarInfo(informacion+"\n");
+				informacion = informacion.concat("Información: Distancia total: "+info[0]+". Tiempo total: "+info[1]+". Peso maximo: "+info[2]+".");
+				pGrafo.mostrarInfo(informacion+"\n\n");
 				informacion = "";
 				contador++;
 			}

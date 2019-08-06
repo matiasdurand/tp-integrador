@@ -87,7 +87,7 @@ public class ControladorInsumos {
 			
 			i.setId(id);
 			
-			daoInsumo.actualizar(i);
+			ControladorPlantas.getInstance().actualizarStocksEnGrafoPlantas(daoInsumo.actualizar(i));
 			
 			List<Insumo> insumos = daoInsumo.buscarTodos();
 			
@@ -113,6 +113,8 @@ public class ControladorInsumos {
 		Runnable r = () -> {
 			
 			daoStock.borrar(-1, id);
+			
+			ControladorPlantas.getInstance().borrarStocksEnGrafoPlantas(daoInsumo.buscar(id));
 			
 			daoInsumo.borrar(id);
 			

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import isi.died.tp.dominio.Insumo; 
 import isi.died.tp.dominio.Planta;
+import isi.died.tp.dominio.Stock;
 import isi.died.tp.estructuras.Arista;
 import isi.died.tp.estructuras.Grafo;
 import isi.died.tp.estructuras.Vertice; 
@@ -362,6 +363,20 @@ public class GrafoPlantas extends Grafo<Planta> {
 		
 		aristas.removeAll(auxiliar);
 	
+	}
+
+	public void borrarStocks(Insumo i) {
+		
+		for(Vertice<Planta> v: vertices) v.getValor().getListaStock().remove(new Stock(0, 0, i));
+		
+	}
+
+	public void actualizarStocks(Insumo i) {
+		
+		for(Vertice<Planta> v: vertices) {
+			for(Stock s: v.getValor().getListaStock()) if(s.getInsumo().equals(i)) s.setInsumo(i);
+		}
+		
 	}
 	
 }
