@@ -20,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import isi.died.tp.controladores.ControladorGrafoView;
@@ -90,7 +91,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridx=col++;
     	c.gridy=fila;
     	c.gridwidth=5;
-    	c.gridheight=2;
+    	c.gridheight=3;
     	c.anchor = GridBagConstraints.CENTER;
     	c.fill=GridBagConstraints.BOTH;
     	c.weighty=1.0;
@@ -102,7 +103,7 @@ public class PanelGrafoView extends JPanel {
 		//Segunda fila
     	
     	col=0;
-    	fila+=2;
+    	fila=3;
     	    	
     	JPanel panelFila1 = new JPanel();
     	
@@ -112,6 +113,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=1;
     	c.gridheight=1;
     	c.weightx=0.0;
+    	c.weighty=0.0;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.NONE;
     	c.insets = new Insets(10, 10, 10, 10);
@@ -122,6 +124,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=1;
     	c.gridheight=1;
     	c.weightx=0.5;
+    	c.weighty=0.0;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.HORIZONTAL;
     	c.insets = new Insets(10, 10, 10, 10);
@@ -133,6 +136,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=1;
     	c.gridheight=1;
     	c.weightx=0.0;
+    	c.weighty=0.0;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.NONE;
     	c.insets = new Insets(10, 10, 10, 10);
@@ -145,6 +149,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=1;
     	c.gridheight=1;
     	c.weightx=0.0;
+    	c.weighty=0.0;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.NONE;
     	c.insets = new Insets(10, 10, 10, 10);
@@ -156,6 +161,7 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=1;
     	c.gridheight=1;
     	c.weightx=0.0;
+    	c.weighty=0.0;
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.NONE;
     	c.insets = new Insets(10, 10, 10, 10);
@@ -169,6 +175,7 @@ public class PanelGrafoView extends JPanel {
     	c.anchor = GridBagConstraints.NORTH;
     	c.fill=GridBagConstraints.NONE;
     	c.weightx=0.0;
+    	c.weighty=0.0;
     	rbtnDistancia.setSelected(true);
     	grupo.add(rbtnDistancia);
     	grupo.add(rbtnTiempo);
@@ -190,10 +197,12 @@ public class PanelGrafoView extends JPanel {
     	c.gridheight=1;
     	c.weightx=1.0;
     	c.weighty=1.0;
-    	c.anchor = GridBagConstraints.CENTER;
+    	c.anchor = GridBagConstraints.SOUTH;
     	c.fill=GridBagConstraints.BOTH;
     	c.insets = new Insets(10, 10, 10, 10);
-		this.add(textArea,c);
+    	
+    	JScrollPane panelFila3 = new JScrollPane(this.textArea);
+		this.add(panelFila3,c);
 
 	}
 	
