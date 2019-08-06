@@ -56,7 +56,19 @@ public class Stock {
 	
 	@Override
 	public boolean equals(Object obj) {
-		return insumo.equals(((Stock)obj).getInsumo());
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Stock other = (Stock)obj;
+		if (insumo==null) {
+			if (other.getInsumo() != null)
+				return false;
+		} else if (!insumo.equals(other.getInsumo()))
+			return false;
+		return true;
 	}
 	
 	@Override

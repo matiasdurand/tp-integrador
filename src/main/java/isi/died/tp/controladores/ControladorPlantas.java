@@ -5,7 +5,9 @@ import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.swing.JComboBox;
@@ -320,11 +322,25 @@ public class ControladorPlantas {
 		pMEnvio.actualizarDatosTablaPlantas(daoPlanta.buscarTodas());
 	}
 
-	public void mejorEnvio(Integer idPlantaSeleccionada, Integer idCamionSeleccionado, Boolean camionAptoParaLiquidos) {
+	public void mejorEnvio(/*Integer idPlantaSeleccionada,*/ Integer idCamionSeleccionado, Boolean camionAptoParaLiquidos) {
 		
 		Camion camion = controladorCamiones.buscarCamion(idCamionSeleccionado);
 		
-		List<Stock> stockFaltante = buscarStockFaltante(idPlantaSeleccionada);
+		List<Planta> plantas = daoPlanta.buscarTodas();
+		List<Stock> stockFaltante = new ArrayList<Stock>();
+		
+		for(Planta p: plantas) {
+			for(Stock sf: buscarStockFaltante(p.getId())) {
+				if(stockFaltante.contains(sf)) {
+					Stock s2 = stockFaltante.stream().filter(s->s.equals(sf)).collect(Collectors.toList()).get(0);
+					stockFaltante.remove(s2);
+					stockFaltante.add(new Stock((s2.getCantidad()+2*sf.getPuntoPedido()-sf.getCantidad()), 0, s2.getInsumo()));
+				}
+				else stockFaltante.add(new Stock(2*sf.getPuntoPedido()-sf.getCantidad(), 0, sf.getInsumo()));
+			}
+		}
+		System.out.println(stockFaltante);
+		//List<Stock> stockFaltante = buscarStockFaltante(idPlantaSeleccionada);
 		
 		if(!camionAptoParaLiquidos) stockFaltante = stockFaltante.stream().filter(s->!s.getInsumo().getEsLiquido()).collect(Collectors.toList());
 		
@@ -345,9 +361,11 @@ public class ControladorPlantas {
 				
 				Insumo i = s.getInsumo();
 				
-				int cantidadAEnviar = 2*s.getPuntoPedido()-s.getCantidad();
+				//int cantidadAEnviar = 2*s.getPuntoPedido()-s.getCantidad();
+				int cantidadAEnviar = s.getCantidad();
 				
 				double pesoInsumo = i.getPeso().doubleValue();
+				
 				int pesoAEnviar;
 				
 				if(pesoInsumo%1==0) pesoAEnviar = (int)pesoInsumo*cantidadAEnviar;
