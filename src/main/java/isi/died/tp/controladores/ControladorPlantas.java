@@ -259,9 +259,7 @@ public class ControladorPlantas {
 			
 			daoStock.actualizar(1, new Stock(acopioInicial.disponible(i)+cantidad, 0, i));
 			
-			pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
-			
-			JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
+			//JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
 			
 			controladorInsumos.aumentarStockInsumo(i, cantidad);
 			
@@ -280,9 +278,7 @@ public class ControladorPlantas {
 				
 				daoStock.actualizar(1, new Stock(acopioInicial.disponible(i)-cantidad, 0, i));
 				
-				pPlanta.actualizarDatosTablaStock(daoPlanta.buscar(id).getListaStock());
-				
-				JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
+				//JOptionPane.showMessageDialog(pPlanta, "El stock ha sido cargado correctamente");
 				
 				grafoPlantas.actualizarNodo(daoPlanta.buscar(id));
 			}

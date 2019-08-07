@@ -130,31 +130,6 @@ public class PanelGrafoView extends JPanel {
     	c.insets = new Insets(10, 10, 10, 10);
 		panelFila1.add(cmboxInsumo,c);
 		
-		btnMostrarCaminos = new JButton("Mostrar caminos");
-    	c.gridx=col++;
-    	c.gridy=fila;
-    	c.gridwidth=1;
-    	c.gridheight=1;
-    	c.weightx=0.0;
-    	c.weighty=0.0;
-    	c.anchor = GridBagConstraints.NORTH;
-    	c.fill=GridBagConstraints.NONE;
-    	c.insets = new Insets(10, 10, 10, 10);
-		btnMostrarCaminos.setEnabled(false);
-		panelFila1.add(btnMostrarCaminos,c);
-		
-		btnMostrarInfo = new JButton("Mostrar información");
-    	c.gridx=col++;
-    	c.gridy=fila;
-    	c.gridwidth=1;
-    	c.gridheight=1;
-    	c.weightx=0.0;
-    	c.weighty=0.0;
-    	c.anchor = GridBagConstraints.NORTH;
-    	c.fill=GridBagConstraints.NONE;
-    	c.insets = new Insets(10, 10, 10, 10);
-		panelFila1.add(btnMostrarInfo,c);
-		
 		lblPriorizar = new JLabel("Priorizar:");
     	c.gridx=col++;
     	c.gridy=fila;
@@ -181,8 +156,33 @@ public class PanelGrafoView extends JPanel {
     	grupo.add(rbtnTiempo);
     	
     	panelFila1.add(rbtnDistancia,c);
-    	panelFila1.add(rbtnTiempo,c);	
+    	panelFila1.add(rbtnTiempo,c);
     	
+		btnMostrarInfo = new JButton("Mostrar información");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.weighty=0.0;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+		panelFila1.add(btnMostrarInfo,c);
+    	
+		btnMostrarCaminos = new JButton("Mostrar caminos");
+    	c.gridx=col++;
+    	c.gridy=fila;
+    	c.gridwidth=1;
+    	c.gridheight=1;
+    	c.weightx=0.0;
+    	c.weighty=0.0;
+    	c.anchor = GridBagConstraints.NORTH;
+    	c.fill=GridBagConstraints.NONE;
+    	c.insets = new Insets(10, 10, 10, 10);
+		btnMostrarCaminos.setEnabled(false);
+		panelFila1.add(btnMostrarCaminos,c);
+
 		this.add(panelFila1,c);
     	
     	//Tercera fila
@@ -196,10 +196,11 @@ public class PanelGrafoView extends JPanel {
     	c.gridwidth=5;
     	c.gridheight=1;
     	c.weightx=1.0;
-    	c.weighty=1.0;
+    	c.weighty=0.5;
     	c.anchor = GridBagConstraints.SOUTH;
     	c.fill=GridBagConstraints.BOTH;
     	c.insets = new Insets(10, 10, 10, 10);
+    	textArea.setEditable(false);
     	
     	JScrollPane panelFila3 = new JScrollPane(this.textArea);
 		this.add(panelFila3,c);
@@ -298,6 +299,7 @@ public class PanelGrafoView extends JPanel {
 	}
 	
 	public void inicializarGrafoView() {
+		textArea.setText("");
 		vertices.clear();
 		aristas.clear();
 		contador=0;

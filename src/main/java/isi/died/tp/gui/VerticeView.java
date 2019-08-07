@@ -68,7 +68,7 @@ public class VerticeView {
     }
 
     public String etiqueta() {
-    	return "["+id+"]"+this.nombre;
+    	return nombre;
     }
     
     public Color getColorBase() {

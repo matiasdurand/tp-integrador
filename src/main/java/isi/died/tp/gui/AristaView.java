@@ -78,7 +78,7 @@ public class AristaView {
     }
     
     public String etiqueta() {
-    	return "["+distancia+"KM]["+tiempo+"MIN]["+peso+"KG]";
+    	return distancia+"KM / "+tiempo+"MIN / "+peso+"KG";
     }
     
     public void update() {

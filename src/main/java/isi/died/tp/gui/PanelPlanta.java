@@ -338,9 +338,12 @@ public class PanelPlanta extends JPanel {
 					
 					int opcion = JOptionPane.showConfirmDialog(this, inputFields, "Cargar stock en Acopio Inicial", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					if(opcion == JOptionPane.OK_OPTION) {
-						if(!cantidad.getText().isEmpty()) controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), 0);
+						if(!cantidad.getText().isEmpty()) {
+							controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), 0);
+							actualizarTablaPlantas();
+						}
 						else JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
-						actualizarTablaPlantas();
+						
 					}
 					
 				}
@@ -354,9 +357,12 @@ public class PanelPlanta extends JPanel {
 					
 					int opcion = JOptionPane.showConfirmDialog(this, inputFields, "Cargar stock en planta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					if(opcion == JOptionPane.OK_OPTION) {
-						if(!cantidad.getText().isEmpty() && !puntoPedido.getText().isEmpty()) controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), Integer.valueOf(puntoPedido.getText()));
+						if(!cantidad.getText().isEmpty() && !puntoPedido.getText().isEmpty()) {
+							controlador.cargarStock(idSeleccionado, (Insumo)cmboxInsumos.getSelectedItem(), Integer.valueOf(cantidad.getText()), Integer.valueOf(puntoPedido.getText()));
+							actualizarTablaPlantas();
+						}
 						else JOptionPane.showMessageDialog(this, "Debe completar todos los campos");
-						actualizarTablaPlantas();
+						
 					}
 					
 				}

@@ -185,7 +185,7 @@ public class GrafoPlantas extends Grafo<Planta> {
     			
     			Arista<Planta> a = buscarArista(v1, ady);
     			
-    			Double[] info = {d+a.getDistancia(), t+a.getTiempo(), p+a.getPesoMax()};
+    			Double[] info = {d+a.getDistancia(), t+a.getTiempo(), Math.min(p, a.getPesoMax())};
     			
     			caminos.put(copiaMarcados.stream().map(Vertice::getValor).collect(Collectors.toList()), info);
     		}
