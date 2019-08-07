@@ -1,10 +1,10 @@
 package isi.died.tp.controladores;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
+
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -165,7 +165,7 @@ public class ControladorInsumos {
 		if(stockMaximo.isEmpty()) stockMax = Integer.MAX_VALUE;
 		else stockMax = Integer.parseInt(stockMaximo);
 		
-		Arbol<Insumo> abb = new ArbolBinarioBusqueda<Insumo>(insumos.get(0));
+		/*Arbol<Insumo> abb = new ArbolBinarioBusqueda<Insumo>(insumos.get(0));
 		
 		insumos.remove(0);
 		
@@ -173,116 +173,94 @@ public class ControladorInsumos {
 		
 		List<Insumo> filtrado = abb.rango(nombre, costoMin, costoMax, stockMin, stockMax);
 		
-		return filtrado;
+		return filtrado;*/
+		
+		Arbol<Insumo> abb;
+		
+		if(!nombre.isEmpty()) {
+			abb = new ArbolBinarioBusqueda<Insumo>(insumos.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i1.getNombre().compareTo(i2.getNombre());}});
+			insumos.remove(0);
+			if(!insumos.isEmpty()) for(Insumo i: insumos) abb.agregar(i);
+			insumos = abb.rango(nombre);
+		}
+		
+		if(!insumos.isEmpty() && (costoMin!=0 || costoMax!=Double.MAX_VALUE)) {
+			abb = new ArbolBinarioBusqueda<Insumo>(insumos.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i1.getCosto().compareTo(i2.getCosto());}});
+			insumos.remove(0);
+			if(!insumos.isEmpty()) for(Insumo i: insumos) abb.agregar(i);
+			insumos = abb.rango(costoMin, costoMax);
+		}
+		
+		if(!insumos.isEmpty() && (stockMin!=0 || stockMax!=Integer.MAX_VALUE)) {
+			abb = new ArbolBinarioBusqueda<Insumo>(insumos.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i1.getStock().compareTo(i2.getStock());}});
+			insumos.remove(0);
+			if(!insumos.isEmpty()) for(Insumo i: insumos) abb.agregar(i);
+			insumos = abb.rango(stockMin, stockMax);
+		}
+	
+		return insumos;
 		
 	}
 	
 	public void ordenarPor(List<Insumo> insumos, String criterio, Boolean descendente) {
 		
-		if(insumos==null) insumos = daoInsumo.buscarTodos();
+		List<Insumo> insumosAOrdenar;
 		
-		if(criterio.equals("Nombre")) {
-			if(!descendente) {
-				Collection<Insumo> arbol = new TreeSet<Insumo>(
-						new Comparator<Insumo>(){
-							@Override
-							public int compare(Insumo i1, Insumo i2) {
-								int comparacion = i1.getNombre().compareTo(i2.getNombre());
-								if(comparacion == 0) return 1;
-								else return comparacion;
-							}
-						}
-					);
-				arbol.addAll(insumos);
-				insumos.clear();
-				insumos.addAll(arbol);
-			}
-			else {
-				Collection<Insumo> arbol = new TreeSet<Insumo>(
-						new Comparator<Insumo>(){
-							@Override
-							public int compare(Insumo i1, Insumo i2) {
-								int comparacion = i2.getNombre().compareTo(i1.getNombre());
-								if(comparacion == 0) return 1;
-								else return comparacion;
-							}
-						}
-					);
-				arbol.addAll(insumos);
-				insumos.clear();
-				insumos.addAll(arbol);
-			}
-		}
-		else {
-			if(criterio.equals("Stock total")) {
+		if(insumos==null) insumosAOrdenar = daoInsumo.buscarTodos();
+		else insumosAOrdenar = insumos.stream().collect(Collectors.toList());
+		
+		Arbol<Insumo> abb;
+		
+		if(!insumosAOrdenar.isEmpty()) {
+			if(criterio.equals("Nombre")) {
 				if(!descendente) {
-					Collection<Insumo> arbol = new TreeSet<Insumo>(
-							new Comparator<Insumo>(){
-								@Override
-								public int compare(Insumo i1, Insumo i2) {
-									int comparacion = i1.getStock().compareTo(i2.getStock());
-									if(comparacion == 0) return 1;
-									else return comparacion;
-								}
-							}
-						);
-					arbol.addAll(insumos);
-					insumos.clear();
-					insumos.addAll(arbol);
+					abb = new ArbolBinarioBusqueda<Insumo>(insumosAOrdenar.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i1.getNombre().compareTo(i2.getNombre());}});
+					insumosAOrdenar.remove(0);
+					if(!insumosAOrdenar.isEmpty()) for(Insumo i: insumosAOrdenar) abb.agregar(i);
+					insumosAOrdenar = abb.inOrden();
 				}
 				else {
-					Collection<Insumo> arbol = new TreeSet<Insumo>(
-							new Comparator<Insumo>(){
-								@Override
-								public int compare(Insumo i1, Insumo i2) {
-									int comparacion = i2.getStock().compareTo(i1.getStock());
-									if(comparacion == 0) return 1;
-									else return comparacion;
-								}
-							}
-						);
-					arbol.addAll(insumos);
-					insumos.clear();
-					insumos.addAll(arbol);
+					abb = new ArbolBinarioBusqueda<Insumo>(insumosAOrdenar.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i2.getNombre().compareTo(i1.getNombre());}});
+					insumosAOrdenar.remove(0);
+					if(!insumosAOrdenar.isEmpty()) for(Insumo i: insumosAOrdenar) abb.agregar(i);
+					insumosAOrdenar = abb.inOrden();
 				}
 			}
 			else {
-				if(criterio.equals("Costo")) {
+				if(criterio.equals("Stock total")) {
 					if(!descendente) {
-						Collection<Insumo> arbol = new TreeSet<Insumo>(
-								new Comparator<Insumo>(){
-									@Override
-									public int compare(Insumo i1, Insumo i2) {
-										int comparacion = i1.getCosto().compareTo(i2.getCosto());
-										if(comparacion == 0) return 1;
-										else return comparacion;
-									}
-								}
-							);
-						arbol.addAll(insumos);
-						insumos.clear();
-						insumos.addAll(arbol);
+						abb = new ArbolBinarioBusqueda<Insumo>(insumosAOrdenar.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i1.getStock().compareTo(i2.getStock());}});
+						insumosAOrdenar.remove(0);
+						if(!insumosAOrdenar.isEmpty()) for(Insumo i: insumosAOrdenar) abb.agregar(i);
+						insumosAOrdenar = abb.inOrden();
 					}
 					else {
-						Collection<Insumo> arbol = new TreeSet<Insumo>(
-								new Comparator<Insumo>(){
-									@Override
-									public int compare(Insumo i1, Insumo i2) {
-										int comparacion = i2.getCosto().compareTo(i1.getCosto());
-										if(comparacion == 0) return 1;
-										else return comparacion;
-									}
-								}
-							);
-						arbol.addAll(insumos);
-						insumos.clear();
-						insumos.addAll(arbol);
+						abb = new ArbolBinarioBusqueda<Insumo>(insumosAOrdenar.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i2.getStock().compareTo(i1.getStock());}});
+						insumosAOrdenar.remove(0);
+						if(!insumosAOrdenar.isEmpty()) for(Insumo i: insumosAOrdenar) abb.agregar(i);
+						insumosAOrdenar = abb.inOrden();
+					}
+				}
+				else {
+					if(criterio.equals("Costo")) {
+						if(!descendente) {
+							abb = new ArbolBinarioBusqueda<Insumo>(insumosAOrdenar.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i1.getCosto().compareTo(i2.getCosto());}});
+							insumosAOrdenar.remove(0);
+							if(!insumosAOrdenar.isEmpty()) for(Insumo i: insumosAOrdenar) abb.agregar(i);
+							insumosAOrdenar = abb.inOrden();
+						}
+						else {
+							abb = new ArbolBinarioBusqueda<Insumo>(insumosAOrdenar.get(0), new Comparator<Insumo>(){ public int compare(Insumo i1, Insumo i2) { return i2.getCosto().compareTo(i1.getCosto());}});
+							insumosAOrdenar.remove(0);
+							if(!insumosAOrdenar.isEmpty()) for(Insumo i: insumosAOrdenar) abb.agregar(i);
+							insumosAOrdenar = abb.inOrden();
+						}
 					}
 				}
 			}
 		}
 		
-		pInsumo.actualizarTablaInsumos(insumos);
+		pInsumo.actualizarTablaInsumos(insumosAOrdenar);
 		
 	}
 	

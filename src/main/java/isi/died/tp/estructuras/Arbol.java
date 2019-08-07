@@ -39,5 +39,10 @@ public abstract class Arbol<E extends Comparable<E>> {
 	public abstract boolean esLleno();
 	
 	public abstract ArrayList<Insumo> rango(String nombre, Double costoMinimo, Double costoMaximo, Integer stockMinimo, Integer stockMaximo);
-	
+
+	public abstract List<Insumo> rango(Double minimo, Double maximo);
+
+	public abstract List<Insumo> rango(Integer minimo, Integer maximo);
+
+	public abstract List<Insumo> rango(String nombre);
 }

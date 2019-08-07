@@ -86,4 +86,19 @@ public class ArbolVacio<E extends Comparable<E>> extends Arbol<E> {
 		return new ArrayList<Insumo>();
 	}
 
+	@Override
+	public List<Insumo> rango(Double minimo, Double maximo) {
+		return new ArrayList<Insumo>();
+	}
+
+	@Override
+	public List<Insumo> rango(Integer minimo, Integer maximo) {
+		return new ArrayList<Insumo>();
+	}
+
+	@Override
+	public List<Insumo> rango(String nombre) {
+		return new ArrayList<Insumo>();
+	}
+
 }

@@ -1,6 +1,7 @@
 package isi.died.tp.estructuras;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import isi.died.tp.dominio.Insumo;
@@ -9,6 +10,7 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 
 	protected Arbol<E> izquierdo;
 	protected Arbol<E> derecho;
+	protected Comparator<Insumo> comparador;
 	
 	public ArbolBinarioBusqueda(){
 		this.valor=null;
@@ -20,6 +22,13 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		this.valor=e;
 		this.izquierdo=new ArbolVacio<E>();
 		this.derecho=new ArbolVacio<E>();
+	}
+	
+	public ArbolBinarioBusqueda(E e, Comparator<Insumo> comparador){
+		this.valor=e;
+		this.izquierdo=new ArbolVacio<E>();
+		this.derecho=new ArbolVacio<E>();
+		this.comparador = comparador;
 	}
 	
 	public ArbolBinarioBusqueda(E e,Arbol<E> i,Arbol<E> d){
@@ -40,9 +49,9 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	@Override
 	public List<E> inOrden() {
 		List<E> lista = new ArrayList<E>();
-		lista.addAll(this.izquierdo.preOrden());
+		lista.addAll(this.izquierdo.inOrden());
 		lista.add(this.valor);
-		lista.addAll(this.derecho.preOrden());
+		lista.addAll(this.derecho.inOrden());
 		return lista;
 	}
 	
@@ -77,12 +86,12 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 	
 	@Override
 	public void agregar(E a) {
-		if(this.valor.compareTo(a)<1) {
-			if (this.derecho.esVacio()) this.derecho = new ArbolBinarioBusqueda<E>(a);
+		if(this.comparador.compare((Insumo)valor, (Insumo)a)<1) {
+			if (this.derecho.esVacio()) this.derecho = new ArbolBinarioBusqueda<E>(a, comparador);
 			else this.derecho.agregar(a);
 		}
 		else {
-			if (this.izquierdo.esVacio()) this.izquierdo= new ArbolBinarioBusqueda<E>(a);
+			if (this.izquierdo.esVacio()) this.izquierdo= new ArbolBinarioBusqueda<E>(a, comparador);
 			else this.izquierdo.agregar(a);
 		}
 	}
@@ -149,4 +158,56 @@ public class ArbolBinarioBusqueda<E extends Comparable<E>> extends Arbol<E> {
 		return lista;
 		
 	}
+	
+	@Override
+	public List<Insumo> rango(Double minimo, Double maximo) {
+		
+		ArrayList<Insumo> lista = new ArrayList<Insumo>();
+		
+		Insumo i = ((Insumo)valor);
+		
+		lista.addAll(izquierdo.rango(minimo, maximo));
+		
+		if(i.getCosto()>=minimo && i.getCosto()<=maximo) lista.add(i);
+
+		lista.addAll(derecho.rango(minimo, maximo));
+		
+		return lista;
+		
+	}
+	
+	@Override
+	public List<Insumo> rango(Integer minimo, Integer maximo) {
+		
+		ArrayList<Insumo> lista = new ArrayList<Insumo>();
+		
+		Insumo i = ((Insumo)valor);
+		
+		lista.addAll(izquierdo.rango(minimo, maximo));
+		
+		if(i.getStock()>=minimo && i.getStock()<=maximo) lista.add(i);
+
+		lista.addAll(derecho.rango(minimo, maximo));
+		
+		return lista;
+		
+	}
+
+	@Override
+	public List<Insumo> rango(String nombre) {
+		
+		ArrayList<Insumo> lista = new ArrayList<Insumo>();
+		
+		Insumo i = ((Insumo)valor);
+		
+		lista.addAll(izquierdo.rango(nombre));
+		
+		if(i.getNombre().toLowerCase().contains(nombre.toLowerCase())) lista.add(i);
+
+		lista.addAll(derecho.rango(nombre));
+		
+		return lista;
+		
+	}
+	
 }
